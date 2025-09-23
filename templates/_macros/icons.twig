@@ -1,0 +1,11 @@
+{# templates/_macros/icons.twig #}
+
+{% macro icon(name, set = 'heroicons', classes = '') %}
+
+  {% set path = 'includes/icons/' ~ set ~ '/' ~ name ~ '.svg' %}
+
+  {% set svg %}
+    {% include path ignore missing %}
+  {% endset %}
+  {{ svg|replace('<svg ', '<svg class="' ~ classes ~ '" ')|raw }}
+{% endmacro %}

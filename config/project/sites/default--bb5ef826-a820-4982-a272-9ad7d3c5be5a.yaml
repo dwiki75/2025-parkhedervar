@@ -1,0 +1,8 @@
+baseUrl: $PRIMARY_SITE_URL
+handle: default
+hasUrls: true
+language: hu
+name: parkhedervar
+primary: true
+siteGroup: 94625fe0-14e2-4fe2-94d5-d0d88b34013a # parkhedervar
+sortOrder: 1

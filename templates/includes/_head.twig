@@ -1,0 +1,56 @@
+{% set pageTitle = pageTitle|default('Fehér Akác') ~ " | " ~ siteName %}
+{% set pageDescription = pageDescription|default('Fehér Akác!')  %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" class="no-js h-full">
+
+<head>
+	
+  <title>{{ pageTitle }} </title>
+
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta name="title" content="{{pageTitle}}">
+<meta name="description" content="{{ description|default(pageDescription) }}">
+<meta name="keywords" content="{{ keywords is defined ? keywords }}">
+<meta name="robots" content="index, follow">
+<meta name="revisit-after" content="1 Month">
+<meta name="distribution" content="local">
+<meta name="language" content="HU">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="rating" content="general">
+
+	<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+	<meta name="theme-color" content="#000000" media="(prefers-color-scheme: light)">
+
+
+
+    <link rel="shortcut icon" href="{{ siteUrl }}favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta property="og:title" content="{{ ogTitle is defined ? ogTitle }} "/>
+<meta property="og:description" content="{{ ogDescription is defined ? ogDescription }}" />
+<meta property="og:image" content="{{ siteUrl|slice(0,-1) }}{{ imgOg is defined ? imgOg }}" > 
+
+
+
+<link href="/styles-data/css/out.css" rel="stylesheet">
+ <script type="module" src="/styles-data/js/main.js"></script>
+ 
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/cookie-bar/cookiebar-latest.min.js?always=1&showNoConsent=1"></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"      rel="stylesheet">
+
+
+
+{% set Local = currentSite.language %}
+
+
+
+
+</head>

@@ -1,0 +1,157 @@
+color: null
+description: null
+fieldLayouts:
+  7869728a-5c08-4218-b250-6cd6479ee0aa:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: '2025-09-23T15:34:11+00:00'
+            disabled: false
+            elementCondition: null
+            id: null
+            includeInCards: false
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            providesThumbs: false
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: a1192016-bb24-435c-9742-f27ac4019a27
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-09-23T15:40:58+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: b3a9b4f6-0a54-40c7-80fa-8a53361137e2 # Választó
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e436c514-bcfd-4864-861d-b2a78fea0fb6
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2025-09-23T15:40:58+00:00'
+            editCondition: null
+            elementCondition:
+              class: craft\elements\conditions\entries\EntryCondition
+              conditionRules:
+                -
+                  class: craft\fields\conditions\OptionsFieldConditionRule
+                  fieldUid: b3a9b4f6-0a54-40c7-80fa-8a53361137e2 # Választó
+                  layoutElementUid: e436c514-bcfd-4864-861d-b2a78fea0fb6
+                  operator: in
+                  uid: 0e9a9dfe-323e-4651-9e4f-9da62a36bf03
+                  values:
+                    - post
+              elementType: craft\elements\Entry
+              fieldContext: global
+            fieldUid: 785c09ff-d241-42d1-b0a7-c985a24a712c # Bejegyzések
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8c4dad14-33e1-4b9f-9b44-a65e51756aff
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2025-09-23T15:40:58+00:00'
+            editCondition: null
+            elementCondition:
+              class: craft\elements\conditions\entries\EntryCondition
+              conditionRules:
+                -
+                  class: craft\fields\conditions\OptionsFieldConditionRule
+                  fieldUid: b3a9b4f6-0a54-40c7-80fa-8a53361137e2 # Választó
+                  layoutElementUid: e436c514-bcfd-4864-861d-b2a78fea0fb6
+                  operator: in
+                  uid: 9310e6f5-2150-4cb8-bebf-b3976c957136
+                  values:
+                    - category
+              elementType: craft\elements\Entry
+              fieldContext: global
+            fieldUid: d46898f6-87ca-4eea-ae8d-1c1f76206e53 # Kategória
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e4fbc9fd-1e82-4d35-b3e8-d19c96c58ba8
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2025-09-23T15:40:58+00:00'
+            editCondition: null
+            elementCondition:
+              class: craft\elements\conditions\entries\EntryCondition
+              conditionRules:
+                -
+                  class: craft\fields\conditions\OptionsFieldConditionRule
+                  fieldUid: b3a9b4f6-0a54-40c7-80fa-8a53361137e2 # Választó
+                  layoutElementUid: e436c514-bcfd-4864-861d-b2a78fea0fb6
+                  operator: in
+                  uid: 37bbb753-0ffd-4fee-8584-e9354365546e
+                  values:
+                    - directlink
+              elementType: craft\elements\Entry
+              fieldContext: global
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: dirctLink
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 648f1037-f818-4de3-a52c-1ede9fe8db3f
+            userCondition: null
+            warning: null
+            width: 50
+        name: Tartalom
+        uid: 032fed4b-8906-4aa7-902e-91a9245bf561
+        userCondition: null
+handle: menu
+hasTitleField: true
+icon: bars
+name: Menü
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

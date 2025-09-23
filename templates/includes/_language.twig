@@ -1,0 +1,14 @@
+<div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-end sm:items-center ml-auto sm:ml-0">
+  {% for site in sites %}
+    {% set lang = site.language %}
+    {% set isCurrent = (site.id == currentSite.id) %}
+    {% set localizedEntry = currentEntry ? currentEntry.getLocalized().site(site).one() : null %}
+    {% set url = localizedEntry ? localizedEntry.url : site.baseUrl %}
+
+    <a href="{{ url }}"
+       class="transition-opacity duration-200 {{ not isCurrent ? 'opacity-50 hover:opacity-100' : '' }}"
+       aria-label="{{ lang|upper }}">
+      <img src="/images/{{ lang|lower }}.svg" alt="{{ lang|upper }}" class="h-[20px] w-auto">
+    </a>
+  {% endfor %}
+</div>

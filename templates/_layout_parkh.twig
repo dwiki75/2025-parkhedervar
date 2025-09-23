@@ -1,0 +1,342 @@
+{#
+ # Layout template
+ # ---------------
+ #
+ # This template defines your site?s global layout. It can be
+ # ?extended? by other templates to fill in the gaps.
+ #
+ # See Twig?s Template Inheritance documentation for more details:
+ # http://twig.sensiolabs.org/doc/templates.html#template-inheritance
+ #}
+
+{% include './includes/_head.twig' %}
+
+
+{# % set pageTitle =  entry.title % #}
+
+
+{# % if entry.facebookTitle|length  %}
+       {% set ogTitle =  entry.facebookTitle %}
+{% elseif entry.title|length  %}
+        {% set ogTitle =  entry.title %}
+
+{% endif %}
+
+
+{% if entry.facebookText|length  %}
+       {% set ogDescription =  entry.facebookText %}
+{% elseif entry.shortText|length  %}
+        {% set ogDescription =  entry.shortText %}
+
+{% endif %}
+
+
+
+ {% if entry.onePict.one() is defined %}
+              {% set image = entry.onePict.one() %} 
+           {% if image|length  %}   
+              {% set imgOg = image.getUrl()  %} 
+           {% endif %} 
+ {% endif %} 
+
+{% if entry.metaWords|length %}
+   {% set keywords =  entry.metaWords %} 
+{% endif %}   
+
+{% if entry.metaText|length  %}
+   {% set description =  entry.metaText %}
+
+{% endif % #}   
+
+
+<body class="">
+
+  {# Transformok #}
+  {% set thumb1024crop = {
+    mode: 'crop',
+    width: 1024,
+    height: 640,
+    quality: 100,
+    position: 'center-center'
+  } %}
+
+  {% set thumb640Hcrop = {
+    mode: 'crop',
+    width: 640,
+    height: 1024,
+    quality: 100,
+    position: 'center-center'
+  } %}
+
+
+    {# Transformok #}
+  {% set thumb1024fit = {
+    mode: 'fit',
+    width: 1024,
+    height: 640,
+    quality: 100,
+    position: 'center-center'
+  } %}
+
+  {% set thumb640Hfit = {
+    mode: 'fit',
+    width: 640,
+    height: 1024,
+    quality: 100,
+    position: 'center-center'
+  } %}
+  
+
+  {% set thumb640crop = {
+    mode: 'fit',
+    width: 640,
+    quality: 100
+  } %}
+
+  {% set thumb1024x940crop = {
+  mode: 'crop',
+  width: 1024,
+  height: 940,
+  quality: 100,
+  position: 'center-center'
+} %}
+
+
+<!-- /****/ -->
+
+ {% set thumb640x480V = {
+    mode: 'fit',
+    width: 640,
+    height: 480,
+    quality: 95,
+    position: 'center-center'
+} %}
+
+
+
+
+
+
+ {% set thumb1980x1080 = {
+    mode: 'fit',
+    width: 1920,
+    height: 1080,
+    quality: 95,
+    position: 'center-center'
+} %}
+
+ {% set thumb608x1080 = {
+    mode: 'crop',
+    width: 608,
+    height: 1080,
+    quality: 95,
+    position: 'center-center'
+} %}
+
+{% set thumb1024 = {
+    mode: 'fit',
+    width: 1024,
+    height: 640,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+
+{% set thumb1024crop = {
+    mode: 'crop',
+    width: 1024,
+    height: 640,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+{% set thumb800 = {
+    mode: 'crop',
+    width: 800,
+    height: 600,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+{% set thumb600 = {
+    mode: 'crop',
+    width: 600,
+    height: 450,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+
+{% set thumb400 = {
+    mode: 'crop',
+    width: 400,
+    height: 210,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+{% set banner970 = {
+    mode: 'fit',
+    width: 970,
+    height: 250,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+
+
+{% set banner1920 = {
+    mode: 'crop',
+    width: 1920,
+    height: 688,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+
+{% set banner1920b = {
+    mode: 'crop',
+    width: 1920,
+    height: 688,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+
+ {% set ban286 = {
+    mode: 'crop',
+    width: 286,
+    height: 376,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+ {% set ban980 = {
+    mode: 'crop',
+    width: 980,
+    height: 236,
+    quality: 100,
+    position: 'center-center'
+} %}
+
+
+ <style>
+
+ </style>
+
+
+<body class="">
+
+
+
+{% block menu %}
+
+
+{% set currentEntry = entry ?? null %}
+{% set currentLang = currentSite.language %}
+{% set sites = craft.app.sites.getAllSites() %}
+
+{# MOBIL STICKY MENÜ #}
+<div class="block md:hidden sticky top-0 z-50 bg-white">
+  {% include './includes/_menu' with { id: 'mobile-header' } %}
+</div>
+
+  <div class="w-full bg-secondary hidden md:block">
+    <div class="max-w-8xl m-auto grid grid-cols-2 sm:flex sm:items-center justify-between p-3 gap-4 bg-secondary text-white">
+
+
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
+                    
+                        {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %}
+                    
+                    </div>
+
+
+                    <div class="flex justify-end sm:justify-start">
+                        {% include './includes/_language' %}
+                    </div>
+
+    </div>
+</div>
+
+
+
+
+{# Desktop sticky menü #}
+<div class="hidden md:block sticky top-0 z-50 bg-lightbrown">
+  {% include './includes/_menu' with { id: 'site-header' } %}
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}  
+
+
+{% set Local = currentSite.language %}
+
+                {% block main %}
+
+                  
+                {% endblock %}  
+
+
+{% block footer %}
+
+
+{% set footer = craft.app.globals.getSetByHandle('footer') %}
+
+<div class="w-full mx-auto bg-primary text-white">
+  <div class="max-w-8xl mx-auto px-6 py-12">
+
+    {# Grid: 4 oszlop desktopon, 1 oszlop mobilon #}
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+      {# Kép box (1. oszlop - 2 oszlop széles) #}
+      <div class="lg:col-span-2">
+        {% if footer.onePict.one() %}
+          <img 
+            src="{{ footer.onePict.one().url }}" 
+            alt="{{ footer.onePict.one().title }}" 
+            class="h-14 w-auto"
+          >
+        {% endif %}
+      </div>
+
+      {# Szövegbox 1 #}
+      <div class="[&_h3]:text-xl [&_h3]:lg:text-2xl [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline">
+        {{ footer.textBox|raw }}
+      </div>
+
+      {# Szövegbox 2 #}
+      <div class="[&_h3]:text-xl [&_h3]:lg:text-2xl [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline">
+        {{ footer.textBox2|raw }}
+      </div>
+
+      {# Szövegbox 3 - teljes szélesség #}
+      <div class="col-span-1 lg:col-span-4 mt-4 text-sm [&_h3]:text-base [&_h3]:lg:text-lg [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline">
+        {{ footer.textBox3|raw }}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}  
+  
+
+
+
+</body>
+
+  {% include './includes/_popup' %}
+
+</html>

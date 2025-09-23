@@ -1,0 +1,62 @@
+columnSuffix: null
+handle: optional
+instructions: null
+name: Választó
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - Bejegyzés
+        -
+          - value
+          - post
+        -
+          - icon
+          - align-center
+        -
+          - color
+          - '#4a55ff'
+        -
+          - default
+          - '1'
+    -
+      __assoc__:
+        -
+          - label
+          - Kategória
+        -
+          - value
+          - category
+        -
+          - icon
+          - tree
+        -
+          - color
+          - '#59bb00'
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - 'Közvetlen link'
+        -
+          - value
+          - directlink
+        -
+          - icon
+          - link-horizontal
+        -
+          - color
+          - '#aa0000'
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown

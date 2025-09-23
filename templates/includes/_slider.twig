@@ -1,0 +1,37 @@
+{% set headerEntry = craft.app.globals.getSetByHandle('header') %}
+
+{% set slider1980x800 = {
+  mode: 'crop',
+  width: 1980,
+  height: 800,
+  quality: 95,
+  position: 'center-right',
+  format: 'webp'
+} %}
+
+{% set slider640x480 = {
+  mode: 'crop',
+  width: 640,
+  height: 480,
+  quality: 95,
+  position: 'center-right',
+  format: 'webp'
+} %}
+
+{% set pictures = [] %}
+{% for image in headerEntry.sliderImage.all() %}
+  {% set pictures = pictures|merge([{
+    desktopUrl: image.getUrl(slider1980x800),
+    mobileUrl: image.getUrl(slider640x480),
+    title: image.title,
+    simpleText: image.simpleText
+  }]) %}
+{% endfor %}
+
+<div
+  id="image-slider"
+  data-pictures='{{ pictures|json_encode|e('html_attr') }}'
+  {% if headerEntry.speed is not null %}
+    data-speed="{{ (headerEntry.speed ?? 10) * 1000 }}"
+  {% endif %}
+></div>

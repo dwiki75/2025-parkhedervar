@@ -1,0 +1,9 @@
+baseUrl: /de
+enabled: '1'
+handle: nemet
+hasUrls: true
+language: de
+name: Német
+primary: false
+siteGroup: 94625fe0-14e2-4fe2-94d5-d0d88b34013a # parkhedervar
+sortOrder: 2

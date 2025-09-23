@@ -1,0 +1,64 @@
+{% set pictures = [] %}
+        {% for image in entry.pictures.all() %}
+        {% set isLandscape = image.width >= image.height %}
+                {% if isLandscape %}
+                        {% set thumb = image.getUrl({
+                                mode: 'fit',
+                                width: 640,
+                                height: 480,
+                                quality: 95,
+                                position: 'center-center'
+                        }) %}
+                        {% set large = image.getUrl({
+                                mode: 'fit',
+                                width: 1920,
+                                height: 1080,
+                                quality: 95,
+                                position: 'center-center'
+                        }) %}
+                {% else %}
+                        {% set thumb = image.getUrl({
+                                mode: 'fit',
+                                width: 480,
+                                height: 640,
+                                quality: 95,
+                                position: 'center-center'
+                        }) %}
+                                {% set large = image.getUrl({
+                                mode: 'fit',
+                                width: 608,
+                                height: 1080,
+                                quality: 95,
+                                position: 'center-center'
+                                }) %}
+                {% endif %}
+
+                {% set thumbWebp = image.getUrl({
+                        mode: 'fit',
+                        width: isLandscape ? 640 : 480,
+                        height: isLandscape ? 480 : 640,
+                        quality: 95,
+                        position: 'center-center',
+                        format: 'webp'
+                }) %}
+                {% set largeWebp = image.getUrl({
+                        mode:  'fit' ,
+                        width: isLandscape ? 1920 : 608,
+                        height: 1080,
+                        quality: 95,
+                        position: 'center-center',
+                        format: 'webp'
+                }) %}
+
+                {% set pictures = pictures|merge([{
+                        id: image.id,
+                        alt: image.title ?: 'gallery image',
+                        isLandscape: isLandscape,
+                        thumbJpg: thumb,
+                        thumbWebp: thumbWebp,
+                        largeJpg: large,
+                        largeWebp: largeWebp,
+                }]) %}
+        {% endfor %}
+
+        <div id="gallery" data-pictures='{{ pictures|json_encode|e('html_attr') }}'></div>

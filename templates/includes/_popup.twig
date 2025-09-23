@@ -1,0 +1,12 @@
+{% set popup = craft.app.globals.getSetByHandle('popup') %}
+{% if popup and popup.subTitle %}
+    {% set popupText = popup.textBox |raw %}
+    {% set popupImg = popup.oneImg.one() %}
+    {% set popupImgUrl = popupImg ? popupImg.getUrl() : '' %}
+
+    <div id="vue-popup"
+         data-title="{{ popup.subTitle }}"
+         data-text="{{ popupText|e('html_attr') }}"
+         data-img="{{ popupImgUrl }}">
+    </div>
+{% endif %}

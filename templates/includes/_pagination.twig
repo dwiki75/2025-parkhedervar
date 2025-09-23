@@ -1,0 +1,64 @@
+<div class="flex justify-center my-5 py-5">
+ 
+<nav aria-label="Page navigation">
+  <ul class="list-none flex">
+
+     <li>
+      {% if paginate.prevUrl %}
+      <a
+        class="relative block  bg-white px-3 py-1.5  text-black font-bold transition-all duration-300 hover:text-[#ee4024] border  border-black mr-2  "
+        href="{{ paginate.prevUrl }}"
+        >< Előző oldal</a
+      >
+      {% endif %} 
+    </li>                
+                
+                
+   
+    {% for page, url in paginate.getPrevUrls(10) %}
+     <li>
+      <a
+        class="relative block bg-white px-3 py-1.5  font-bold transition-all duration-300 text-black hover:text-[#ee4024] border border-black mr-2  "
+        href="{{ url }}"
+        >{{ page }}</a
+      >
+      </li>
+     {% endfor %} 
+    
+
+     <li>
+      {% if paginate.totalPages > 1  %}
+      <span
+        class="relative block   px-3 py-1.5  text-white bg-black font-bold  transition-all duration-300 mr-2"
+        >{{ paginate.currentPage }} </span
+      >
+      </li>
+                                {% for page, url in paginate.getNextUrls(10) %}
+                                   {% if  page  > 1 %}
+                                     <li>    
+                                                <a
+                                                        class="relative block bg-white  font-bold  px-3 py-1.5   transition-all duration-300 text-black hover:text-[#ee4024] border border-black mr-2 "
+                                                        href="{{ url }}"
+                                                        >{{ page }}</a
+                                                >
+                                      </li>           
+                                    {% endif %}
+                                {% endfor %}
+      
+   
+     {% endif %} 
+                        
+    <li>
+      {% if paginate.nextUrl %}  
+      <a
+        class="relative block px-3 py-1.5   transition-all duration-300  font-bold  bg-white  text-black hover:text-[#ee4024] border border-black  mr-2   "
+        href="{{ paginate.nextUrl }}"
+        >Következő oldal ></a
+      >
+      {% endif %}
+    </li>
+               
+  </ul>
+</nav>  
+
+  </div>

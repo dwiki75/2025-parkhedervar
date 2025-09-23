@@ -1,0 +1,56 @@
+dateModified: 1758648704
+email:
+  fromEmail: fulop.viktor.dwiki@gmail.com
+  fromName: parkhedervar
+  transportType: craft\mail\transportadapters\Sendmail
+fs:
+  kepek:
+    hasUrls: true
+    name: Képek
+    settings:
+      path: '@webroot/images'
+    type: craft\fs\Local
+    url: /images
+  sliderPictPlace:
+    hasUrls: true
+    name: 'Képváltó képek helye'
+    settings:
+      path: '@webroot/sliderimages'
+    type: craft\fs\Local
+    url: /sliderimages
+meta:
+  __names__:
+    0a8824d5-d531-40bc-b0c8-c420edc4449b: Német # Német
+    2bd5267e-a36c-43fa-96fd-e740550c69fc: Nyitólap # Nyitólap
+    3f01429d-2635-4f6a-a7e2-03296a05e255: Nyitó # Nyitó
+    8bcb174f-c2de-46c2-b796-1394dac78109: Cikk # Cikk
+    33fbdc92-4491-48e7-a475-1e1fdf3fc897: Képek # Képek
+    88c6398a-f683-42af-9840-82a752943ecc: Főmenü # Főmenü
+    785c09ff-d241-42d1-b0a7-c985a24a712c: Bejegyzések # Bejegyzések
+    846aa6c1-3a4b-4656-a534-646aa812d4f4: Simple # Simple
+    02980df4-89da-41dc-9c95-0b95a8764e23: Menü # Menü
+    36685e5a-d503-4f86-9d6d-e73a0d97dc93: 'Képváltó képek' # Képváltó képek
+    94625fe0-14e2-4fe2-94d5-d0d88b34013a: parkhedervar # parkhedervar
+    b3a9b4f6-0a54-40c7-80fa-8a53361137e2: Választó # Választó
+    bb5ef826-a820-4982-a272-9ad7d3c5be5a: parkhedervar # parkhedervar
+    cd5eaea5-24c1-47f6-96bf-ce456bbed2f2: Cikkek # Cikkek
+    d11f6ee6-67d9-4ae4-8924-e8dffc44555a: Szöveg # Szöveg
+    d46898f6-87ca-4eea-ae8d-1c1f76206e53: Kategória # Kategória
+plugins:
+  ckeditor:
+    edition: standard
+    enabled: true
+    schemaVersion: 3.0.0.0
+system:
+  edition: solo
+  live: true
+  name: parkhedervar
+  schemaVersion: 5.8.0.3
+  timeZone: America/Los_Angeles
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: null
+  photoVolumeUid: null
+  require2fa: false
+  requireEmailVerification: true

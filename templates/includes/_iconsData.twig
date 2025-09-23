@@ -1,0 +1,46 @@
+   {% import '_macros/icons.twig' as icons %}
+  {% set headerEntry = craft.app.globals.getSetByHandle('header') %}
+
+    {% if headerEntry and headerEntry.datas|length %}
+      <ul class="flex flex-col sm:flex-row gap-2 sm:gap-4">
+        {% for block in headerEntry.datas %}
+          {% set iconName = block.simpleIcon|trim %}
+          {% set label = block.simpleText|trim %}
+          {% set url = block.simpleLink|trim %}
+
+          {% set iconSet = null %}
+          {% if iconName %}
+            {% set heroiconsPath = 'includes/icons/heroicons/' ~ iconName ~ '.svg' %}
+            {% set brandsPath = 'includes/icons/brands/' ~ iconName ~ '.svg' %}
+            {% if craft.app.view.doesTemplateExist(heroiconsPath) %}
+              {% set iconSet = 'heroicons' %}
+            {% elseif craft.app.view.doesTemplateExist(brandsPath) %}
+              {% set iconSet = 'brands' %}
+            {% endif %}
+          {% endif %}
+
+          {% set iconHtml = '' %}
+          {% if iconSet %}
+            {% set iconHtml = icons.icon(iconName, iconSet, 'w-6 h-6 text-white') %}
+          {% endif %}
+
+          <li class="flex items-center gap-2">
+            {% if url %}
+              <a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:underline text-white">
+                {{ iconHtml|raw }}
+                {% if label %}
+                  <span>{{ label }}</span>
+                {% endif %}
+              </a>
+            {% else %}
+              {% if iconHtml %}
+                {{ iconHtml|raw }}
+              {% endif %}
+              {% if label %}
+                <span>{{ label }}</span>
+              {% endif %}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}

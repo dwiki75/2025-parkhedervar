@@ -1,0 +1,155 @@
+{% set menuItems = craft.entries.section('menu').all() %}
+{% set currentPath = craft.app.request.getPathInfo() %}
+{% set image = header.image.one() %}
+
+<style>
+  /* Hamburger ikon "X" animáció */
+  #menu-toggle span {
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+  #menu-toggle.open span:nth-child(1) {
+    transform: translateY(9.5px) rotate(45deg);
+  }
+  #menu-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+  #menu-toggle.open span:nth-child(3) {
+    transform: translateY(-9.5px) rotate(-45deg);
+  }
+</style>
+
+<header id="site-header"
+  class="sticky top-0 z-50 w-full border-b border-gray-300 bg-white transition-[height] duration-300 ease-in-out"
+  style="height: 140px;">
+  <div id="header-inner"
+    class="w-full max-w-8xl mx-auto px-6 h-full flex items-center justify-between transition-[height] duration-300 ease-in-out">
+
+    <!-- Logó konténer, most fix magassággal -->
+    <div id="logo-container" class="flex-shrink-0 flex items-center transition-[padding] duration-300 ease-in-out py-4"
+         style="height: 100%;">
+      <a href="/" class="block h-full flex items-center">
+        <img
+          src="{{ image.url() }}"
+          alt="{{ image.alt }}"
+          class="logo-img object-contain transition-[max-height] duration-300 ease-in-out"
+          style="height: 100%; width: auto; max-height: 100%;"
+        />
+      </a>
+    </div>
+
+    <!-- Hamburger ikon mobilra -->
+    <div class="relative z-50 sm:hidden flex items-center">
+      <button id="menu-toggle" aria-label="Toggle menu" type="button"
+        class="relative w-[30px] h-[22px] flex flex-col justify-between cursor-pointer">
+        <span class="block bg-black rounded h-[3px] w-[30px]"></span>
+        <span class="block bg-black rounded h-[3px] w-[30px]"></span>
+        <span class="block bg-black rounded h-[3px] w-[30px]"></span>
+      </button>
+    </div>
+
+    <!-- Asztali menü -->
+    <ul class="hidden sm:flex gap-6 items-center text-black text-base font-medium ml-auto font-gilda">
+      {{ _self.renderMenu(menuItems, currentPath) }}
+    </ul>
+
+    <!-- Mobil menü -->
+    <div id="mobile-menu"
+      class="fixed inset-0 bg-white z-40 flex-col px-6 py-8 pt-12 overflow-y-auto sm:hidden opacity-0 pointer-events-none transform -translate-y-full transition-all duration-300 ease-in-out">
+      <img src="{{ image.url() }}" alt="{{ image.alt }}"
+        class="absolute top-4 left-4 h-8 w-auto opacity-0 transition-opacity duration-300 pointer-events-none select-none z-50"
+        id="mobile-logo" />
+      <ul class="flex flex-col gap-4 items-center text-black text-xl font-medium mt-12 font-gilda">
+        {{ _self.renderMenu(menuItems, currentPath) }}
+      </ul>
+    </div>
+  </div>
+</header>
+
+{% macro renderMenu(menuItems, currentPath) %}
+  {% for item in menuItems %}
+    {% set type = item.optional|lower %}
+    {% set url = '#' %}
+    {% if type == 'post' and item.post|length %}
+      {% set url = item.post.one().url %}
+    {% elseif type == 'category' and item.catField|length %}
+      {% set url = item.catField.one().url %}
+    {% elseif type == 'directlink' and item.directLink is not empty %}
+      {% set url = item.directLink %}
+    {% endif %}
+
+    {% set isExternal = (type == 'directlink') %}
+    {% set baseUrl = craft.app.request.getHostInfo() %}
+    {% set menuPath = url|replace({(baseUrl ~ '/'): ''}) %}
+    {% set isActive = (not isExternal) and (menuPath == currentPath) %}
+
+    <li>
+      <a href="{{ url }}" class="{{ isActive ? 'underline' : '' }} hover:underline"
+        {% if isExternal %} target="_blank" rel="noopener noreferrer" {% endif %}>
+        {{ item.title }}
+      </a>
+    </li>
+  {% endfor %}
+{% endmacro %}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLogo = document.getElementById('mobile-logo');
+  const header = document.getElementById('site-header');
+  const logoContainer = document.getElementById('logo-container');
+  const logoImg = document.querySelector('.logo-img');
+
+  let isScrolled = false;
+  const beforeScroll = 50;   // Scroll pozíció, amikor kicsinyítünk
+  const afterScroll = 0;     // Scroll pozíció, amikor visszaállítunk
+
+  const largeHeight = 140;  // header eredeti magassága (px)
+  const smallHeight = 50;   // kicsinyített magasság (px)
+
+  function checkScroll() {
+    const scrollY = window.scrollY;
+    if (scrollY > beforeScroll && !isScrolled) {
+      header.style.height = smallHeight + 'px';
+      logoContainer.classList.replace('py-4', 'py-1');
+      logoImg.style.maxHeight = '40px';
+      isScrolled = true;
+    } else if (scrollY <= afterScroll && isScrolled) {
+      header.style.height = largeHeight + 'px';
+      logoContainer.classList.replace('py-1', 'py-4');
+      logoImg.style.maxHeight = '100%';
+      isScrolled = false;
+    } else if (scrollY <= beforeScroll && !isScrolled) {
+      logoContainer.classList.add('py-4');
+      logoContainer.classList.remove('py-1');
+      header.style.height = largeHeight + 'px';
+      logoImg.style.maxHeight = '100%';
+    }
+  }
+
+  // Alapértelmezett beállítások betöltéskor
+  header.style.height = largeHeight + 'px';
+  logoContainer.classList.add('py-4');
+  logoImg.style.maxHeight = '100%';
+
+  checkScroll();
+  window.addEventListener('scroll', checkScroll);
+
+  menuToggle.addEventListener('click', () => {
+    const isOpen = menuToggle.classList.toggle('open');
+
+    if (isOpen) {
+      mobileMenu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-full');
+      mobileMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      mobileLogo?.classList.add('opacity-100');
+      document.body.classList.add('overflow-hidden');
+    } else {
+      mobileMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-full');
+      mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      mobileLogo?.classList.remove('opacity-100');
+      document.body.classList.remove('overflow-hidden');
+    }
+  });
+});
+</script>

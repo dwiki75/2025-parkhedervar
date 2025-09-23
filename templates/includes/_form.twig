@@ -1,0 +1,190 @@
+{% macro errorList(errors, label) %}
+  {% if errors %}
+    <ul class="text-red-600 text-sm mt-1">
+      {% for error in errors %}
+        <li>{{ label }}: {{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+{% set submission = submission ?? null %}
+
+<form method="post" action="" accept-charset="UTF-8" class="bg-lightbrown p-6" novalidate>
+  {{ csrfInput() }}
+  {{ actionInput('contact-form/send') }}
+  {{ redirectInput('contact/thanks') }}
+
+  <!-- Honeypot mező -->
+  <div style="display: none;">
+    <label for="MézresBÖddön">Leave this field empty</label>
+    <input type="text" id="MézresBÖddön" name="MézresBÖddön" value="">
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Bal oszlop -->
+    <div class="flex flex-col gap-4">
+      <div>
+        <label for="subject" class="block font-semibold mb-1">Tárgy</label>
+        {{ input('text', 'subject', 'Asztalfoglalás', {
+          id: 'subject',
+          readonly: true,
+          class: 'w-full p-2 bg-white border border-gray-300 rounded-md text-gray-500 cursor-not-allowed'
+        }) }}
+      </div>
+
+      <div>
+        <label for="peopleCount" class="block font-semibold mb-1">Személyek száma <span class="text-red-600">*</span></label>
+        {{ input('number', 'message[peopleCount]', submission ? submission.message.peopleCount : '', {
+          id: 'peopleCount',
+          min: 1,
+          max: 10,
+          required: true,
+          class: 'w-full p-2 bg-white border border-gray-300 rounded-md' ~ (submission and submission.getErrors('message.peopleCount') ? ' border-red-600' : '')
+        }) }}
+        {{ submission ? _self.errorList(submission.getErrors('message.peopleCount'), 'Személyek száma') }}
+      </div>
+
+      <div>
+        <label for="datetime" class="block font-semibold mb-1">Időpont <span class="text-red-600">*</span></label>
+        {{ input('datetime-local', 'message[datetime]', submission ? submission.message.datetime : '', {
+          id: 'datetime',
+          required: true,
+          class: 'w-full p-2 bg-white border border-gray-300 rounded-md' ~ (submission and submission.getErrors('message.datetime') ? ' border-red-600' : '')
+        }) }}
+        {{ submission ? _self.errorList(submission.getErrors('message.datetime'), 'Időpont') }}
+      </div>
+    </div>
+
+    <!-- Jobb oszlop -->
+    <div class="flex flex-col gap-4">
+      <div>
+        <label for="from-name" class="block font-semibold mb-1">Név <span class="text-red-600">*</span></label>
+        {{ input('text', 'fromName', submission ? submission.fromName : '', {
+          id: 'from-name',
+          autocomplete: 'name',
+          required: true,
+          class: 'w-full p-2 bg-white border border-gray-300 rounded-md' ~ (submission and submission.getErrors('fromName') ? ' border-red-600' : '')
+        }) }}
+        {{ submission ? _self.errorList(submission.getErrors('fromName'), 'Név') }}
+      </div>
+
+      <div>
+        <label for="phone" class="block font-semibold mb-1">Telefonszám <span class="text-red-600">*</span></label>
+        {{ input('tel', 'message[phone]', submission ? submission.message.phone : '', {
+          id: 'phone',
+          required: true,
+          placeholder: '+36 30 123 4567',
+          class: 'w-full p-2 bg-white border border-gray-300 rounded-md' ~ (submission and submission.getErrors('message.phone') ? ' border-red-600' : '')
+        }) }}
+        {{ submission ? _self.errorList(submission.getErrors('message.phone'), 'Telefonszám') }}
+      </div>
+
+      <div>
+        <label for="from-email" class="block font-semibold mb-1">E-mail <span class="text-red-600">*</span></label>
+        {{ input('email', 'fromEmail', submission ? submission.fromEmail : '', {
+          id: 'from-email',
+          autocomplete: 'email',
+          required: true,
+          class: 'w-full p-2 bg-white border border-gray-300 rounded-md' ~ (submission and submission.getErrors('fromEmail') ? ' border-red-600' : '')
+        }) }}
+        {{ submission ? _self.errorList(submission.getErrors('fromEmail'), 'E-mail') }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Üzenet -->
+  <div class="mt-6">
+    <label for="message-body" class="block font-semibold mb-1">Üzenet (nem kötelező)</label>
+    {{ tag('textarea', {
+      text: submission ? submission.message.body : '',
+      id: 'message-body',
+      name: 'message[body]',
+      rows: 6,
+      class: 'w-full p-2 bg-white border border-gray-300 rounded-md' ~ (submission and submission.getErrors('message.body') ? ' border-red-600' : '')
+    }) }}
+    {{ submission ? _self.errorList(submission.getErrors('message.body'), 'Üzenet') }}
+  </div>
+
+  <!-- Küldés -->
+  <div class="mt-8 flex flex-col md:flex-row md:items-start md:gap-4">
+    <button type="submit" class="px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-opacity-80 transition">
+      Küldés
+    </button>
+    <div class="prose text-sm text-gray-800 md:ml-4 md:flex-1">
+      {{ formOne.textBox|raw }}
+    </div>
+  </div>
+
+  <!-- Rejtett mezők a magyar e-mail tartalomhoz -->
+  <input type="hidden" name="message[Név]" value="{{ submission ? submission.fromName : '' }}">
+  <input type="hidden" name="message[E-mail]" value="{{ submission ? submission.fromEmail : '' }}">
+  <input type="hidden" name="message[Telefonszám]" value="{{ submission ? submission.message.phone : '' }}">
+  <input type="hidden" name="message[Személyek száma]" value="{{ submission ? submission.message.peopleCount : '' }}">
+  <input type="hidden" name="message[Időpont]" value="{{ submission ? submission.message.datetime : '' }}">
+</form>
+
+<!-- Frontend JS validáció -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    let valid = true;
+    let firstInvalid = null;
+
+    form.querySelectorAll('input, textarea').forEach(el => {
+      el.classList.remove('border-red-500');
+    });
+
+    form.querySelectorAll('.client-error').forEach(el => el.remove());
+
+    const fields = [
+      { id: 'from-name', label: 'Név', type: 'text' },
+      { id: 'from-email', label: 'E-mail', type: 'email' },
+      { id: 'phone', label: 'Telefonszám', type: 'text' },
+      { id: 'datetime', label: 'Időpont', type: 'datetime-local' },
+      { id: 'peopleCount', label: 'Személyek száma', type: 'number', min: 1, max: 10 },
+    ];
+
+    fields.forEach(field => {
+      const el = document.getElementById(field.id);
+      const val = el?.value?.trim() || '';
+      let isValid = true;
+
+      if (val === '') {
+        isValid = false;
+      } else if (field.type === 'email') {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        isValid = emailPattern.test(val);
+      } else if (field.type === 'number') {
+        const num = parseInt(val);
+        isValid = !isNaN(num) && num >= field.min && num <= field.max;
+      }
+
+      if (!isValid) {
+        el.classList.add('border-red-500');
+        if (!firstInvalid) firstInvalid = el;
+        valid = false;
+
+        let errorEl = el.parentElement.querySelector('.client-error');
+        if (!errorEl) {
+          errorEl = document.createElement('div');
+          errorEl.className = 'text-red-600 text-sm mt-1 client-error';
+          el.parentElement.appendChild(errorEl);
+        }
+        errorEl.innerText = `${field.label} mező hibás vagy hiányzik`;
+      }
+    });
+
+    if (!valid) {
+      e.preventDefault();
+      if (firstInvalid) {
+        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstInvalid.focus();
+      }
+    }
+  });
+});
+</script>
