@@ -1,0 +1,47 @@
+fieldLayouts:
+  f866c5d5-1019-40f0-92b1-e25e47cc93eb:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2025-09-25T17:51:50+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 5b557374-743e-40fc-8528-a0d4e9b40506 # Képváltó képek
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: fe328b43-a2ee-46e2-a5fb-6eba425c1fbf
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-09-25T18:23:01+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: a0ed06e8-7d19-46e7-b39f-32af2d4e18c3 # Sebesség
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: d009cf12-5da2-4730-a496-fe9859c9b720
+            userCondition: null
+            warning: null
+            width: 100
+        name: Tartalom
+        uid: c20de0b0-5fc8-4975-914d-cbff2f64b28f
+        userCondition: null
+handle: header
+name: Fejléc
+sortOrder: 1
