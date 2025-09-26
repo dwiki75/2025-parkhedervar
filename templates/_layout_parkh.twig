@@ -237,11 +237,11 @@
 {% set sites = craft.app.sites.getAllSites() %}
 
 {# MOBIL STICKY MENÜ #}
-<div class="block md:hidden sticky top-0 z-50 bg-white">
+<div class="block md:hidden sticky top-0 z-50 bg-white ">
   {% include './includes/_menu' with { id: 'mobile-header' } %}
 </div>
 
-  <div class="w-full bg-secondary hidden md:block">
+  <div class="w-full bg-secondary hidden md:block rounded-4xl">
     <div class="max-w-8xl m-auto grid grid-cols-2 sm:flex sm:items-center justify-between p-3 gap-4 bg-secondary text-white">
 
 
@@ -252,7 +252,7 @@
                     </div>
 
 
-                    <div class="flex justify-end sm:justify-start">
+                    <div class="flex  justify-end sm:justify-start">
                         {% include './includes/_language' %}
                     </div>
 
@@ -263,7 +263,7 @@
 
 
 {# Desktop sticky menü #}
-<div class="hidden md:block sticky top-0 z-50 bg-lightbrown">
+<div class="hidden md:block sticky top-0 z-50 bg-lightbrown p-5">
   {% include './includes/_menu' with { id: 'site-header' } %}
 </div>
 

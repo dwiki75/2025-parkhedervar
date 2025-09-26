@@ -16,13 +16,20 @@
 {% set sites = craft.app.sites.getAllSites() %}
 
 {# MOBIL STICKY MENÜ #}
-<div class="block md:hidden sticky top-0 z-50 bg-white">
+
+
+
+<div class="block md:hidden sticky top-0 z-50 bg-white ">
   {% include './includes/_menu' with { id: 'mobile-header' } %}
 </div>
 
-<div class="w-full bg-secondary">
-  <div class="max-w-8xl mx-auto p-3 bg-secondary text-white">
-    <div class="flex flex-row sm:flex sm:items-center justify-between gap-4">
+<div class="w-full bg-white p-5">
+  <div class="mx-auto p-3 bg-secondary text-white rounded-4xl">
+
+
+       <div class="hidden md:block z-50  w-full">
+        {% include './includes/_menu' with { id: 'site-header' } %}
+      </div>
 
       <!-- Bal oldali adat blokk -->
       <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
@@ -34,28 +41,37 @@
         {% include './includes/_language.twig' %}
       </div>
 
+            {# Desktop sticky menü #}
+
+
+      <div class="w-1/2 mx-left">
+              {% include './includes/_slider'%}
+      </div>
+
+
+
     </div>
-  </div>
+
 </div>
 
 
+orem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
+
+Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
+
+Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
+
+Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque. 
 
 
 
 
-{# Desktop sticky menü #}
-<div class="hidden md:block sticky top-0 z-50 bg-lightbrown">
-  {% include './includes/_menu' with { id: 'site-header' } %}
-</div>
 
 {% endblock %}  
 
 {% block main %}
 
 
-<div class="w-full mx-auto">
-         {% include './includes/_slider'%}
-</div>
 
 
 

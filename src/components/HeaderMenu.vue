@@ -13,11 +13,9 @@ const props = defineProps({
 })
 
 const menuOpen = ref(false)
-const isScrolled = ref(false)
 const isMobile = ref(false)
-
-const beforeScroll = 100
-const afterScroll = 50
+const miniVisible = ref(false)            // mini-header láthatósága
+const mainHeaderRef = ref(null)           // nagy fejléc DOM referenciája
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
@@ -25,12 +23,9 @@ function toggleMenu() {
 }
 
 function checkScroll() {
-  const scrollY = window.scrollY
-  if (scrollY > beforeScroll && !isScrolled.value) {
-    isScrolled.value = true
-  } else if (scrollY <= afterScroll && isScrolled.value) {
-    isScrolled.value = false
-  }
+  if (!mainHeaderRef.value) return
+  const bottom = mainHeaderRef.value.getBoundingClientRect().bottom
+  miniVisible.value = bottom <= 0
 }
 
 function checkIsMobile() {
@@ -47,14 +42,12 @@ function isCurrent(url) {
   }
 }
 
-// ✅ Közös link class helper DRY
 function linkClasses(url) {
   const isActive = isCurrent(url)
-
   return [
     isActive
       ? 'bg-primary text-white rounded-full px-5 py-2'
-      : 'text-midgray hover:bg-primary hover:bg-opacity-100 hover:text-white rounded-full px-5 py-2',
+      : 'text-midgray hover:bg-primary hover:text-white rounded-full px-5 py-2',
     'hover:underline link-transition'
   ]
 }
@@ -62,7 +55,7 @@ function linkClasses(url) {
 onMounted(() => {
   checkScroll()
   checkIsMobile()
-  window.addEventListener('scroll', checkScroll)
+  window.addEventListener('scroll', checkScroll, { passive: true })
   window.addEventListener('resize', checkIsMobile)
 })
 
@@ -73,22 +66,20 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <!-- 1) NAGY, NEM-STICKY FEJLÉC (háttér nélkül, kifut) -->
   <header
-    :class="[
-      'sticky top-0 z-50 w-full  transition-all duration-300 ease-in-out'
-    ]"
-    :style="{ height: (isMobile ? SMALL_HEADER_HEIGHT : (isScrolled ? SMALL_HEADER_HEIGHT : LARGE_HEADER_HEIGHT)) + 'px' }"
+    ref="mainHeaderRef"
+    :class="['w-full transition-all duration-300 ease-in-out']"
+    :style="{ height: (isMobile ? SMALL_HEADER_HEIGHT : LARGE_HEADER_HEIGHT) + 'px' }"
   >
-    <div
-      class="max-w-8xl mx-auto px-6 h-full flex items-center justify-between transition-all duration-300 bg-lightbrown"
-    >
+    <div class="mx-auto px-6 h-full flex items-center justify-between">
       <!-- Logó -->
       <div
-        :class="['flex items-center transition-all duration-300']"
+        class="flex items-center transition-all duration-300"
         :style="{
-          height: (isMobile ? SMALL_HEADER_HEIGHT : (isScrolled ? SMALL_HEADER_HEIGHT : LARGE_HEADER_HEIGHT)) + 'px',
-          paddingTop: (isMobile ? '4px' : (isScrolled ? '4px' : '24px')),
-          paddingBottom: (isMobile ? '4px' : (isScrolled ? '4px' : '24px'))
+          height: (isMobile ? SMALL_HEADER_HEIGHT : LARGE_HEADER_HEIGHT) + 'px',
+          paddingTop: (isMobile ? '4px' : '24px'),
+          paddingBottom: (isMobile ? '4px' : '24px')
         }"
       >
         <a href="/" class="flex items-center h-full">
@@ -96,19 +87,23 @@ onUnmounted(() => {
             :src="logoUrl"
             :alt="logoAlt"
             class="object-contain transition-all duration-300 block mix-blend-multiply"
-            :style="{ height: isMobile ? LOGO_SMALL_HEIGHT : (isScrolled ? LOGO_SMALL_HEIGHT : LOGO_LARGE_HEIGHT) }"
+            :style="{ height: isMobile ? LOGO_SMALL_HEIGHT : LOGO_LARGE_HEIGHT }"
           />
         </a>
       </div>
 
       <!-- Hamburger -->
-      <div class="relative z-50 sm:hidden flex items-center">
+      <div class="sm:hidden">
         <button
           @click="toggleMenu"
+          :aria-expanded="menuOpen ? 'true' : 'false'"
           aria-label="Toggle menu"
           type="button"
-          class="relative w-[30px] h-[22px] flex flex-col justify-between cursor-pointer"
-          :class="{ open: menuOpen }"
+          class="w-[30px] h-[22px] flex flex-col justify-between cursor-pointer transition-all duration-300 ease-in-out pointer-events-auto"
+          :class="[
+            menuOpen ? 'fixed top-4 right-4 z-[70]' : 'relative z-[70]',
+            menuOpen ? 'open' : ''
+          ]"
           id="menu-toggle"
         >
           <span class="block bg-black rounded h-[3px] w-[30px] transition-all duration-300 ease-in-out"></span>
@@ -117,8 +112,8 @@ onUnmounted(() => {
         </button>
       </div>
 
-      <!-- Desktop menu -->
-     <ul class="hidden sm:flex gap-[1px] items-center text-secondary text-base font-bold ml-auto ">
+      <!-- Desktop menü -->
+      <ul class="hidden sm:flex gap-[1px] items-center text-secondary text-base font-bold ml-auto">
         <template v-for="item in menuItems" :key="item.url">
           <li>
             <a
@@ -132,25 +127,66 @@ onUnmounted(() => {
           </li>
         </template>
       </ul>
+    </div>
 
-      <!-- Mobile menu -->
-      <div
-        id="mobile-menu"
-        :class="[
-          'fixed inset-0 bg-lightbrown z-40 flex-col px-6 py-8 pt-12 overflow-y-auto sm:hidden transition-all duration-300 ease-in-out',
-          menuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-full'
-        ]"
-      >
-        <img
-          :src="logoUrl"
-          :alt="logoAlt"
-          id="mobile-logo"
-          class="absolute top-4 left-4 h-8 w-auto transition-opacity duration-300 select-none z-50"
-          :class="menuOpen ? 'opacity-100' : 'opacity-0'"
-        />
-        <ul class="flex flex-col gap-[1px] items-center text-secondary text-xl font-bold mt-12 ">
-          <template v-for="item in menuItems" :key="item.url + '-mobile'">
-            <li class="my-2">
+    <!-- Mobil menü overlay -->
+    <div
+      id="mobile-menu"
+      :class="[
+        'fixed inset-0 bg-lightbrown z-40 flex-col px-6 py-8 pt-12 overflow-y-auto sm:hidden transition-all duration-300 ease-in-out',
+        menuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-full'
+      ]"
+    >
+      <img
+        :src="logoUrl"
+        :alt="logoAlt"
+        id="mobile-logo"
+        class="absolute top-4 left-4 h-8 w-auto transition-opacity duration-300 select-none z-50"
+        :class="menuOpen ? 'opacity-100' : 'opacity-0'"
+      />
+      <ul class="flex flex-col gap-[1px] items-center text-secondary text-xl font-bold mt-12">
+        <template v-for="item in menuItems" :key="item.url + '-mobile'">
+          <li class="my-2">
+            <a
+              :href="item.url"
+              :class="linkClasses(item.url)"
+              :target="item.external ? '_blank' : undefined"
+              :rel="item.external ? 'noopener noreferrer' : undefined"
+            >
+              {{ item.title }}
+            </a>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </header>
+
+  <!-- 2) MINI FIX FEJLÉC (csak ha a nagy teljesen eltűnt) -->
+  <header
+    aria-hidden="true"
+    class="fixed top-2 left-10 right-10 z-50 pointer-events-none"
+    :class="[
+      'transition-all duration-300 ease-out',
+      miniVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-[10px]'
+    ]"
+  >
+    <div
+      class="pointer-events-auto mx-auto px-6 py-2 rounded-xl shadow-lg bg-lightbrown/95 backdrop-blur"
+    >
+      <div class="flex items-center justify-between">
+        <!-- Kisebb logó -->
+        <a href="/" class="flex items-center h-10">
+          <img
+            :src="logoUrl"
+            :alt="logoAlt"
+            class="h-8 w-auto object-contain mix-blend-multiply"
+          />
+        </a>
+
+        <!-- Desktop menü (kompakt) -->
+        <ul class="hidden sm:flex gap-1 items-center text-secondary text-sm font-bold ml-auto">
+          <template v-for="item in menuItems" :key="item.url + '-mini'">
+            <li>
               <a
                 :href="item.url"
                 :class="linkClasses(item.url)"
@@ -167,16 +203,18 @@ onUnmounted(() => {
   </header>
 </template>
 
-
-
 <style scoped>
-#menu-toggle.open span:nth-child(1) {
+/* Hamburger → X átalakulás */
+#menu-toggle.open span:nth-child(1),
+#menu-toggle[aria-expanded="true"] span:nth-child(1) {
   transform: translateY(9.5px) rotate(45deg);
 }
-#menu-toggle.open span:nth-child(2) {
+#menu-toggle.open span:nth-child(2),
+#menu-toggle[aria-expanded="true"] span:nth-child(2) {
   opacity: 0;
 }
-#menu-toggle.open span:nth-child(3) {
+#menu-toggle.open span:nth-child(3),
+#menu-toggle[aria-expanded="true"] span:nth-child(3) {
   transform: translateY(-9.5px) rotate(-45deg);
 }
 </style>
