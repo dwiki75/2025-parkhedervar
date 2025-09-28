@@ -33,9 +33,10 @@ html, body {
 
 
 @theme {
-  --color-primary: #76806c;
-  --color-secondary: #b3937e;
-  --color-thirdy: #e9e2dc;
+  --color-primary: #1f3335;
+  --color-secondary: #e5ebe2;
+  --color-thirdy: #abdda2;
+  --color-four: #2f7e4b;
   --color-lightbrown: #f5f4f0;
   --color-midgray: #463e3c;
   --font-raleway: "Raleway", sans-serif;
@@ -85,6 +86,12 @@ html, body {
 
 .max-w-8xl {
   max-width: 90rem;
+
+}
+
+.max-w-10xl {
+  max-width: 110rem;
+  
 }
 
 

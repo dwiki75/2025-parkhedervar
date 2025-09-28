@@ -1,37 +1,45 @@
 {% set menuItems = craft.entries.section('menu').all() %}
 {% set currentPath = craft.app.request.getPathInfo() %}
 {% set baseUrl = craft.app.request.getHostInfo() %}
-{# % set logo = header.image.one() % #}
 
-{# Twig-ben készítsük elő a menüt tömbként (append nélkül): #}
+{# Globálból a logó #}
+{% set logo = header.image|length ? header.image.one() : null %}
+
+{# Menü tömb előkészítése #}
 {% set formattedMenu = [] %}
 {% for item in menuItems %}
-    {% set type = item.optional|lower %}
-    {% set url = '#' %}
-    {% if type == 'post' and item.post|length %}
-      {% set url = item.post.one().url %}
-    {% elseif type == 'category' and item.catField|length %}
-      {% set url = item.catField.one().url %}
-    {% elseif type == 'directlink' and item.directLink is not empty %}
-      {% set url = item.directLink %}
-    {% endif %}
-    {% set isExternal = (type == 'directlink') %}
-    {% set menuPath = url|replace({(baseUrl ~ '/'): ''}) %}
-    {% set isActive = (not isExternal) and (menuPath == currentPath) %}
+  {% set type = item.optional|lower %}
+  {% set url = '#' %}
+  {% if type == 'post' and item.post|length %}
+    {% set url = item.post.one().url %}
+  {% elseif type == 'category' and item.catField|length %}
+    {% set url = item.catField.one().url %}
+  {% elseif type == 'directlink' and item.directLink is not empty %}
+    {% set url = item.directLink %}
+  {% endif %}
+  {% set isExternal = (type == 'directlink') %}
+  {% set menuPath = url|replace({(baseUrl ~ '/'): ''}) %}
+  {% set isActive = (not isExternal) and (menuPath == currentPath) %}
 
-    {% set formattedMenu = formattedMenu|merge([{
-      title: item.title,
-      url: url,
-      active: isActive,
-      external: isExternal
-    }]) %}
+  {% set formattedMenu = formattedMenu|merge([{
+    title: item.title,
+    url: url,
+    active: isActive,
+    external: isExternal
+  }]) %}
 {% endfor %}
+
+
+{% set languageHtml %}
+  {% include './includes/_language.twig' %}
+{% endset %}
 
 <header
   id="{{ id ?? 'site-header' }}"
- {#  data-logo-url="{{ logo.url() }}"
-  data-logo-alt="{{ logo.alt }}" #}
+  data-logo-url="{{ logo ? logo.url : '' }}"
+  data-logo-alt="{{ logo ? (logo.alt ?? logo.title ?? '') : '' }}"
+  data-language="{{ languageHtml|e('html_attr') }}"   {# ⬅⬅⬅ EZ ÚJ #}
   data-menu="{{ formattedMenu|json_encode|e('html_attr') }}"
-  class="sticky top-0 z-50 w-full transition-all duration-300 ease-in-out"
+  class="w-full transition-all duration-300 ease-in-out"
 >
 </header>

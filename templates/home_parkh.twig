@@ -23,33 +23,59 @@
   {% include './includes/_menu' with { id: 'mobile-header' } %}
 </div>
 
-<div class="w-full bg-white p-5">
-  <div class="mx-auto p-3 bg-secondary text-white rounded-4xl">
+<div class="w-full  bg-white p-5  ">
+  <div class="mx-auto  bg-primary text-white rounded-4xl  overflow-hidden" >
+   <div class="max-w-10xl mx-auto " >
 
 
-       <div class="hidden md:block z-50  w-full">
-        {% include './includes/_menu' with { id: 'site-header' } %}
-      </div>
+      <div class="flex flex-row sm:flex sm:items-center justify-between gap-4 px-5 lg:px-10 2xl:px-20">
+          <div class="hidden md:block z-50  w-full">
+            {% include './includes/_menu' with { id: 'site-header' } %}
+          </div>
 
-      <!-- Bal oldali adat blokk -->
-      <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
-        {# % include './includes/_iconsData.twig' with { id: 'mobile-header' } % #}
-      </div>
+          <!-- Bal oldali adat blokk -->
+          <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row  gap-2  sm:gap-4 sm:items-center">
+            {# % include './includes/_iconsData.twig' with { id: 'mobile-header' } % #}
+          </div>
 
-      <!-- Jobb oldali nyelv blokk -->
-      <div class="w-1/4 sm:w-auto flex justify-end sm:justify-start items-start sm:items-center">
-        {% include './includes/_language.twig' %}
+          <!-- Jobb oldali nyelv blokk -->
+          <div class="hidden md:flex w-1/4 sm:w-auto  justify-end sm:justify-start items-start sm:items-center">
+            {% include './includes/_language.twig' %}
+          </div>
       </div>
 
             {# Desktop sticky menü #}
+  <div class="flex flex-col xl:flex-row items-stretch gap-6">
+
+  <!-- BAL OSZLOP (mobilon teljes szélesség) -->
+  <div class="w-full xl:w-2/5 p-5 lg:px-10 2xl:px-20
+              grid grid-rows-[auto_1fr_auto] min-h-0
+              [&_p]:text-base [&_p]:lg:text-sm [&_p]:2xl:text-base
+              [&_h1]:mb-2 [&_h1]:text-thirdy [&_h1]:text-4xl [&_h1]:lg:text-6xl [&_h1]:2xl:text-8xl
+              [&_h2]:text-secondary [&_h2]:mb-5 [&_h2]:text-2xl [&_h2]:lg:text-4xl [&_h2]:2xl:text-6xl">
+
+    <div class="self-start">
+      ikonok
+    </div>
+
+    <div class="self-center">
+      {{ header.textBox }}
+    </div>
+
+    <div class="self-end">
+      heti menu
+    </div>
+  </div>
+
+  <!-- JOBB OSZLOP: SLIDER (mobilon teljes szélesség) -->
+  <div class="w-full xl:w-3/5 overflow-hidden rounded-tl-[64px] min-h-0">
+    {% include './includes/_slider' %}
+  </div>
+
+</div>
 
 
-      <div class="w-1/2 mx-left">
-              {% include './includes/_slider'%}
-      </div>
-
-
-
+     </div>
     </div>
 
 </div>
@@ -63,6 +89,20 @@ Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo ti
 
 Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque. 
 
+orem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
+
+Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
+
+Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
+
+Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque. 
+orem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
+
+Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
+
+Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
+
+Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque. 
 
 
 

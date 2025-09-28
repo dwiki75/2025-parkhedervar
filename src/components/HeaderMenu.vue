@@ -9,7 +9,8 @@ const LOGO_SMALL_HEIGHT = '40px'
 const props = defineProps({
   logoUrl: String,
   logoAlt: String,
-  menuItems: Array
+  menuItems: Array,
+  languageHtml: String
 })
 
 const menuOpen = ref(false)
@@ -45,10 +46,12 @@ function isCurrent(url) {
 function linkClasses(url) {
   const isActive = isCurrent(url)
   return [
+    // közös
+    'rounded-full px-5 py-2 transition-colors duration-200',
+    // állapotok
     isActive
-      ? 'bg-primary text-white rounded-full px-5 py-2'
-      : 'text-midgray hover:bg-primary hover:text-white rounded-full px-5 py-2',
-    'hover:underline link-transition'
+      ? 'bg-thirdy text-black'
+      : 'text-white hover:bg-thirdy hover:text-black'
   ]
 }
 
@@ -72,7 +75,7 @@ onUnmounted(() => {
     :class="['w-full transition-all duration-300 ease-in-out']"
     :style="{ height: (isMobile ? SMALL_HEADER_HEIGHT : LARGE_HEADER_HEIGHT) + 'px' }"
   >
-    <div class="mx-auto px-6 h-full flex items-center justify-between">
+    <div class="mx-auto h-full flex items-center justify-between">
       <!-- Logó -->
       <div
         class="flex items-center transition-all duration-300"
@@ -86,7 +89,7 @@ onUnmounted(() => {
           <img
             :src="logoUrl"
             :alt="logoAlt"
-            class="object-contain transition-all duration-300 block mix-blend-multiply"
+            class="object-contain transition-all duration-300 block"
             :style="{ height: isMobile ? LOGO_SMALL_HEIGHT : LOGO_LARGE_HEIGHT }"
           />
         </a>
@@ -158,6 +161,9 @@ onUnmounted(() => {
           </li>
         </template>
       </ul>
+
+      <!-- (OPCIONÁLIS) Nyelvváltó a mobil overlay alján -->
+      <div class="mt-8" v-html="languageHtml"></div>
     </div>
   </header>
 
@@ -170,16 +176,18 @@ onUnmounted(() => {
       miniVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-[10px]'
     ]"
   >
-    <div
-      class="pointer-events-auto mx-auto px-6 py-2 rounded-xl shadow-lg bg-lightbrown/95 backdrop-blur"
-    >
+  <div
+  class="pointer-events-auto max-w-8xl mx-auto px-6 py-2 rounded-xl
+         bg-primary text-white backdrop-blur
+         shadow-[0_0_40px_rgba(255,255,255,0.25)]"
+>
       <div class="flex items-center justify-between">
         <!-- Kisebb logó -->
         <a href="/" class="flex items-center h-10">
           <img
             :src="logoUrl"
             :alt="logoAlt"
-            class="h-8 w-auto object-contain mix-blend-multiply"
+            class="h-8 w-auto object-contain"
           />
         </a>
 
@@ -198,6 +206,9 @@ onUnmounted(() => {
             </li>
           </template>
         </ul>
+
+        <!-- Nyelvváltó a mini-header jobb oldalán -->
+        <div class="hidden sm:block ml-4 pointer-events-auto" v-html="languageHtml"></div>
       </div>
     </div>
   </header>

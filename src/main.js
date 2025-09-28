@@ -1,54 +1,68 @@
 // src/main.js
-
-import './styles.css';
+import './styles.css'
 
 import { createApp } from 'vue'
 import ImageSlider from './components/ImageSlider.vue'
 import Gallery from './components/Gallery.vue'
-import HeaderMenu from './components/HeaderMenu.vue' // ✅ név egyezik
-import Popup from './components/Popup.vue' // ⬅ új import
+import HeaderMenu from './components/HeaderMenu.vue'
+import Popup from './components/Popup.vue'
 
-// ImageSlider mount
-const el = document.getElementById('image-slider')
-if (el) {
-  const pictures = JSON.parse(el.dataset.pictures)
-  const speed = el.dataset.speed ? Number(el.dataset.speed) : undefined
-  createApp(ImageSlider, { pictures, speed }).mount(el)
+// -- Kisegítő függvények --
+function safeParseJSON(str, fallback = []) {
+  try {
+    return str ? JSON.parse(str) : fallback
+  } catch {
+    return fallback
+  }
+}
+function ds(el, key, fallback = '') {
+  return (el?.dataset?.[key] ?? fallback)
 }
 
-// Gallery mount
-const galleryEl = document.getElementById('gallery')
-if (galleryEl) {
-  const pictures = JSON.parse(galleryEl.dataset.pictures)
-  createApp(Gallery, { pictures }).mount(galleryEl)
-}
-
-
-// Header mount
-
-// Feltételezve, hogy a twig-ben a #site-header elemre mountolunk
-function mountHeaderById(id) {
-  const el = document.getElementById(id);
+// -- ImageSlider mount --
+{
+  const el = document.getElementById('image-slider')
   if (el) {
-    const logoUrl = el.dataset.logoUrl;
-    const logoAlt = el.dataset.logoAlt;
-    const menuItems = JSON.parse(el.dataset.menu);
-
-    createApp(HeaderMenu, { logoUrl, logoAlt, menuItems }).mount(el);
+    const pictures = safeParseJSON(ds(el, 'pictures'))
+    const speed = ds(el, 'speed') ? Number(ds(el, 'speed')) : undefined
+    createApp(ImageSlider, { pictures, speed }).mount(el)
   }
 }
 
-mountHeaderById('site-header');      // desktop
-mountHeaderById('mobile-header'); 
+// -- Gallery mount --
+{
+  const el = document.getElementById('gallery')
+  if (el) {
+    const pictures = safeParseJSON(ds(el, 'pictures'))
+    createApp(Gallery, { pictures }).mount(el)
+  }
+}
 
+// -- HeaderMenu mount (desktop + mobil támogatás) --
+function mountHeaderById(id) {
+  const el = document.getElementById(id)
+  if (!el) return
 
+  const props = {
+    logoUrl: ds(el, 'logoUrl'),
+    logoAlt: ds(el, 'logoAlt'),
+    languageHtml: ds(el, 'language'),          // ⬅️ nyelvváltó HTML
+    menuItems: safeParseJSON(ds(el, 'menu'))    // ⬅️ menü tömb
+  }
 
-// Popup mount
-const popupEl = document.getElementById('vue-popup')
-if (popupEl) {
-  createApp(Popup, {
-    title: popupEl.dataset.title,
-    text: popupEl.dataset.text,
-    img: popupEl.dataset.img
-  }).mount(popupEl)
+  createApp(HeaderMenu, props).mount(el)
+}
+mountHeaderById('site-header')   // desktop
+mountHeaderById('mobile-header') // mobil
+
+// -- Popup mount --
+{
+  const el = document.getElementById('vue-popup')
+  if (el) {
+    createApp(Popup, {
+      title: ds(el, 'title'),
+      text: ds(el, 'text'),
+      img: ds(el, 'img')
+    }).mount(el)
+  }
 }
