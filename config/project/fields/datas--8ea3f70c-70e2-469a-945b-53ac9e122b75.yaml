@@ -1,0 +1,29 @@
+columnSuffix: null
+handle: datas
+instructions: null
+name: Adatok
+searchable: false
+settings:
+  createButtonLabel: null
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 915fda05-fe2f-4d16-8676-0d5f34b33d08 # Adat
+        -
+          - group
+          - Általános
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix

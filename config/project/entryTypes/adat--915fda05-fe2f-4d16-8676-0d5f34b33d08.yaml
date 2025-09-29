@@ -1,0 +1,74 @@
+color: null
+description: null
+fieldLayouts:
+  0ee4801b-d11b-4d85-b860-97718c31f27a:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2025-09-29T08:20:42+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: simpleIcon
+            includeInCards: false
+            instructions: null
+            label: 'Sima ikon'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: badd7ee8-1f48-4e6f-8fd1-5ebc86d6a65b
+            userCondition: null
+            warning: null
+            width: 25
+          -
+            dateAdded: '2025-09-29T08:20:42+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: 'Adat szövege'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: b743f491-f68a-48eb-9db6-ad3f6d50575d
+            userCondition: null
+            warning: null
+            width: 25
+          -
+            dateAdded: '2025-09-29T08:20:42+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: simpleLink
+            includeInCards: false
+            instructions: null
+            label: URL
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8096a1a7-c3a2-493d-9527-a89f29bdf4e7
+            userCondition: null
+            warning: null
+            width: 50
+        name: Tartalom
+        uid: 514af082-14ba-4e2d-9b2e-bcdb62136fcf
+        userCondition: null
+handle: adat
+hasTitleField: false
+icon: null
+name: Adat
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
