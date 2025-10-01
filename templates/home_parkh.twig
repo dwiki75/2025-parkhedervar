@@ -16,7 +16,21 @@
 {% set sites = craft.app.sites.getAllSites() %}
 
 {# MOBIL STICKY MENÜ #}
-<div class="block md:hidden sticky top-0 z-50 bg-primary  ">
+{# Globál: header beállítása EGYSZER #}
+{% set header = craft.app.globals.getSetByHandle('header') ?? null %}
+{% if not header %}
+  {# Ha valamiért nincs beállítva, ne dőljön el az oldal #}
+  {% set header = {
+    textBox: '',
+    button: null
+  } %}
+{% endif %}
+
+{# (Opcionális) kapcsolat előtöltés, ha a 'button' reláció #}
+{# {% do craft.app.elements.eagerLoadElements(className(header), [header], ['button']) %} #}
+
+{# MOBIL STICKY MENÜ #}
+<div class="block md:hidden sticky top-0 z-50 bg-primary">
   {% include './includes/_menu' with { id: 'mobile-header' } %}
 </div>
 
@@ -32,7 +46,8 @@
 
         <!-- Bal oldali adat blokk -->
         <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
-          {# % include './includes/_iconsData.twig' with { id: 'mobile-header' } % #}
+          {# ide jöhet később az iconsData, ha kell #}
+          {# {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %} #}
         </div>
 
         <!-- Jobb oldali nyelv blokk -->
@@ -49,11 +64,11 @@
                     grid grid-rows-[auto_1fr_auto] min-h-0
                     break-words [hyphens:auto]
                     [&_p]:text-base [&_p]:lg:text-sm [&_p]:2xl:text-base
-                    [&_h1]:mb-2 [&_h1]:text-thirdy [&_h1]:text-4xl [&_h1]:lg:text-6xl [&_h1]:2xl:text-8xl [&_h1]:break-words
-                    [&_h2]:text-secondary [&_h2]:mb-5 [&_h2]:text-2xl [&_h2]:lg:text-4xl [&_h2]:2xl:text-6xl [&_h2]:break-words">
+                    [&_h1]:mb-2 [&_h1]:text-thirdy [&_h1]:text-4xl [&_h1]:lg:text-5xl [&_h1]:xl:text-6xl [&_h1]:2xl:text-8xl [&_h1]:break-words
+                    [&_h2]:text-secondary [&_h2]:mb-2 [&_h2]:lg:mb-3 [&_h2]:xl:mb-4 [&_h2]:2xl:mb-5
+                    [&_h2]:text-2xl [&_h2]:lg:text-3xl [&_h2]:xl:text-4xl [&_h2]:2xl:text-6xl [&_h2]:break-words">
 
           <div class="self-start">
-            <!-- ITT frissült a wrapper: min-w-0 max-w-full, hogy biztosan törjön -->
             <div class="order-2 sm:order-1 w-full min-w-0 max-w-full flex items-center gap-2
                         text-base sm:group-[.shrink]:gap-1 sm:group-[.shrink]:text-sm
                         transition-all duration-300">
@@ -65,10 +80,28 @@
             {{ header.textBox }}
           </div>
 
-          <div class="self-end">
-            heti menu
+          {# Gomb a header.button-ból #}
+          {% set btnEntry = header.button is defined ? header.button.one() : null %}
+          {% if btnEntry %}
+            {# Desktop / tablet verzió - a mostani helyén, de mobilon hidden #}
+            <div class="self-end mt-2 hidden md:block">
+              <a href="{{ btnEntry.url }}" class="btn btn--thirdy btn--lineDraw">
+                {{ btnEntry.title }}
+              </a>
+            </div>
+
+            {# Mobil verzió - fix pozíció, saját stílussal #}
+            <div class="fixed bottom-4 left-4 md:hidden z-50">
+              <a href="{{ btnEntry.url }}" 
+                class="px-4 py-2 rounded-lg bg-primary text-white border border-white font-bold text-sm shadow-lg">
+                {{ btnEntry.title }}
+              </a>
+            </div>
+          {% endif %}
+
+
           </div>
-        </div>
+    
 
         <!-- JOBB OSZLOP: SLIDER -->
         <div class="w-full lg:w-3/5 min-w-0 overflow-hidden rounded-tl-[64px] min-h-0">

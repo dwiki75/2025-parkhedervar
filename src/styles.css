@@ -72,6 +72,54 @@ html, body {
 
 }
 
+
+@layer components {
+  /* Alap gomb: méret, lekerekítés, animációk, fókuszgyűrű, izolált stacking */
+  .btn {
+    @apply inline-block rounded-full px-6 py-2 font-semibold
+           transition-colors duration-300 ease-in-out
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    isolation: isolate; /* hogy a ::before ne takarja ki a szöveget/bg-t */
+    z-index: 0;
+  }
+  /* Biztosítsuk, hogy a tartalom a keret fölött legyen (nincs szükség extra <span>-ra) */
+  .btn > * { position: relative; z-index: 2; }
+
+  /* Színséma: thirdy → hover: primary + fehér szöveg */
+  .btn--thirdy {
+    @apply bg-thirdy text-primary focus-visible:ring-thirdy
+           hover:bg-primary hover:text-white;
+  }
+
+  /* Fehér, „kirajzolódó” keret effekt */
+  .btn--lineDraw {
+    position: relative; overflow: hidden; z-index: 0;
+  }
+  .btn--lineDraw::before {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    border: 2px solid var(--btn-border, #fff); /* keret színe — alap: fehér */
+    pointer-events: none;
+    z-index: 1;
+    /* indulás: rejtve (balról „nyitjuk”) */
+    clip-path: inset(0 100% 0 0 round 9999px);
+    transition: clip-path .45s ease;
+  }
+  .btn--lineDraw:hover::before,
+  .btn--lineDraw:focus-visible::before {
+    clip-path: inset(0 0 0 0 round 9999px);
+  }
+
+  /* Opcionális módosítók */
+  .btn--square { border-radius: 0; }                  /* szögletes verzió */
+  .btn--from-right::before  { clip-path: inset(0 0 0 100% round 9999px); }
+  .btn--from-top::before    { clip-path: inset(100% 0 0 0 round 9999px); }
+  .btn--from-bottom::before { clip-path: inset(0 0 100% 0 round 9999px); }
+}
+
+
+
 @layer utilities {
   .link-transition {
     transition-property: background-color, color, opacity;

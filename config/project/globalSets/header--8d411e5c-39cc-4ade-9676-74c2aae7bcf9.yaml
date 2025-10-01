@@ -73,6 +73,30 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 25
+          -
+            dateAdded: '2025-10-01T08:58:48+00:00'
+            elementCondition: null
+            heading: 'Gomb - menünek'
+            type: craft\fieldlayoutelements\Heading
+            uid: bdb0d28a-126d-4d95-9940-3cf770ae6287
+            userCondition: null
+          -
+            dateAdded: '2025-10-01T08:58:48+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 785c09ff-d241-42d1-b0a7-c985a24a712c # Bejegyzések
+            handle: button
+            includeInCards: false
+            instructions: null
+            label: Menü
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ed033a95-e3d2-47ec-909b-7f7302254760
+            userCondition: null
+            warning: null
+            width: 100
         name: Tartalom
         uid: c20de0b0-5fc8-4975-914d-cbff2f64b28f
         userCondition: null
