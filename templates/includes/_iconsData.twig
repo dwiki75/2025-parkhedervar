@@ -1,6 +1,7 @@
 {% import '_macros/icons.twig' as icons %}
 {% set headerEntry = craft.app.globals.getSetByHandle('header') %}
 
+
 {% if headerEntry and headerEntry.datas|length %}
   <ul class="flex flex-wrap items-start gap-2 sm:gap-x-4 sm:gap-y-2 w-full min-w-0">
     {% for block in headerEntry.datas %}

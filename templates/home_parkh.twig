@@ -1,175 +1,151 @@
 {% extends "_layout_parkh" %}
 
-{# % set pageTitle =  entry.title % #}
-
-
-
-{% set pageTitle =  entry.title %}
-
-
+{# Oldalcím #}
+{% set pageTitle = entry.title %}
 
 {% block menu %}
 
+  {# Kontextus #}
+  {% set currentEntry = entry ?? null %}
+  {% set currentLang = currentSite.language %}
+  {% set sites = craft.app.sites.getAllSites() %}
 
-{% set currentEntry = entry ?? null %}
-{% set currentLang = currentSite.language %}
-{% set sites = craft.app.sites.getAllSites() %}
+  {# Ikon macro #}
+  {% import '_macros/icons.twig' as icons %}
 
-{# MOBIL STICKY MENÜ #}
-{# Globál: header beállítása EGYSZER #}
-{% set header = craft.app.globals.getSetByHandle('header') ?? null %}
-{% if not header %}
-  {# Ha valamiért nincs beállítva, ne dőljön el az oldal #}
-  {% set header = {
-    textBox: '',
-    button: null
-  } %}
-{% endif %}
+  {# Globál: header beállítása EGYSZER #}
+  {% set header = craft.app.globals.getSetByHandle('header') ?? null %}
+  {% if not header %}
+    {% set header = { textBox: '', button: null } %}
+  {% endif %}
 
-{# (Opcionális) kapcsolat előtöltés, ha a 'button' reláció #}
-{# {% do craft.app.elements.eagerLoadElements(className(header), [header], ['button']) %} #}
+  {# Opcionális kapcsolat előtöltés, ha a 'button' reláció #}
+  {# {% do craft.app.elements.eagerLoadElements(className(header), [header], ['button']) %} #}
 
-{# MOBIL STICKY MENÜ #}
-<div class="block md:hidden sticky top-0 z-50 bg-primary">
-  {% include './includes/_menu' with { id: 'mobile-header' } %}
-</div>
+  {# Mobil alsó sávhoz: opcionális ikon a header.iconName alapján (csak ikon, nincs szöveg/link) #}
+  {% set iconName = header.iconName is defined and header.iconName ? header.iconName|trim : null %}
+  {% set iconSet = null %}
+  {% if iconName %}
+    {% set heroiconsPath = 'includes/icons/heroicons/' ~ iconName ~ '.svg' %}
+    {% set brandsPath = 'includes/icons/brands/' ~ iconName ~ '.svg' %}
+    {% if craft.app.view.doesTemplateExist(heroiconsPath) %}
+      {% set iconSet = 'heroicons' %}
+    {% elseif craft.app.view.doesTemplateExist(brandsPath) %}
+      {% set iconSet = 'brands' %}
+    {% endif %}
+  {% endif %}
+  {% set iconHtml = iconSet ? icons.icon(iconName, iconSet, 'w-6 h-6 text-white') : '' %}
 
-<div class="w-full bg-white p-2 md:p-5">
-  <div class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden">
-    <div class="max-w-10xl mx-auto">
+  {# MOBIL STICKY MENÜ #}
+  <div class="block md:hidden sticky top-0 z-50 bg-primary">
+    {% include './includes/_menu' with { id: 'mobile-header' } %}
+  </div>
 
-      <!-- Felső sor -->
-      <div class="flex flex-row sm:flex sm:items-center justify-between gap-4 px-5 lg:px-10 2xl:px-20">
-        <div class="hidden md:block z-50 w-full">
-          {% include './includes/_menu' with { id: 'site-header' } %}
+  <div class="w-full bg-white p-2 md:p-5">
+    <div class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0">
+      <div class="max-w-10xl mx-auto">
+
+        <!-- Felső sor -->
+        <div class="flex flex-row sm:flex sm:items-center justify-between gap-4 px-5 lg:px-10 2xl:px-20">
+          <div class="hidden md:block z-50 w-full">
+            {% include './includes/_menu' with { id: 'site-header' } %}
+          </div>
+
+          <!-- Bal oldali adat blokk -->
+          <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
+            {# később ide jöhet még tartalom #}
+            {# {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %} #}
+          </div>
+
+          <!-- Jobb oldali nyelv blokk -->
+          <div class="hidden md:flex w-1/4 sm:w-auto justify-end sm:justify-start items-start sm:items-center">
+            {% include './includes/_language.twig' %}
+          </div>
         </div>
 
-        <!-- Bal oldali adat blokk -->
-        <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
-          {# ide jöhet később az iconsData, ha kell #}
-          {# {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %} #}
-        </div>
+        {# Hero két oszlop lg-től #}
+        <div class="flex flex-col lg:flex-row items-stretch">
 
-        <!-- Jobb oldali nyelv blokk -->
-        <div class="hidden md:flex w-1/4 sm:w-auto justify-end sm:justify-start items-start sm:items-center">
-          {% include './includes/_language.twig' %}
+          <!-- BAL OSZLOP -->
+          <div class="w-full lg:w-2/5 min-w-0 p-5 lg:px-10 2xl:px-20
+                      grid grid-rows-[auto_1fr_auto] min-h-0
+                      break-words [hyphens:auto]
+                      [&_p]:text-base [&_p]:lg:text-sm [&_p]:2xl:text-base
+                      [&_h1]:mb-2 [&_h1]:text-thirdy [&_h1]:text-4xl [&_h1]:lg:text-5xl [&_h1]:xl:text-6xl [&_h1]:2xl:text-8xl [&_h1]:break-words
+                      [&_h2]:text-secondary [&_h2]:mb-2 [&_h2]:lg:mb-3 [&_h2]:xl:mb-4 [&_h2]:2xl:mb-5
+                      [&_h2]:text-2xl [&_h2]:lg:text-3xl [&_h2]:xl:text-4xl [&_h2]:2xl:text-6xl [&_h2]:break-words">
+
+            <div class="self-start">
+              <div class="order-2 sm:order-1 w-full min-w-0 max-w-full flex items-center gap-2
+                          text-base sm:group-[.shrink]:gap-1 sm:group-[.shrink]:text-sm
+                          transition-all duration-300">
+                {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %}
+              </div>
+            </div>
+
+            <div class="self-center min-w-0">
+              {{ header.textBox }}
+            </div>
+
+            {# Gomb a header.button-ból #}
+            {% set btnEntry = header.button is defined ? header.button.one() : null %}
+            {% if btnEntry %}
+              {# Desktop / tablet verzió - a mostani helyén, de mobilon hidden #}
+              <div class="self-end mt-2 hidden md:block">
+                <a href="{{ btnEntry.url }}" class="btn btn--thirdy btn--lineDraw">
+                  {{ btnEntry.title }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- JOBB OSZLOP: SLIDER -->
+          <div class="w-full lg:w-3/5 min-w-0 overflow-hidden rounded-tl-[64px] min-h-0">
+            {% include './includes/_slider' %}
+          </div>
+
         </div>
       </div>
-
-      {# Hero két oszlop lg-től #}
-      <div class="flex flex-col lg:flex-row items-stretch">
-
-        <!-- BAL OSZLOP -->
-        <div class="w-full lg:w-2/5 min-w-0 p-5 lg:px-10 2xl:px-20
-                    grid grid-rows-[auto_1fr_auto] min-h-0
-                    break-words [hyphens:auto]
-                    [&_p]:text-base [&_p]:lg:text-sm [&_p]:2xl:text-base
-                    [&_h1]:mb-2 [&_h1]:text-thirdy [&_h1]:text-4xl [&_h1]:lg:text-5xl [&_h1]:xl:text-6xl [&_h1]:2xl:text-8xl [&_h1]:break-words
-                    [&_h2]:text-secondary [&_h2]:mb-2 [&_h2]:lg:mb-3 [&_h2]:xl:mb-4 [&_h2]:2xl:mb-5
-                    [&_h2]:text-2xl [&_h2]:lg:text-3xl [&_h2]:xl:text-4xl [&_h2]:2xl:text-6xl [&_h2]:break-words">
-
-          <div class="self-start">
-            <div class="order-2 sm:order-1 w-full min-w-0 max-w-full flex items-center gap-2
-                        text-base sm:group-[.shrink]:gap-1 sm:group-[.shrink]:text-sm
-                        transition-all duration-300">
-              {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %}
-            </div>
-          </div>
-
-          <div class="self-center min-w-0">
-            {{ header.textBox }}
-          </div>
-
-          {# Gomb a header.button-ból #}
-          {% set btnEntry = header.button is defined ? header.button.one() : null %}
-          {% if btnEntry %}
-            {# Desktop / tablet verzió - a mostani helyén, de mobilon hidden #}
-            <div class="self-end mt-2 hidden md:block">
-              <a href="{{ btnEntry.url }}" class="btn btn--thirdy btn--lineDraw">
-                {{ btnEntry.title }}
-              </a>
-            </div>
-
-            {# Mobil verzió - fix pozíció, saját stílussal #}
-            <div class="fixed bottom-4 left-4 md:hidden z-50">
-              <a href="{{ btnEntry.url }}" 
-                class="px-4 py-2 rounded-lg bg-primary text-white border border-white font-bold text-sm shadow-lg">
-                {{ btnEntry.title }}
-              </a>
-            </div>
-          {% endif %}
-
-
-          </div>
-    
-
-        <!-- JOBB OSZLOP: SLIDER -->
-        <div class="w-full lg:w-3/5 min-w-0 overflow-hidden rounded-tl-[64px] min-h-0">
-          {% include './includes/_slider' %}
-        </div>
-
-      </div>
-
     </div>
   </div>
-</div>
 
+  {# --- Mobil alsó sáv (full-width). Csak akkor rajzoljuk, ha van ikon vagy gomb) --- #}
+  {% if iconHtml or (header.button is defined and header.button.one()) %}
+   {% set btnEntry = header.button is defined ? header.button.one() : null %}
+{% if btnEntry %}
+  <div class="fixed bottom-0 left-0 w-full bg-primary text-white border-t border-white md:hidden z-50">
+    <div class="flex items-center gap-3 p-2 px-3">
+      <a href="{{ btnEntry.url }}"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white text-white font-bold text-sm shadow-lg">
+        {% if iconHtml %}
+          {{ iconHtml|raw }}
+        {% endif %}
+        {{ btnEntry.title }}
+      </a>
+    </div>
+  </div>
+{% endif %}
+  {% endif %}
 
+  {# --- Menü ikonok / egyéb tartalom (placeholder) --- #}
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
+  <br><br>
+  Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
+  <br><br>
+  Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
+  <br><br>
+  Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque.
 
-
-
-      {# --- Menü ikonok / egyéb tartalom --- #}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
-
-Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
-
-Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
-
-Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque. 
-
-orem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
-
-Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
-
-Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
-
-Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque. 
-orem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
-
-Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
-
-Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
-
-Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque. 
-
-
-
-
-{% endblock %}  
+{% endblock %}
 
 {% block main %}
-
-
-
-
-
-
-<div class="w-full my-auto mx-auto">
+  <div class="w-full my-auto mx-auto">
     {# % for block in entry.pictText.all() %}
       {% include '_modules/' ~ block.type  %}
     {% endfor % #}
-</div>
-
-
-
-
-{% endblock %}  
+  </div>
+{% endblock %}
 
 {% block footer %}
-
-
-footer
-
-
-{% endblock %}  
+  footer
+{% endblock %}

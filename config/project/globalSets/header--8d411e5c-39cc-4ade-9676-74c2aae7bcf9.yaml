@@ -81,6 +81,23 @@ fieldLayouts:
             uid: bdb0d28a-126d-4d95-9940-3cf770ae6287
             userCondition: null
           -
+            dateAdded: '2025-10-02T16:58:14+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: iconName
+            includeInCards: false
+            instructions: null
+            label: 'Ikon neve'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: d4c35d65-a3f5-4b8d-849e-ea5613c25f0b
+            userCondition: null
+            warning: null
+            width: 25
+          -
             dateAdded: '2025-10-01T08:58:48+00:00'
             editCondition: null
             elementCondition: null
@@ -96,7 +113,7 @@ fieldLayouts:
             uid: ed033a95-e3d2-47ec-909b-7f7302254760
             userCondition: null
             warning: null
-            width: 100
+            width: 75
         name: Tartalom
         uid: c20de0b0-5fc8-4975-914d-cbff2f64b28f
         userCondition: null
