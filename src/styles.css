@@ -49,6 +49,10 @@ html, body {
 
 
 @layer base {
+
+
+
+
   html {
 
     font-family: "Raleway", sans-serif;
@@ -70,10 +74,21 @@ html, body {
     
   }
 
+
+  #mobile-header .fixed.opacity-0,
+  #mobile-header .fixed[aria-hidden="true"] {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+
 }
 
 
 @layer components {
+
+
+
   /* Alap gomb: méret, lekerekítés, animációk, fókuszgyűrű, izolált stacking */
   .btn {
     @apply inline-block rounded-full px-6 py-2 font-semibold
@@ -121,6 +136,8 @@ html, body {
 
 
 @layer utilities {
+
+
   .link-transition {
     transition-property: background-color, color, opacity;
     @apply duration-500 ease-in-out;

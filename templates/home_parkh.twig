@@ -19,10 +19,7 @@
     {% set header = { textBox: '', button: null } %}
   {% endif %}
 
-  {# Opcionális kapcsolat előtöltés, ha a 'button' reláció #}
-  {# {% do craft.app.elements.eagerLoadElements(className(header), [header], ['button']) %} #}
-
-  {# Mobil alsó sávhoz: opcionális ikon a header.iconName alapján (csak ikon, nincs szöveg/link) #}
+  {# Mobil alsó sávhoz: opcionális ikon a header.iconName alapján (csak ikon) #}
   {% set iconName = header.iconName is defined and header.iconName ? header.iconName|trim : null %}
   {% set iconSet = null %}
   {% if iconName %}
@@ -37,29 +34,37 @@
   {% set iconHtml = iconSet ? icons.icon(iconName, iconSet, 'w-6 h-6 text-white') : '' %}
 
   {# MOBIL STICKY MENÜ #}
-  <div class="block md:hidden sticky top-0 z-50 bg-primary">
-    {% include './includes/_menu' with { id: 'mobile-header' } %}
-  </div>
 
+
+
+<div class="block md:hidden sticky top-0 z-50 bg-primary">
+  <nav aria-label="{{ 'Fő navigáció'|t }}">
+    {% include './includes/_menu' with { id: 'mobile-header' } %}
+  </nav>
+</div>
   <div class="w-full bg-white p-2 md:p-5">
-    <div class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0">
+    <section class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0" aria-labelledby="home-hero-title">
       <div class="max-w-10xl mx-auto">
 
         <!-- Felső sor -->
         <div class="flex flex-row sm:flex sm:items-center justify-between gap-4 px-5 lg:px-10 2xl:px-20">
           <div class="hidden md:block z-50 w-full">
-            {% include './includes/_menu' with { id: 'site-header' } %}
+            <nav aria-label="{{ 'Fő navigáció'|t }}">
+              {% include './includes/_menu' with { id: 'site-header' } %}
+            </nav>
           </div>
 
-          <!-- Bal oldali adat blokk -->
-          <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
+          <!-- Bal oldali adat blokk (opcionális infók) -->
+          <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center" aria-label="{{ 'Elérhetőségek és rövid információk'|t }}">
             {# később ide jöhet még tartalom #}
             {# {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %} #}
           </div>
 
           <!-- Jobb oldali nyelv blokk -->
           <div class="hidden md:flex w-1/4 sm:w-auto justify-end sm:justify-start items-start sm:items-center">
-            {% include './includes/_language.twig' %}
+            <nav aria-label="{{ 'Nyelvváltó'|t }}">
+              {% include './includes/_language.twig' %}
+            </nav>
           </div>
         </div>
 
@@ -78,21 +83,23 @@
             <div class="self-start">
               <div class="order-2 sm:order-1 w-full min-w-0 max-w-full flex items-center gap-2
                           text-base sm:group-[.shrink]:gap-1 sm:group-[.shrink]:text-sm
-                          transition-all duration-300">
+                          transition-all duration-300 motion-reduce:transition-none">
                 {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %}
               </div>
             </div>
 
             <div class="self-center min-w-0">
+              <h1 id="home-hero-title" class="sr-only">{{ siteName }}</h1>
               {{ header.textBox }}
             </div>
 
             {# Gomb a header.button-ból #}
             {% set btnEntry = header.button is defined ? header.button.one() : null %}
             {% if btnEntry %}
-              {# Desktop / tablet verzió - a mostani helyén, de mobilon hidden #}
               <div class="self-end mt-2 hidden md:block">
-                <a href="{{ btnEntry.url }}" class="btn btn--thirdy btn--lineDraw">
+                <a href="{{ btnEntry.url }}"
+                   class="btn btn--thirdy btn--lineDraw focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 focus-visible:ring-offset-primary"
+                   aria-label="{{ 'Tovább: '|t ~ btnEntry.title }}">
                   {{ btnEntry.title }}
                 </a>
               </div>
@@ -106,44 +113,147 @@
 
         </div>
       </div>
-    </div>
+    </section>
   </div>
 
   {# --- Mobil alsó sáv (full-width). Csak akkor rajzoljuk, ha van ikon vagy gomb) --- #}
   {% if iconHtml or (header.button is defined and header.button.one()) %}
-   {% set btnEntry = header.button is defined ? header.button.one() : null %}
-{% if btnEntry %}
-  <div class="fixed bottom-0 left-0 w-full bg-primary text-white border-t border-white md:hidden z-50">
-    <div class="flex items-center gap-3 p-2 px-3">
-      <a href="{{ btnEntry.url }}"
-         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white text-white font-bold text-sm shadow-lg">
-        {% if iconHtml %}
-          {{ iconHtml|raw }}
-        {% endif %}
-        {{ btnEntry.title }}
-      </a>
-    </div>
-  </div>
-{% endif %}
+    {% set btnEntry = header.button is defined ? header.button.one() : null %}
+    {% if btnEntry %}
+      <div class="fixed bottom-0 left-0 w-full bg-primary text-white border-t border-white md:hidden z-50" role="region" aria-label="{{ 'Gyors művelet'|t }}">
+        <div class="flex items-center gap-3 p-2 px-3">
+          <a href="{{ btnEntry.url }}"
+             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white text-white font-bold text-sm shadow-lg
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white focus-visible:ring-offset-primary"
+             aria-label="{{ 'Tovább: '|t ~ btnEntry.title }}">
+            {% if iconHtml %}
+              <span aria-hidden="true">{{ iconHtml|raw }}</span>
+            {% endif %}
+            <span>{{ btnEntry.title }}</span>
+          </a>
+        </div>
+      </div>
+    {% endif %}
   {% endif %}
 
-  {# --- Menü ikonok / egyéb tartalom (placeholder) --- #}
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
-  <br><br>
-  Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
-  <br><br>
-  Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
-  <br><br>
-  Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque.
+  {# --- Hírek adatlekérés --- #}
+  {% set limit = 6 %}
+  {% set allNewsQuery = craft.entries()
+    .section('news')
+    .type('new')
+    .with(['onePict'])
+    .orderBy('postDate desc') %}
+  {% set totalNews = allNewsQuery.count() %}
+  {% set news = allNewsQuery.limit(limit).all() %}
+
+  {# --- Hírek szekció --- #}
+  <section id="home-news" class="py-10" aria-labelledby="home-news-title">
+    <div class="max-w-8xl mx-auto px-4 sm:px-6">
+
+      <div class="mb-8 text-center">
+        <h2 id="home-news-title" class="text-3xl md:text-4xl text-primary">{{ 'Hírek'|t }}</h2>
+      </div>
+
+      {# --- Mobil karusszel --- #}
+      <div class="md:hidden" role="region" aria-roledescription="carousel" aria-label="{{ 'Legfrissebb hírek'|t }}">
+        <div class="news-carousel -mx-4 px-4 overflow-x-auto flex gap-4
+                    snap-x snap-mandatory scroll-pl-4"
+             role="list"
+             data-dots="#news-dots"
+             aria-describedby="news-carousel-hint">
+          {% for item in news %}
+            {# A kártya include marad — ha nem ad role-t, a list szerepet a konténer biztosítja #}
+            {% include 'includes/_newsCard.twig' with { item: item } %}
+          {% endfor %}
+        </div>
+        <p id="news-carousel-hint" class="sr-only">{{ 'Vízszintesen görgethető lista'|t }}</p>
+        <div id="news-dots" class="flex items-center gap-2 mt-4 justify-center"
+             role="tablist" aria-label="{{ 'Lapozó'|t }}"></div>
+      </div>
+
+      {# --- Desktop grid --- #}
+      <div class="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6" role="list" aria-label="{{ 'Legfrissebb hírek'|t }}">
+        {% for item in news|slice(0,3) %}
+          {% include 'includes/_newsCard.twig' with { item: item } %}
+        {% endfor %}
+      </div>
+
+      {% if totalNews > 3 %}
+        <div class="mt-6 text-center">
+          <a href="{{ url('news') }}"
+             class="inline-flex items-center gap-2 px-5 py-3 rounded-md
+                    bg-thirdy text-black font-semibold
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-black/60"
+             aria-label="{{ 'További hírek megnyitása'|t }}">
+            {{ 'További hírek'|t }}
+            <svg class="w-4 h-4" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 5l5 5-5 5"/></svg>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {# --- Karusszel pöttyök – a11y finomítással --- #}
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const wrap = document.querySelector('.news-carousel');
+    if (!wrap) return;
+
+    const items = Array.from(wrap.children);
+    const dotsBox = document.querySelector(wrap.getAttribute('data-dots'));
+    if (!dotsBox) return;
+
+    // pöttyök kirajzolása
+    dotsBox.innerHTML = '';
+    const dots = items.map((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.className = 'w-2.5 h-2.5 rounded-full bg-primary/30 aria-[current=true]:bg-primary transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+      b.setAttribute('aria-label', `${i+1}. ${'{{ "hír"|t }}'}`);
+      b.addEventListener('click', () => {
+        const smoothOk = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        items[i].scrollIntoView({ behavior: smoothOk ? 'smooth' : 'auto', inline: 'start' });
+      });
+      dotsBox.appendChild(b);
+      return b;
+    });
+
+    // aktív pötty frissítése
+    const update = () => {
+      let idx = 0, min = Infinity, left = wrap.scrollLeft;
+      items.forEach((el, i) => {
+        const d = Math.abs(el.offsetLeft - left);
+        if (d < min) { min = d; idx = i; }
+      });
+      dots.forEach((d, i) => d.setAttribute('aria-current', String(i === idx)));
+    };
+
+    update();
+    wrap.addEventListener('scroll', () => {
+      if (wrap._t) return;
+      wrap._t = requestAnimationFrame(() => { update(); wrap._t = null; });
+    });
+    window.addEventListener('resize', update);
+  });
+  </script>
+
+  {# --- Placeholder tartalom (nem szükséges a11y-hoz, maradhat) --- #}
+  <div class="px-4 max-w-8xl mx-auto prose prose-invert prose-headings:text-white/90">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
+    <br><br>
+    Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
+    <br><br>
+    Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
+    <br><br>
+    Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque.
+  </div>
 
 {% endblock %}
 
 {% block main %}
-  <div class="w-full my-auto mx-auto">
-    {# % for block in entry.pictText.all() %}
-      {% include '_modules/' ~ block.type  %}
-    {% endfor % #}
-  </div>
+  {# A layout már tartalmaz <main>-t; itt ne tegyünk újabbat, csak tartalmat adnánk, de most üresen hagyom #}
+  <div class="w-full my-auto mx-auto"></div>
 {% endblock %}
 
 {% block footer %}

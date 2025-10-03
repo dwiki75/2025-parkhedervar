@@ -1,14 +1,18 @@
-{% set menuItems = craft.entries.section('menu').all() %}
+{# includes/_menu.twig #}
+{# --- Adatok előkészítése --- #}
+{% set menuItems   = craft.entries.section('menu').all() %}
 {% set currentPath = craft.app.request.getPathInfo() %}
-{% set baseUrl = craft.app.request.getHostInfo() %}
+{% set baseUrl     = craft.app.request.getHostInfo() %}
 
-{# Globálból a logó #}
-{% set logo = header.image|length ? header.image.one() : null %}
+{# Logo: ha nincs átadott 'header', essen vissza a globál set-re #}
+{% set headerGlobal = craft.app.globals.getSetByHandle('header') ?? null %}
+{% set headerObj    = (header is defined and header) ? header : headerGlobal %}
+{% set logo         = (headerObj and headerObj.image|length) ? headerObj.image.one() : null %}
 
-{# Menü tömb előkészítése #}
+{# Menü tömb előkészítése (változatlan logika, de védetten) #}
 {% set formattedMenu = [] %}
 {% for item in menuItems %}
-  {% set type = item.optional|lower %}
+  {% set type = (item.optional ?? '')|lower %}
   {% set url = '#' %}
   {% if type == 'post' and item.post|length %}
     {% set url = item.post.one().url %}
@@ -17,9 +21,10 @@
   {% elseif type == 'directlink' and item.directLink is not empty %}
     {% set url = item.directLink %}
   {% endif %}
+
   {% set isExternal = (type == 'directlink') %}
-  {% set menuPath = url|replace({(baseUrl ~ '/'): ''}) %}
-  {% set isActive = (not isExternal) and (menuPath == currentPath) %}
+  {% set menuPath   = url|replace({ (baseUrl ~ '/'): '' }) %}
+  {% set isActive   = (not isExternal) and (menuPath == currentPath) %}
 
   {% set formattedMenu = formattedMenu|merge([{
     title: item.title,
@@ -29,17 +34,60 @@
   }]) %}
 {% endfor %}
 
-
+{# Nyelvváltó HTML (önálló include, nem kell neki külső változó) #}
 {% set languageHtml %}
   {% include './includes/_language.twig' %}
 {% endset %}
 
+{# --- Kimenet: HEADER + NAV (no-JS fallbackkal) --- #}
 <header
   id="{{ id ?? 'site-header' }}"
   data-logo-url="{{ logo ? logo.url : '' }}"
-  data-logo-alt="{{ logo ? (logo.alt ?? logo.title ?? '') : '' }}"
-  data-language="{{ languageHtml|e('html_attr') }}"   {# ⬅⬅⬅ EZ ÚJ #}
+  data-logo-alt="{{ logo ? (logo.alt ?? logo.title ?? siteName ?? '') : '' }}"
+  data-language="{{ languageHtml|e('html_attr') }}"
   data-menu="{{ formattedMenu|json_encode|e('html_attr') }}"
   class="w-full transition-all duration-300 ease-in-out"
+  role="banner"
 >
+  <nav aria-label="{{ 'Fő navigáció'|t }}" class="max-w-8xl mx-auto px-4">
+    <div class="flex items-center justify-between gap-4 py-3">
+      {# Bal: logó/link #}
+      <a href="{{ siteUrl }}"
+         class="inline-flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black rounded-md"
+         aria-label="{{ siteName }}">
+        {% if logo %}
+          <img src="{{ logo.url }}" alt="{{ siteName }}" class="h-10 w-auto" loading="lazy" decoding="async">
+        {% else %}
+          <span class="text-lg font-semibold">{{ siteName }}</span>
+        {% endif %}
+      </a>
+
+      {# Közép: menüpontok #}
+      <ul class="hidden md:flex items-center gap-1" role="list" id="primary-menu">
+        {% for it in formattedMenu %}
+          <li>
+            <a href="{{ it.url }}"
+               class="px-3 py-2 rounded-md inline-flex items-center gap-2
+                      hover:bg-white/10
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
+               {% if it.active %} aria-current="page"{% endif %}
+               {% if it.external %} target="_blank" rel="noopener noreferrer"{% endif %}>
+              <span>{{ it.title }}</span>
+              {% if it.external %}
+                <svg class="w-4 h-4" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" d="M7 5h8v8h-2V8.414l-8.293 8.293-1.414-1.414L11.586 7H7V5z"/>
+                </svg>
+                <span class="sr-only">{{ ' (külső hivatkozás)'|t }}</span>
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      {# Jobb: nyelvváltó #}
+      <div class="hidden md:block">
+        {% include './includes/_language.twig' %}
+      </div>
+    </div>
+  </nav>
 </header>

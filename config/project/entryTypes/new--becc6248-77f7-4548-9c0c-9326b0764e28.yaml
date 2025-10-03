@@ -1,0 +1,87 @@
+color: null
+description: null
+fieldLayouts:
+  f4565d83-a86a-41ac-8c36-a614d2ff66f1:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: '2025-10-03T07:10:46+00:00'
+            disabled: false
+            elementCondition: null
+            id: null
+            includeInCards: false
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            providesThumbs: false
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: b997c09a-2ca8-44d9-bf5a-7911adbc6c9c
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-10-03T07:12:40+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 8792f1cf-e9e4-4f28-9777-8c5304780529 # Egy kép
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 755d6114-457b-46a8-9106-04c302188c53
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-10-03T07:12:40+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 6755a832-4602-473a-a932-b6633c4cf009
+            userCondition: null
+            warning: null
+            width: 100
+        name: Tartalom
+        uid: 39ce1a3c-5785-4975-943c-feac9d5bd3de
+        userCondition: null
+handle: new
+hasTitleField: true
+icon: null
+name: HÍr
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
