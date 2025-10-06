@@ -8,6 +8,7 @@
     "icons:optimize:brands": "svgo -f ./templates/includes/icons/brands --config=svgo.config.js"
   },
   "dependencies": {
+    "swiper": "^12.0.2",
     "vue": "^3.5.21"
   },
   "devDependencies": {

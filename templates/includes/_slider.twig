@@ -1,5 +1,8 @@
-{% set headerEntry = craft.app.globals.getSetByHandle('header') %}
+{# includes/_slider.twig #}
+{# 1) Forrás: globál 'header' #}
+{% set headerEntry = craft.app.globals.getSetByHandle('header') ?? null %}
 
+{# 2) Képtranszformok (állíts rajtuk, ha kell) #}
 {% set slider1980x800 = {
   mode: 'crop',
   width: 1920,
@@ -18,20 +21,28 @@
   format: 'webp'
 } %}
 
+{# 3) Képtömb összeállítása #}
 {% set pictures = [] %}
-{% for image in headerEntry.sliderImage.all() %}
-  {% set pictures = pictures|merge([{
-    desktopUrl: image.getUrl(slider1980x800),
-    mobileUrl: image.getUrl(slider640x480),
-    title: image.title,
-    simpleText: image.simpleText
-  }]) %}
-{% endfor %}
+{% if headerEntry and headerEntry.sliderImage|length %}
+  {% for image in headerEntry.sliderImage.all() %}
+    {% set pictures = pictures|merge([{
+      desktopUrl: image.getUrl(slider1980x800),
+      mobileUrl:  image.getUrl(slider640x480),
+      title:      image.title,
+      simpleText: image.simpleText,
+      alt:        image.alt ?? image.title
+    }]) %}
+  {% endfor %}
+{% endif %}
 
+{# 4) Sebesség (ms) – ha nincs megadva, 10000 ms #}
+{% set speedMs = (headerEntry and headerEntry.speed is not null) 
+  ? (headerEntry.speed * 1000) 
+  : 10000 %}
+
+{# 5) Mount cél – ezt a divet keresi a main.js #}
 <div
-  id="image-slider"
-  data-pictures='{{ pictures|json_encode|e('html_attr') }}'
-  {% if headerEntry.speed is not null %}
-    data-speed="{{ (headerEntry.speed ?? 10) * 1000 }}"
-  {% endif %}
+  id="image-slider-swiper"
+  data-pictures='{{ pictures|json_encode|e("html_attr") }}'
+  data-speed="{{ speedMs }}"
 ></div>
