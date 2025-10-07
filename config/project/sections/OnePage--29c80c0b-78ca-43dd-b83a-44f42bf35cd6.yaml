@@ -1,0 +1,36 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: 5fea41c4-9177-4d44-928a-27f69f223cc0 # Tartalom
+handle: OnePage
+maxAuthors: 1
+name: 'Nyitólap - one page'
+previewTargets:
+  -
+    __assoc__:
+      -
+        - label
+        - 'Elsődleges bejegyzés oldal'
+      -
+        - urlFormat
+        - '{url}'
+      -
+        - refresh
+        - '1'
+propagationMethod: all
+siteSettings:
+  0a8824d5-d531-40bc-b0c8-c420edc4449b: # Német
+    enabledByDefault: true
+    hasUrls: true
+    template: nyitolap-one-page/_entry.twig
+    uriFormat: 'nyitolap-one-page/{slug}'
+  bb5ef826-a820-4982-a272-9ad7d3c5be5a: # parkhedervar
+    enabledByDefault: true
+    hasUrls: true
+    template: nyitolap-one-page/_entry.twig
+    uriFormat: 'nyitolap-one-page/{slug}'
+structure:
+  maxLevels: null
+  uid: 2bfbc2e8-2417-4b16-9524-befdf0f50afa
+type: structure

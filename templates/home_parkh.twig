@@ -240,15 +240,97 @@
   </script>
 
   {# --- Placeholder tartalom (nem szükséges a11y-hoz, maradhat) --- #}
-  <div class="px-4 max-w-8xl mx-auto prose prose-invert prose-headings:text-white/90">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non euismod nunc. Nam lacinia urna a ante tincidunt, tristique porta eros gravida. Mauris ut aliquet mi. Donec vitae est non erat accumsan cursus quis sit amet libero. In pharetra lectus ullamcorper, ultricies nibh et, tincidunt odio. Ut non nunc luctus ligula tincidunt dapibus. Morbi dapibus dui nec mauris fringilla consectetur. Nulla venenatis pellentesque lorem, ut tempus quam fermentum sed.
-    <br><br>
-    Aenean gravida orci nec orci placerat eleifend. Nullam sed cursus risus. Mauris hendrerit lorem vel nunc hendrerit sollicitudin. Integer consectetur maximus lacus et maximus. Donec eget ante condimentum, faucibus urna id, suscipit est. In quis tempor nulla. Donec id scelerisque lectus, venenatis tincidunt lectus. Suspendisse vitae tellus sit amet nulla vestibulum tempus eget in ex. Donec varius, eros vitae viverra laoreet, magna neque posuere dolor, non posuere orci tellus vestibulum ex. Sed viverra viverra nunc a tincidunt. In lobortis lorem ut eros sollicitudin, vitae lacinia est dignissim. Phasellus libero odio, pretium at erat ac, sagittis cursus ante. Ut sed ornare dui, ullamcorper gravida turpis. Integer tempor, leo ac fermentum volutpat, magna augue mollis metus, in porttitor urna ipsum a augue. Curabitur et purus ut erat mollis volutpat quis et tellus.
-    <br><br>
-    Nunc at nibh viverra, dignissim augue vel, aliquet nunc. Nullam porttitor leo tincidunt erat scelerisque, a tincidunt neque auctor. Proin mattis turpis sed viverra ultrices. In hac habitasse platea dictumst. Aliquam et velit ultrices, venenatis lectus sed, bibendum orci. Cras feugiat, ligula id egestas lobortis, tellus lectus volutpat turpis, sit amet laoreet ipsum magna ut libero. Nullam pharetra condimentum magna congue egestas. Ut congue libero vel massa aliquet cursus. Morbi ut enim est. Nam ac nulla et orci cursus venenatis.
-    <br><br>
-    Vestibulum vitae eleifend elit, ac elementum leo. Cras eget est vel turpis convallis aliquam. Etiam purus lorem, dapibus sit amet nulla sit amet, pellentesque congue odio. Proin a quam consectetur, mollis augue vel, cursus magna. Nunc a congue velit. Nulla posuere mi placerat orci placerat condimentum. Donec viverra fermentum rhoncus. Maecenas sit amet purus neque. In eu consectetur enim. Cras eu eleifend leo. Suspendisse ut nibh eu erat auctor scelerisque.
-  </div>
+/* új */
+
+{# OnePage szekció / content típus megjelenítése — A11y-ready #}
+{% set entries = craft.entries().section('onePage').type('content').all() %}
+
+{% if entries|length %}
+  {% for entry in entries %}
+    {% set sectionId = 'onepage-' ~ entry.id %}
+    {% set img = entry.onePict.one() ?? null %}
+    {% set hasImage = img is not null %}
+
+    {# Kép tájolás + transform #}
+    {% if hasImage %}
+      {% set isLandscape = img.width >= img.height %}
+      {% set transform = isLandscape ? { mode: 'crop', width: 1280 } : { mode: 'crop', width: 800 } %}
+      {% set imgUrl = img.getUrl(transform) %}
+      {% set imgWAttr = img.getWidth(transform) ?? null %}
+      {% set imgHAttr = img.getHeight(transform) ?? null %}
+      {% set imgAlt = (img.title ?? null) ?: (entry.title ?? 'Kép') %}
+    {% endif %}
+
+    {# Szélesség arányok #}
+{% set imgW  = hasImage ? (isLandscape ? 'md:w-1/2' : 'md:w-5/12') : 'md:w-0' %}
+{% set textW = hasImage ? (isLandscape ? 'md:w-1/2' : 'md:w-7/12') : 'md:w-full' %}
+
+    {# Switch: kép helye #}
+    {% set imgOrder  = entry.switch ? 'md:order-2' : 'md:order-1' %}
+    {% set textOrder = entry.switch ? 'md:order-1' : 'md:order-2' %}
+
+    <section
+      id="{{ sectionId }}"
+      role="region"
+      aria-labelledby="{{ sectionId }}-heading"
+      class="max-w-8xl mx-auto px-6 md:px-10 py-12 md:py-20"
+    >
+      <div class="flex flex-col md:flex-row items-center gap-8 md:gap-14">
+
+        {# KÉP #}
+        {% if hasImage %}
+          <div class="{{ imgW }} w-full {{ imgOrder }}">
+            <figure class="rounded-3xl overflow-hidden">
+              <img
+                src="{{ imgUrl }}"
+                alt="{{ imgAlt }}"
+                {% if imgWAttr %}width="{{ imgWAttr }}"{% endif %}
+                {% if imgHAttr %}height="{{ imgHAttr }}"{% endif %}
+                class="block w-full h-auto motion-reduce:transition-none"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+              >
+            </figure>
+          </div>
+        {% endif %}
+
+        {# SZÖVEG #}
+        <div class="{{ textW }} w-full {{ textOrder }}">
+          {% if entry.title %}
+            <h2 id="{{ sectionId }}-heading" class="mb-6 text-primary text-4xl md:text-5xl leading-tight">
+              {{ entry.title }}
+            </h2>
+          {% endif %}
+
+          {% if entry.textBox %}
+            <div class="prose max-w-none md:prose-lg [&_p]:mb-4">
+              {{ entry.textBox|raw }}
+            </div>
+          {% endif %}
+
+          {# Bővebben – csak ha van kijelölt bejegyzés #}
+          {% set target = entry.post.one() %}
+          {% if target %}
+            <div class="mt-8">
+              <a
+                href="{{ target.url }}"
+                rel="bookmark"
+                class="inline-flex items-center justify-center rounded-full bg-primary text-white px-6 py-3 font-semibold tracking-wide hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 motion-reduce:transition-none"
+              >
+                <span aria-hidden="true">{{ 'Bővebben'|t }}</span>
+                <span class="sr-only">: {{ target.title }}</span>
+              </a>
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </section>
+  {% endfor %}
+{% endif %}
+
+       {% include './includes/_weeklyMenuFromDoc.twig' %}
 
 {% endblock %}
 

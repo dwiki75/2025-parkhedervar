@@ -1,0 +1,89 @@
+{# ======== HETI MENÜ – TXT alapú feldolgozás ======== #}
+{% set today = now|date('m.d')|replace({'.0':'.'})|trim %}
+
+
+
+{% set file = entry.menuDocFile.one() ?? null %}
+{% set rows = [] %}
+
+{% if file %}
+  {# Fájl beolvasása és normalizálása #}
+  {% set raw = file.getContents() %}
+  {% set raw = raw|replace({'\uFEFF':'','\xEF':'','\xBB':'','\xBF':''}) %}
+  {% set norm = raw|replace({'\r\n':'\n','\r':'\n'})|trim %}
+  {% set lines = norm|split('\n') %}
+
+  {% for ln in lines %}
+    {% set ln = ln|trim %}
+    {% if ln %}
+      {% set ln = ln|replace({'—':'-','–':'-'}) %}
+      {% set toks = ln|split(' ') %}
+      {% if toks|length >= 3 %}
+        {% set date = toks[0] %}
+        {% set day  = toks[1] %}
+        {% set rest = toks|slice(2)|join(' ') %}
+        {% set parts = rest|split(' - ') %}
+        {% set soup  = (parts[0] ?? '')|trim %}
+        {% set mains = (parts|slice(1)|join(' – '))|trim %}
+        {% set rows = rows|merge([{ date:date, day:day, soup:soup, mains:mains }]) %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% set today = now|date('m.d') %}
+
+{# ======== ASZTALI TÁBLÁZAT ======== #}
+<div class="hidden md:block max-w-5xl mx-auto mt-10 mb-10 rounded-2xl overflow-hidden shadow-lg bg-white/80 backdrop-blur-sm">
+  <table class="w-full border-collapse text-left">
+    <caption class="sr-only">{{ "Heti menü"|t }}</caption>
+    <thead class="bg-primary/90 text-white">
+      <tr>
+        <th class="py-3 px-4 font-semibold">{{ "Dátum"|t }}</th>
+        <th class="py-3 px-4 font-semibold">{{ "Nap"|t }}</th>
+        <th class="py-3 px-4 font-semibold">{{ "Leves"|t }}</th>
+        <th class="py-3 px-4 font-semibold">{{ "Főétel(ek)"|t }}</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      {% for r in rows %}
+          {% set isToday = (r.date|replace({'0':''})|trim == today|replace({'0':''})|trim) %}
+        {% set parts = r.date|split('.') %}
+        {% set formattedDate = ('2025-' ~ parts[0]|trim ~ '-' ~ parts[1]|trim)|date('F j.', 'Europe/Budapest')|capitalize %}
+        <tr class="{% if isToday %}bg-primary/10 font-semibold{% elseif loop.index is odd %}bg-gray-50{% else %}bg-white{% endif %} hover:bg-primary/5 transition">
+          <td class="py-3 px-4 whitespace-nowrap {% if isToday %}text-primary{% endif %}">{{ formattedDate }}</td>
+          <td class="py-3 px-4 whitespace-nowrap {% if isToday %}text-primary{% endif %}">{{ r.day }}</td>
+          <td class="py-3 px-4">{{ r.soup }}</td>
+          <td class="py-3 px-4">{{ r.mains }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{# ======== MOBIL KÁRTYÁK ======== #}
+<ul class="md:hidden space-y-4 max-w-xl mx-auto mt-8 mb-8" aria-label="{{ 'Heti menü'|t }}">
+  {% for r in rows %}
+    {% set isToday = (r.date == today) %}
+    {% set parts = r.date|split('.') %}
+    {% set formattedDate = ('2025-' ~ parts[0]|trim ~ '-' ~ parts[1]|trim)|date('F j.', 'Europe/Budapest')|capitalize %}
+    <li class="relative rounded-2xl border p-4 shadow-sm hover:shadow-lg transition 
+               {% if isToday %}bg-primary/10 ring-2 ring-primary/40{% else %}bg-white{% endif %}">
+      {% if isToday %}
+        <span class="absolute left-0 top-0 h-full w-1 bg-primary rounded-l-2xl"></span>
+      {% endif %}
+      <div class="flex items-center justify-between">
+        <h3 class="font-semibold text-lg {% if isToday %}text-primary font-bold{% endif %}">
+          {% if isToday %}<strong>{{ r.day }}</strong>{% else %}{{ r.day }}{% endif %}
+        </h3>
+        <span class="text-sm text-gray-500">{{ formattedDate }}</span>
+      </div>
+      <div class="mt-2 text-gray-700">
+        <p><span class="font-medium">{{ "Leves"|t }}:</span> {{ r.soup }}</p>
+        {% if r.mains %}
+          <p class="mt-1"><span class="font-medium">{{ "Főétel(ek)"|t }}:</span> {{ r.mains }}</p>
+        {% endif %}
+      </div>
+    </li>
+  {% endfor %}
+</ul>
