@@ -1,0 +1,64 @@
+fieldLayouts:
+  3dfc8a54-2184-4cbd-a564-118e32f4f0b8:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2025-10-09T16:09:47+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: subTitle
+            includeInCards: false
+            instructions: null
+            label: Cím
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: a6bfaa57-9201-48a0-98f9-85555308fd4d
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-10-09T16:09:47+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 6652c4a0-b521-4514-9e6a-ba6383a6325a # Szöveg doboz
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: d939d3b9-9347-48ac-aed3-a6c165129592
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-10-09T16:09:47+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 8792f1cf-e9e4-4f28-9777-8c5304780529 # Egy kép
+            handle: oneImg
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 335d1f42-4202-4c82-8ceb-d8b293d94129
+            userCondition: null
+            warning: null
+            width: 100
+        name: Tartalom
+        uid: 275f4bdf-fb8c-4d2b-b9ff-2d29bcd5c352
+        userCondition: null
+handle: popup
+name: Popup
+sortOrder: 2

@@ -7,6 +7,8 @@ import ImageSliderSwiper from './components/ImageSliderSwiper.vue'
 import Gallery from './components/Gallery.vue'
 import HeaderMenu from './components/HeaderMenu.vue'
 import Popup from './components/Popup.vue'
+import MenuPopup from './components/MenuPopup.vue'
+
 
 // --- Segédfüggvények ---
 function safeParseJSON(str, fallback = []) {
@@ -61,5 +63,22 @@ mountHeaderById('mobile-header')
       text: ds(el, 'text'),
       img: ds(el, 'img'),
     }).mount(el)
+  }
+}
+
+
+// --- MENU POPUP ---
+
+{
+  const el = document.getElementById('menu-popup-mount')
+  if (el) {
+    const ds = (node, key) => node.dataset[key] 
+    const title = (el.dataset.title) || 'Heti menü'
+    const contentHtml = el.dataset.content ? JSON.parse(el.dataset.content) : ''
+    const attachment  = el.dataset.attachment ? JSON.parse(el.dataset.attachment) : null
+
+    const app = createApp(MenuPopup, { title, contentHtml, attachment })
+    const vm = app.mount(el)
+    window.__menuPopup = vm // a gomb ezt hívja: window.__menuPopup.open()
   }
 }

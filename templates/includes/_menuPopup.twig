@@ -1,0 +1,159 @@
+{# ======== HETI MENÜ – weeklyMenu globál + popup mount ======== #}
+{% set weekly = craft.app.globals.getSetByHandle('weeklyMenu') ?? null %}
+{% if weekly %}
+  {# nincs globál — semmit nem renderelünk #}
+  
+
+
+{# 1) Mezők #}
+{% set title       = weekly.menuTitle ?? 'Heti menü' %}
+{% set txtAsset    = weekly.menuDocFile.one() ?? null %}
+{% set attachAsset = weekly.menuAttachment.one() ?? null %}
+
+{# 2) TXT → rows[] #}
+{% set rows = [] %}
+{% if txtAsset %}
+  {% set raw  = txtAsset.getContents() %}
+  {% set raw  = raw|replace({'\uFEFF':'','\xEF':'','\xBB':'','\xBF':''}) %}
+  {% set norm = raw|replace({'\r\n':'\n','\r':'\n'})|trim %}
+  {% set lines = norm|split('\n') %}
+
+  {% for ln in lines %}
+    {% set ln = ln|trim %}
+    {% if ln %}
+      {% set ln = ln|replace({'—':'-','–':'-'}) %}
+      {% set toks = ln|split(' ') %}
+      {% if toks|length >= 3 %}
+        {% set date = toks[0] %} {# pl. 10.7 vagy 10.07 #}
+        {% set day  = toks[1] %}
+        {% set rest = toks|slice(2)|join(' ') %}
+        {% set parts = rest|split(' - ') %}
+        {% set soup  = (parts[0] ?? '')|trim %}
+        {% set mains = (parts|slice(1)|join(' – '))|trim %}
+        {% set rows = rows|merge([{ date:date, day:day, soup:soup, mains:mains }]) %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{# 3) Dátum kiemeléshez: ma "n.j" (0-k nélkül) #}
+{% set todayKey = now|date('n.j') %}
+
+{# 4) Melléklet (PDF/JPG) meták #}
+{% macro humanSize(bytes) %}
+  {% set b = bytes ?? 0 %}
+  {% if b >= 1048576 %}
+    {{ (b / 1048576)|number_format(1, ',', ' ') ~ ' MB' }}
+  {% else %}
+    {{ (b / 1024)|number_format(0, ',', ' ') ~ ' KB' }}
+  {% endif %}
+{% endmacro %}
+
+{% set attachment = null %}
+{% if attachAsset %}
+        {% set attachment = {
+        url: attachAsset.url,
+        filename: attachAsset.filename,
+        displayName: attachAsset.title ?? attachAsset.filename, 
+        sizeText: _self.humanSize(attachAsset.size),
+        ext: attachAsset.extension|lower
+        } %}
+{% endif %}
+
+{# 5) A popup tartalmának HTML-je – Twiggel renderelve, Vue v-html-lel kerül be #}
+{% set contentHtml %}
+  <h2 class="mb-4 text-2xl font-semibold">{{ title }}</h2>
+
+  {# Asztali: táblázat #}
+  <div class="hidden md:block max-w-5xl mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg bg-white">
+    <table class="w-full border-collapse text-left">
+      <caption class="sr-only">{{ 'Heti menü'|t }}</caption>
+      <thead class="bg-primary/90 text-white">
+        <tr>
+          <th class="py-3 px-4 font-semibold">{{ 'Dátum'|t }}</th>
+          <th class="py-3 px-4 font-semibold">{{ 'Nap'|t }}</th>
+          <th class="py-3 px-4 font-semibold">{{ 'Leves'|t }}</th>
+          <th class="py-3 px-4 font-semibold">{{ 'Főétel(ek)'|t }}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        {% for r in rows %}
+          {% set isToday = (r.date|replace({'.0':'.'}) == todayKey) %}
+          {% set parts = r.date|split('.') %}
+          {% set formattedDate = ('2025-' ~ parts[0]|trim ~ '-' ~ parts[1]|trim)|date('F j.', 'Europe/Budapest')|capitalize %}
+          <tr class="{% if isToday %}bg-primary/10 font-semibold{% elseif loop.index is odd %}bg-gray-50{% else %}bg-white{% endif %} hover:bg-primary/5 transition">
+            <td class="py-3 px-4 whitespace-nowrap {% if isToday %}text-primary{% endif %}">{{ formattedDate }}</td>
+            <td class="py-3 px-4 whitespace-nowrap {% if isToday %}text-primary{% endif %}">
+              {% if isToday %}<strong>{{ r.day }}</strong>{% else %}{{ r.day }}{% endif %}
+            </td>
+            <td class="py-3 px-4">{{ r.soup }}</td>
+            <td class="py-3 px-4">{{ r.mains }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# Mobil: kártyák #}
+  <ul class="md:hidden space-y-4 max-w-xl mx-auto">
+    {% for r in rows %}
+      {% set isToday = (r.date|replace({'.0':'.'}) == todayKey) %}
+      {% set parts = r.date|split('.') %}
+      {% set formattedDate = ('2025-' ~ parts[0]|trim ~ '-' ~ parts[1]|trim)|date('F j.', 'Europe/Budapest')|capitalize %}
+      <li class="relative rounded-2xl border p-4 shadow-sm hover:shadow-lg transition
+                 {% if isToday %}bg-primary/10 ring-2 ring-primary/40{% else %}bg-white{% endif %}">
+        {% if isToday %}
+          <span class="absolute left-0 top-0 h-full w-1 bg-primary rounded-l-2xl"></span>
+        {% endif %}
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-lg {% if isToday %}text-primary font-bold{% endif %}">
+            {% if isToday %}<strong>{{ r.day }}</strong>{% else %}{{ r.day }}{% endif %}
+          </h3>
+          <span class="text-sm text-gray-500">{{ formattedDate }}</span>
+        </div>
+        <div class="mt-2 text-gray-700">
+          <p><span class="font-medium">{{ 'Leves'|t }}:</span> {{ r.soup }}</p>
+          {% if r.mains %}
+            <p class="mt-1"><span class="font-medium">{{ 'Főétel(ek)'|t }}:</span> {{ r.mains }}</p>
+          {% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if attachment %}
+    <div class="mt-6">
+      <a href="{{ attachment.url }}" target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-gray-50">
+         {% import '_macros/icons.twig' as icons %}
+{% if attachment.ext == 'pdf' %}
+  {{ icons.icon('file-type-pdf', 'brands', '[&_svg]:w-6 [&_svg]:h-6') }}
+  PDF letöltés
+{% elseif attachment.ext in ['jpg','jpeg'] %}
+  {{ icons.icon('file-type-jpg', 'brands', '[&_svg]:w-6 [&_svg]:h-6') }}
+  Kép letöltés
+{% else %}
+  {{ icons.icon('arrow-down', 'heroicons', '[&_svg]:w-6 [&_svg]:h-6') }}
+  Letöltés
+{% endif %}
+        <span class="opacity-60">— {{ attachment.displayName }}</span>
+        <span class="opacity-60">({{ attachment.sizeText }})</span>
+      </a>
+    </div>
+  {% endif %}
+{% endset %}
+
+{# 6) MOUNT: a Vue komponens ide csatlakozik; adat átadás data-* attribútumokkal #}
+<div id="menu-popup-mount"
+     data-title="{{ title|e('html_attr') }}"
+     data-content='{{ contentHtml|json_encode|raw }}'
+     {% if attachment %}data-attachment='{{ attachment|json_encode|raw }}'{% endif %}>
+</div>
+
+{# 7) Gomb, ami megnyitja a popupot #}
+<button type="button"
+        class="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 font-semibold text-white hover:brightness-110"
+        onclick="window.__menuPopup && window.__menuPopup.open()">
+  {{ title }}
+</button>
+{% endif %}

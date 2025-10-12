@@ -1,0 +1,38 @@
+columnSuffix: null
+handle: pictPdf
+instructions: null
+name: 'Kép / PDF'
+searchable: false
+settings:
+  allowSelfRelations: false
+  allowSubfolders: false
+  allowUploads: true
+  allowedKinds:
+    - image
+    - pdf
+  branchLimit: null
+  defaultPlacement: end
+  defaultUploadLocationSource: 'volume:33fbdc92-4491-48e7-a475-1e1fdf3fc897' # Képek
+  defaultUploadLocationSubpath: null
+  maintainHierarchy: false
+  maxRelations: 1
+  minRelations: null
+  previewMode: full
+  restrictFiles: true
+  restrictLocation: false
+  restrictedDefaultUploadSubpath: null
+  restrictedLocationSource: 'volume:33fbdc92-4491-48e7-a475-1e1fdf3fc897' # Képek
+  restrictedLocationSubpath: null
+  selectionLabel: null
+  showCardsInGrid: false
+  showSearchInput: true
+  showSiteMenu: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: false
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: list
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Assets

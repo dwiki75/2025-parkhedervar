@@ -1,4 +1,4 @@
-dateModified: 1759841899
+dateModified: 1760284097
 email:
   fromEmail: fulop.viktor.dwiki@gmail.com
   fromName: parkhedervar
@@ -22,6 +22,7 @@ meta:
   __names__:
     0a8824d5-d531-40bc-b0c8-c420edc4449b: Német # Német
     1ddf3471-9514-416a-8cdd-cb453f093e39: 'Szöveges dokumnetum -  heti menu' # Szöveges dokumnetum -  heti menu
+    2bc467f8-64cd-4784-be94-b76f3f1d7fc4: 'Kép / PDF' # Kép / PDF
     2bd5267e-a36c-43fa-96fd-e740550c69fc: Nyitólap # Nyitólap
     3f01429d-2635-4f6a-a7e2-03296a05e255: Nyitó # Nyitó
     4cb3f0fe-5a28-46e4-aeca-af520ddf4746: Kapcsoló # Kapcsoló
@@ -33,12 +34,14 @@ meta:
     8ea3f70c-70e2-469a-945b-53ac9e122b75: Adatok # Adatok
     29c80c0b-78ca-43dd-b83a-44f42bf35cd6: 'Nyitólap - one page' # Nyitólap - one page
     33fbdc92-4491-48e7-a475-1e1fdf3fc897: Képek # Képek
+    36f675c9-3455-4876-b913-6b88042286a0: 'Heti menü' # Heti menü
     88c6398a-f683-42af-9840-82a752943ecc: Főmenü # Főmenü
     785c09ff-d241-42d1-b0a7-c985a24a712c: Bejegyzések # Bejegyzések
     846aa6c1-3a4b-4656-a534-646aa812d4f4: Simple # Simple
     915fda05-fe2f-4d16-8676-0d5f34b33d08: Adat # Adat
     939c7f22-e6c5-4dbe-8aaa-69b6c587edd0: 'Basic dw' # Basic dw
     02980df4-89da-41dc-9c95-0b95a8764e23: Menü # Menü
+    5032b9b8-3c3f-4bd9-b66c-9b616eabab4c: Popup # Popup
     6652c4a0-b521-4514-9e6a-ba6383a6325a: 'Szöveg doboz' # Szöveg doboz
     8792f1cf-e9e4-4f28-9777-8c5304780529: 'Egy kép' # Egy kép
     36685e5a-d503-4f86-9d6d-e73a0d97dc93: 'Képváltó képek' # Képváltó képek

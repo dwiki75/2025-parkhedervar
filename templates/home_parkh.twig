@@ -94,16 +94,16 @@
             </div>
 
             {# Gomb a header.button-ból #}
-            {% set btnEntry = header.button is defined ? header.button.one() : null %}
-            {% if btnEntry %}
-              <div class="self-end mt-2 hidden md:block">
-                <a href="{{ btnEntry.url }}"
-                   class="btn btn--thirdy btn--lineDraw focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 focus-visible:ring-offset-primary"
-                   aria-label="{{ 'Tovább: '|t ~ btnEntry.title }}">
-                  {{ btnEntry.title }}
-                </a>
-              </div>
-            {% endif %}
+
+            <div class="self-end mt-2 hidden md:block">
+              <button type="button"
+                      class="btn btn--thirdy btn--lineDraw focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 focus-visible:ring-offset-primary"
+                      onclick="window.__menuPopup && window.__menuPopup.open()"
+                      aria-label="{{ 'Heti menü megnyitása'|t }}">
+                {{ 'Heti menü'|t }}
+              </button>
+            </div>
+
           </div>
 
           <!-- JOBB OSZLOP: SLIDER -->
@@ -119,22 +119,24 @@
 
   {# --- Mobil alsó sáv (full-width). Csak akkor rajzoljuk, ha van ikon vagy gomb) --- #}
   {% if iconHtml or (header.button is defined and header.button.one()) %}
-    {% set btnEntry = header.button is defined ? header.button.one() : null %}
-    {% if btnEntry %}
-      <div class="fixed bottom-0 left-0 w-full bg-primary text-white border-t border-white md:hidden z-50" role="region" aria-label="{{ 'Gyors művelet'|t }}">
+
+      <div class="fixed bottom-0 left-0 w-full bg-primary text-white border-t border-white md:hidden z-50"
+          role="region"
+          aria-label="{{ 'Gyors művelet'|t }}">
         <div class="flex items-center gap-3 p-2 px-3">
-          <a href="{{ btnEntry.url }}"
-             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white text-white font-bold text-sm shadow-lg
-                    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white focus-visible:ring-offset-primary"
-             aria-label="{{ 'Tovább: '|t ~ btnEntry.title }}">
+          <button type="button"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white text-white font-bold text-sm shadow-lg
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white focus-visible:ring-offset-primary"
+                  onclick="window.__menuPopup && window.__menuPopup.open()"
+                  aria-label="{{ 'Heti menü megnyitása'|t }}">
             {% if iconHtml %}
               <span aria-hidden="true">{{ iconHtml|raw }}</span>
             {% endif %}
-            <span>{{ btnEntry.title }}</span>
-          </a>
+            <span>{{ 'Heti menü'|t }}</span>
+          </button>
         </div>
-      </div>
-    {% endif %}
+      </div> 
+ 
   {% endif %}
 
   {# --- Hírek adatlekérés --- #}
@@ -336,7 +338,11 @@
 
 {% block main %}
   {# A layout már tartalmaz <main>-t; itt ne tegyünk újabbat, csak tartalmat adnánk, de most üresen hagyom #}
-  <div class="w-full my-auto mx-auto"></div>
+  <div class="w-full my-auto mx-auto">
+     {% include './includes/_menuPopup.twig' %}
+        
+  
+  </div>
 {% endblock %}
 
 {% block footer %}
