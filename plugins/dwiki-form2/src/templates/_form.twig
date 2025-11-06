@@ -1,0 +1,41 @@
+<form class="space-y-4">
+  {# Küldjük el a formKey-t, hogy a SendController tudja, melyik űrlapról érkeztek az adatok. #}
+  <input type="hidden" name="formKey" value="{{ formKey ?? 'default' }}">
+
+  {% for field in fields %}
+    <div class="{{ field.cssClass }}">
+      {% if field.type == 'text' %}
+        <input type="text" name="{{ field.label|kebab }}" placeholder="{{ field.label }}" class="border p-2 w-full">
+
+      {% elseif field.type == 'email' %}
+        <input type="email" name="{{ field.label|kebab }}" placeholder="{{ field.label }}" class="border p-2 w-full">
+
+      {% elseif field.type == 'date' %}
+        <input type="date" name="{{ field.label|kebab }}" class="border p-2 w-full">
+
+      {% elseif field.type == 'select' %}
+        <select name="{{ field.label|kebab }}" class="border p-2 w-full">
+          {% for option in field.options|split("\n") %}
+            {% set opt = option|trim %}
+            {% if opt != '' %}
+              <option value="{{ opt }}">{{ opt }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+
+      {% elseif field.type == 'checkbox' %}
+        {# SINGLE checkbox: hidden 0 + checkbox 1 + _types[...] = 'checkbox' a normalizáláshoz #}
+        <label class="flex items-center gap-2">
+          <input type="hidden" name="{{ field.label|kebab }}" value="0">
+          <input type="checkbox"
+                 name="{{ field.label|kebab }}"
+                 value="1"
+                 {% if field.required %}required{% endif %}>
+          <span>{{ field.label }}{% if field.required %} *{% endif %}</span>
+        </label>
+        <input type="hidden" name="_types[{{ field.label|kebab }}]" value="checkbox">
+
+      {% endif %}
+    </div>
+  {% endfor %}
+</form>

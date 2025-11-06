@@ -56,6 +56,23 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: '2025-11-02T10:49:40+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 6652c4a0-b521-4514-9e6a-ba6383a6325a # Szöveg doboz
+            handle: null
+            includeInCards: false
+            instructions: 'Általános szöveg a menühöz, állandó menük.'
+            label: 'Általános szöveg'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 45ed36fb-66a7-462a-962b-d3d48b00400a
+            userCondition: null
+            warning: null
+            width: 100
         name: Tartalom
         uid: 3365a352-4618-4309-93bf-456d32855c56
         userCondition: null

@@ -1,4 +1,4 @@
-dateModified: 1760284097
+dateModified: 1762084345
 email:
   fromEmail: fulop.viktor.dwiki@gmail.com
   fromName: parkhedervar
@@ -18,6 +18,10 @@ fs:
       path: '@webroot/sliderimages'
     type: craft\fs\Local
     url: /sliderimages
+graphql:
+  publicToken:
+    enabled: false
+    expiryDate: null
 meta:
   __names__:
     0a8824d5-d531-40bc-b0c8-c420edc4449b: Német # Német
@@ -53,11 +57,48 @@ meta:
     cd5eaea5-24c1-47f6-96bf-ce456bbed2f2: Cikkek # Cikkek
     d11f6ee6-67d9-4ae4-8924-e8dffc44555a: Szöveg # Szöveg
     d46898f6-87ca-4eea-ae8d-1c1f76206e53: Kategória # Kategória
+    e0fa9cd2-ed5d-4928-999a-9131fd0788fb: Lábléc # Lábléc
 plugins:
   ckeditor:
     edition: standard
     enabled: true
     schemaVersion: 3.0.0.0
+  dwiki-form2:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+    settings:
+      i18n:
+        __assoc__:
+          -
+            - 0a8824d5-d531-40bc-b0c8-c420edc4449b # Német
+            -
+              __assoc__:
+                -
+                  - recipientEmail
+                  - ''
+                -
+                  - modalTitle
+                  - ''
+                -
+                  - modalMessage
+                  - ''
+          -
+            - bb5ef826-a820-4982-a272-9ad7d3c5be5a # parkhedervar
+            -
+              __assoc__:
+                -
+                  - recipientEmail
+                  - fulop.viktor.dwiki@gmail.com
+                -
+                  - modalTitle
+                  - 'Köszönjük üzenetét!'
+                -
+                  - modalMessage
+                  - 'Hamarosan felvesszük Önnel a kapcsolatot.'
+      modalMessage: null
+      modalTitle: null
+      recipientEmail: null
 system:
   edition: solo
   live: true

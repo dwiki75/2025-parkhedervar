@@ -141,6 +141,15 @@
       </a>
     </div>
   {% endif %}
+
+
+  {% if weekly.textBox is defined and weekly.textBox|length %}
+    <div class="max-w-5xl mx-auto mt-8 prose prose-neutral">
+      {{ weekly.textBox|raw }}
+    </div>
+  {% endif %}
+
+
 {% endset %}
 
 {# 6) MOUNT: a Vue komponens ide csatlakozik; adat átadás data-* attribútumokkal #}
@@ -151,9 +160,9 @@
 </div>
 
 {# 7) Gomb, ami megnyitja a popupot #}
-<button type="button"
+<!-- button type="button"
         class="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 font-semibold text-white hover:brightness-110"
         onclick="window.__menuPopup && window.__menuPopup.open()">
-  {{ title }}
-</button>
+  {# { title } #}
+</button -->
 {% endif %}

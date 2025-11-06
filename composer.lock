@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3be0499f68755709f05a7b35ef48b21a",
+    "content-hash": "d3eba40733ed5cbb76a522b5f7b30348",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -942,6 +942,36 @@
                 "php"
             ],
             "time": "2024-02-05T11:56:58+00:00"
+        },
+        {
+            "name": "dwiki/dwiki-form2",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "./plugins/dwiki-form2",
+                "reference": "c031474df2cb2c432f85ec40b9ab62d553b4f5e1"
+            },
+            "require": {
+                "craftcms/cms": "^5.0"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Dwiki Form 2",
+                "handle": "dwiki-form2",
+                "class": "dwiki\\dwikiform2\\Plugin",
+                "schemaVersion": "1.0.0",
+                "hasCpSettings": true,
+                "hasCpSection": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "dwiki\\dwikiform2\\": "src/"
+                }
+            },
+            "description": "Custom form builder plugin for Craft CMS 5",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "egulias/email-validator",
@@ -7982,11 +8012,13 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "dwiki/dwiki-form2": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2"
     },

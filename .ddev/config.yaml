@@ -1,5 +1,5 @@
 name: 2025-parkhedervar
-type: php
+type: craftcms
 docroot: web
 php_version: "8.3"
 webserver_type: nginx-fpm

@@ -1,0 +1,84 @@
+{% import "_includes/forms" as forms %}
+
+{# 0) Site váltás a ?site= param alapján #}
+{% set selectedSiteHandle = craft.app.request.getParam('site') %}
+{% if selectedSiteHandle %}
+  {% set targetSite = craft.app.sites.getSiteByHandle(selectedSiteHandle) %}
+  {% if targetSite %}
+    {% set _ = craft.app.sites.setCurrentSite(targetSite) %}
+  {% endif %}
+{% endif %}
+
+{# 1) Fejléc + nyelvváltó linkek #}
+<p style="font-style:italic; margin-top:10px;">
+    Aktuális nyelv: <strong>{{ craft.app.sites.currentSite.name }}</strong> ({{ craft.app.sites.currentSite.handle }})
+</p>
+
+<p><strong>Nyelv kiválasztása:</strong>
+    {% for site in craft.app.sites.getAllSites() %}
+        {% set baseUrl = craft.app.request.pathInfo %}
+        {% set url = url(baseUrl ~ '?site=' ~ site.handle) %}
+        <a href="{{ url }}" style="margin-left:10px; {% if site.handle == craft.app.sites.currentSite.handle %}font-weight:bold; text-decoration:underline;{% endif %}">
+            {{ site.name }}
+        </a>
+    {% endfor %}
+</p>
+
+{# 2) SMTP emlékeztető #}
+<div style="padding:10px; background:#fff3cd; border:1px solid #ffeeba; border-radius:4px; margin-bottom:20px;">
+    <strong>SMTP beállítás emlékeztető:</strong><br>
+    Éles rendszer email címéhez az <code>config/app.web.php</code> fájl használata szükséges!<br>
+    Az SMTP adatokat az <code>.env</code> fájlban kell megadni a következő módon:<br><br>
+    <pre style="background:#f8f9fa; padding:10px; border-radius:4px; white-space: pre-wrap;">
+# SMTP beállítások (production környezetben)
+SMTP_FROM_EMAIL="info@femailcim.hu"
+SMTP_FROM_NAME="Példa"
+SMTP_HOST="pop3.mediacenter.hu"
+SMTP_PORT=465
+SMTP_USER="info@pelda.hu"
+SMTP_PASS="Jelszo"
+SMTP_ENCRYPTION="ssl"
+    </pre>
+</div>
+
+{# 3) Aktuális site + i18n #}
+{% set site = craft.app.sites.currentSite %}
+{% set siteUid = site.uid %}
+{% set S = settings.i18n[siteUid] ?? {} %}
+
+{# 3/a) minden site listája (rejtett mezőkhöz) #}
+{% set allSites = craft.app.sites.getAllSites() %}
+
+{# 3/b) rejtett mezők a többi site-hoz #}
+{% for other in allSites %}
+    {% if other.uid != siteUid %}
+        {% set O = settings.i18n[other.uid] ?? {} %}
+        <input type="hidden" name="i18n[{{ other.uid }}][recipientEmail]" value="{{ O.recipientEmail ?? '' }}">
+        <input type="hidden" name="i18n[{{ other.uid }}][modalTitle]" value="{{ O.modalTitle ?? '' }}">
+        <input type="hidden" name="i18n[{{ other.uid }}][modalMessage]" value="{{ O.modalMessage ?? '' }}">
+    {% endif %}
+{% endfor %}
+
+{# 4) aktuális nyelv mezői #}
+{{ forms.textField({
+  label: "Címzett e-mail cím (aktuális nyelv)",
+  instructions: "Ha üres, a rendszer / globális értékre esik vissza.",
+  id: 'recipientEmail_' ~ siteUid,
+  name: 'i18n[' ~ siteUid ~ '][recipientEmail]',
+  value: S.recipientEmail ?? settings.recipientEmail ?? ''
+}) }}
+
+{{ forms.textField({
+  label: "Modal cím (aktuális nyelv)",
+  id: 'modalTitle_' ~ siteUid,
+  name: 'i18n[' ~ siteUid ~ '][modalTitle]',
+  value: S.modalTitle ?? settings.modalTitle ?? 'Köszönjük üzenetét!'
+}) }}
+
+{{ forms.textareaField({
+  label: "Modal szöveg (aktuális nyelv)",
+  id: 'modalMessage_' ~ siteUid,
+  name: 'i18n[' ~ siteUid ~ '][modalMessage]',
+  value: S.modalMessage ?? settings.modalMessage ?? 'Hamarosan felvesszük Önnel a kapcsolatot.',
+  rows: 4
+}) }}

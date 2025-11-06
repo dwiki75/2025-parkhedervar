@@ -73,44 +73,70 @@
   </main>
 
   {# ---------- FOOTER ---------- #}
-  <footer role="contentinfo" class="mt-12">
-    {% block footer %}
-      {% set footer = craft.app.globals.getSetByHandle('footer') %}
+{% block footer %}
+{% set footer = craft.app.globals.getSetByHandle('footer') %}
 
-      <div class="w-full mx-auto bg-primary text-white">
-        <div class="max-w-8xl mx-auto px-6 py-12">
-          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {# logo #}
-            <div class="lg:col-span-2">
-              {% set footerImg = footer.onePict.one() %}
-              {% if footerImg %}
-                <img
-                  src="{{ footerImg.url }}"
-                  alt="{{ siteName }}"
-                  class="h-14 w-auto"
-                  loading="lazy" decoding="async">
-              {% endif %}
-            </div>
+<div class="w-full bg-white p-2 md:p-5">
+  <footer class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0">
+    <div class="max-w-10xl mx-auto px-5 lg:px-10 2xl:px-20 pt-10 pb-5">
+      <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-            {# Szövegbox 1 #}
-            <div class="[&_h3]:text-xl [&_h3]:lg:text-2xl [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline">
-              {{ footer.textBox|raw }}
-            </div>
-
-            {# Szövegbox 2 #}
-            <div class="[&_h3]:text-xl [&_h3]:lg:text-2xl [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline">
-              {{ footer.textBox2|raw }}
-            </div>
-
-            {# Szövegbox 3 - teljes szélesség #}
-            <div class="col-span-1 lg:col-span-4 mt-4 text-sm [&_h3]:text-base [&_h3]:lg:text-lg [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline">
-              {{ footer.textBox3|raw }}
-            </div>
-          </div>
+        {# LOGÓ #}
+        <div class="lg:col-span-2">
+          {% if footer.onePict.one() %}
+            <img
+              src="{{ footer.onePict.one().url }}"
+              alt="{{ footer.onePict.one().title }}"
+              class="h-14 w-auto">
+          {% endif %}
         </div>
+
+        {# SZÖVEGBOX 1 #}
+        <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 
+                    [&_h3]:mb-4 [&_h3]:text-white [&_h4]:text-white [&_a]:underline
+                    [&_h4]:mb-4 [&_h4]:font-lg">
+          {{ footer.textBox
+            |iconify
+            |replace({
+                '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
+              })
+            |raw }}
+        </div>
+
+        {# SZÖVEGBOX 2 #}
+        <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 [&_h4]:text-white
+                    [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline
+                    [&_h4]:mb-4 [&_h4]:font-lg">
+          {{ footer.textBox2
+            |iconify
+            |replace({
+                '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
+              })
+            |raw }}
+        </div>
+
+        {# SZÖVEGBOX 3 #}
+        <div class="group/fadebox col-span-1 lg:col-span-4 mt-4 text-sm [&_h4]:text-white
+                    [&_p]:mt-1 [&_h3]:text-base [&_h3]:lg:text-lg [&_h3]:mb-4
+                    [&_h4]:mb-4 [&_h4]:font-lg [&_h3]:text-white [&_a]:underline">
+          {{ footer.textBox3
+            |iconify
+            |replace({
+                '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
+              })
+            |raw }}
+        </div>
+
       </div>
-    {% endblock %}
+    </div>
   </footer>
+</div>
+
+{% endblock %}
+
+
+
+
 
   {% include './includes/_popup' %}
 </body>

@@ -1,0 +1,32 @@
+<h2>Új űrlap beküldés</h2>
+
+{# --- DEBUG: POST kulcsok + site infó (teszteléshez, élesben nyugodtan kiveheted) --- #}
+{% if debugKeys is defined %}
+  <pre style="font-size:12px;background:#f7f7f7;padding:8px;border:1px solid #ddd;">
+POST keys: {{ debugKeys|join(', ') }}
+Site: handle={{ siteInfo.handle }}, uid={{ siteInfo.uid }}, postedHandle={{ siteInfo.postedHandle }}, postedUid={{ siteInfo.postedUid }}
+  </pre>
+{% endif %}
+
+<table cellpadding="5" cellspacing="0" border="1" style="border-collapse: collapse;">
+  {% if rows is defined %}
+    {# Új működés: rows tömbből #}
+    {% for r in rows %}
+      <tr>
+        <td><strong>{{ r.label }}</strong></td>
+        <td>{{ (r.value ?? '') | nl2br }}</td>
+      </tr>
+    {% endfor %}
+  {% else %}
+    {# Régi működés fallback: sima data tömbből #}
+    {% for key, raw in data %}
+      {% if not (key starts with 'company' or key == 'CRAFT_CSRF_TOKEN') %}
+        {% set value = raw is iterable ? raw|join(', ') : raw %}
+        <tr>
+          <td><strong>{{ key | replace({'-':' '}) | title }}</strong></td>
+          <td>{{ value | nl2br }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</table>

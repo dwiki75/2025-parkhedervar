@@ -332,19 +332,19 @@
   {% endfor %}
 {% endif %}
 
-       {% include './includes/_weeklyMenuFromDoc.twig' %}
+       
 
 {% endblock %}
 
 {% block main %}
   {# A layout már tartalmaz <main>-t; itt ne tegyünk újabbat, csak tartalmat adnánk, de most üresen hagyom #}
-  <div class="w-full my-auto mx-auto">
+  <div class="w-full my-auto mx-auto p-3">
+      {% set resp = craft.app.runAction('dwiki-form2/default/frontend-form', { formKey: 'default' }) %}
+    {{ (resp.content ?? resp.data ?? '')|raw }}
+
      {% include './includes/_menuPopup.twig' %}
         
   
   </div>
 {% endblock %}
 
-{% block footer %}
-  footer
-{% endblock %}
