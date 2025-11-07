@@ -1,4 +1,4 @@
-{# includes/_menu.twig #}
+{# includes/_menuIn.twig #}
 {% set menuItems   = craft.entries.section('menu').all() %}
 {% set currentPath = craft.app.request.getPathInfo() %}
 {% set baseUrl     = craft.app.request.getHostInfo() %}
@@ -33,21 +33,30 @@
   {% include './includes/_language.twig' %}
 {% endset %}
 
+{# --- MOBIL: fixen fent, de nem dupláz zászlót --- #}
+<nav
+  id="mobile-header-wrap"
+  class="block md:hidden fixed top-0 left-0 w-full z-50 bg-primary shadow-lg"
+  aria-label="{{ 'Fő navigáció'|t }}"
+>
+  {% include './includes/_menu' with { id: 'mobile-header' } %}
+</nav>
+
+{# --- DESKTOP: lekerekített, zászlós, fixen fent --- #}
 <header
-  id="{{ id ?? 'site-header' }}"
+  id="{{ id ?? 'site-header-in' }}"
   data-logo-url="{{ logo ? logo.url : '' }}"
   data-logo-alt="{{ logo ? (logo.alt ?? logo.title ?? siteName ?? '') : '' }}"
   data-language="{{ languageHtml|e('html_attr') }}"
   data-menu="{{ formattedMenu|json_encode|e('html_attr') }}"
-  class="w-full transition-all duration-300 ease-in-out"
+  class="w-full fixed top-0 left-0 right-0 z-40 hidden md:block transition-all duration-300 ease-in-out"
   role="banner"
 >
-  <nav aria-label="{{ 'Fő navigáció'|t }}" class="max-w-8xl mx-auto px-4 relative">
-    {# a relative biztosítja, hogy a nyelvváltó ne csússzon ki fix overlayben sem #}
-    <div class="flex items-center justify-between gap-4 py-3 relative">
-      {# Bal: logó #}
+<nav aria-label="{{ 'Fő navigáció'|t }}" class="w-full text-white">
+  <div class="bg-primary rounded-b-3xl shadow-lg mx-5">
+    <div class="max-w-8xl mx-auto flex items-center justify-between gap-4 py-3 px-5">
       <a href="{{ siteUrl }}"
-         class="inline-flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black rounded-md"
+         class="inline-flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white rounded-md"
          aria-label="{{ siteName }}">
         {% if logo %}
           <img src="{{ logo.url }}" alt="{{ siteName }}" class="h-10 w-auto" loading="lazy" decoding="async">
@@ -56,14 +65,14 @@
         {% endif %}
       </a>
 
-      {# Közép: menüpontok (desktopon látszik) #}
       <ul class="hidden md:flex items-center gap-1" role="list" id="primary-menu">
         {% for it in formattedMenu %}
           <li>
             <a href="{{ it.url }}"
                class="px-3 py-2 rounded-md inline-flex items-center gap-2
                       hover:bg-white/10
-                      focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white
+                      {% if it.active %} bg-white/20 {% endif %}"
                {% if it.active %} aria-current="page"{% endif %}
                {% if it.external %} target="_blank" rel="noopener noreferrer"{% endif %}>
               <span>{{ it.title }}</span>
@@ -78,10 +87,16 @@
         {% endfor %}
       </ul>
 
-      {# Jobb: nyelvváltó – középen marad, nem csúszik ki mobilon #}
-        <div class="flex items-center gap-2 pr-8 md:absolute md:right-3 md:top-1/2 md:-translate-y-1/2">
-          {% include './includes/_language.twig' %}
-        </div>
+      <div class="hidden md:block">
+        {% include './includes/_language.twig' %}
+      </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
+
+
 </header>
+
+{# tartalom alá ne csússzon desktopon #}
+<div class="hidden md:block pt-24 lg:pt-28"></div>

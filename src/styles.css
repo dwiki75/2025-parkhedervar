@@ -106,6 +106,10 @@ html, body {
            hover:bg-primary hover:text-white;
   }
 
+ #mobile-header [data-language] ul {
+  padding-right: 2rem;
+}
+
   /* Fehér, „kirajzolódó” keret effekt */
   .btn--lineDraw {
     position: relative; overflow: hidden; z-index: 0;

@@ -4,7 +4,7 @@
 {% set sites        = craft.app.sites.getAllSites() %}
 {% set entryObj     = (currentEntry is defined and currentEntry) ? currentEntry : null %}
 
-<ul class="flex items-center gap-2 relative z-[60]" role="list">
+<ul class="flex items-center gap-2 relative z-[60] pr-12 md:pr-0" role="list">
   {% for site in sites %}
     {% set lang       = site.language ?? 'hu' %}
     {% set isCurrent  = (site.id == currentSite.id) %}

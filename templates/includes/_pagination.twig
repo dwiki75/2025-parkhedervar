@@ -1,64 +1,27 @@
-<div class="flex justify-center my-5 py-5">
- 
-<nav aria-label="Page navigation">
-  <ul class="list-none flex">
+{# templates/includes/_pagination.twig #}
+<nav class="mt-10 flex justify-center items-center gap-3" role="navigation" aria-label="{{ 'Oldalak'|t }}">
+  {# Előző #}
+  {% if paginate.prevUrl %}
+    <a href="{{ paginate.prevUrl }}"
+       class="px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm text-gray-700">
+      ‹ {{ 'Előző'|t }}
+    </a>
+  {% endif %}
 
-     <li>
-      {% if paginate.prevUrl %}
-      <a
-        class="relative block  bg-white px-3 py-1.5  text-black font-bold transition-all duration-300 hover:text-[#ee4024] border  border-black mr-2  "
-        href="{{ paginate.prevUrl }}"
-        >< Előző oldal</a
-      >
-      {% endif %} 
-    </li>                
-                
-                
-   
-    {% for page, url in paginate.getPrevUrls(10) %}
-     <li>
-      <a
-        class="relative block bg-white px-3 py-1.5  font-bold transition-all duration-300 text-black hover:text-[#ee4024] border border-black mr-2  "
-        href="{{ url }}"
-        >{{ page }}</a
-      >
-      </li>
-     {% endfor %} 
-    
+  {# Oldalszámok #}
+  {% for page in 1..paginate.totalPages %}
+    {% set url = paginate.getPageUrl(page) %}
+    <a href="{{ url }}"
+       class="px-3 py-2 rounded-md text-sm font-medium {{ page == paginate.currentPage ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700' }}">
+      {{ page }}
+    </a>
+  {% endfor %}
 
-     <li>
-      {% if paginate.totalPages > 1  %}
-      <span
-        class="relative block   px-3 py-1.5  text-white bg-black font-bold  transition-all duration-300 mr-2"
-        >{{ paginate.currentPage }} </span
-      >
-      </li>
-                                {% for page, url in paginate.getNextUrls(10) %}
-                                   {% if  page  > 1 %}
-                                     <li>    
-                                                <a
-                                                        class="relative block bg-white  font-bold  px-3 py-1.5   transition-all duration-300 text-black hover:text-[#ee4024] border border-black mr-2 "
-                                                        href="{{ url }}"
-                                                        >{{ page }}</a
-                                                >
-                                      </li>           
-                                    {% endif %}
-                                {% endfor %}
-      
-   
-     {% endif %} 
-                        
-    <li>
-      {% if paginate.nextUrl %}  
-      <a
-        class="relative block px-3 py-1.5   transition-all duration-300  font-bold  bg-white  text-black hover:text-[#ee4024] border border-black  mr-2   "
-        href="{{ paginate.nextUrl }}"
-        >Következő oldal ></a
-      >
-      {% endif %}
-    </li>
-               
-  </ul>
-</nav>  
-
-  </div>
+  {# Következő #}
+  {% if paginate.nextUrl %}
+    <a href="{{ paginate.nextUrl }}"
+       class="px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm text-gray-700">
+      {{ 'Következő'|t }} ›
+    </a>
+  {% endif %}
+</nav>

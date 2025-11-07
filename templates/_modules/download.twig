@@ -1,0 +1,24 @@
+ {% if block.type == 'download' %}
+      {% set file = block.media.one() %}
+      {% if file %}
+        {% set ext = file.extension|lower %}
+        {% set iconName = 'file-type-' ~ ext ~ '.svg' %}
+        {% set fileSize = (file.size / 1048576)|number_format(1, '.', '') ~ ' MB' %}
+        {% set title = file.title ?: file.filename %}
+
+        <div class="flex justify-center my-6">
+          <div class="inline-flex items-center space-x-4 bg-primary text-white rounded-full px-5 py-3">
+            <div class="w-6 h-6 [&_svg]:w-full [&_svg]:h-full shrink-0">
+              {% include 'includes/icons/brands/' ~ iconName %}
+            </div>
+            <div>
+              <a href="{{ file.url }}" download
+                 class="hover:underline text-white font-medium">
+                {{ title }}
+              </a>
+              <span class="ml-1 text-white text-sm">({{ fileSize }})</span>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}

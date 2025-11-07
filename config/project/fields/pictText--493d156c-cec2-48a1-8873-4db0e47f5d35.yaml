@@ -1,0 +1,29 @@
+columnSuffix: null
+handle: pictText
+instructions: null
+name: 'Kép és szöveg'
+searchable: false
+settings:
+  createButtonLabel: null
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - d823c0fc-0e81-4d86-95cf-0b55ac23463e # Kép és szöveg
+        -
+          - group
+          - Általános
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
