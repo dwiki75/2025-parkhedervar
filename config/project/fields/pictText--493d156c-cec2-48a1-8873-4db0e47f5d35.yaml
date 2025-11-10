@@ -16,6 +16,14 @@ settings:
         -
           - group
           - Általános
+    -
+      __assoc__:
+        -
+          - uid
+          - fbc0eba2-1bc3-4182-8660-1c571425c373 # 4 kép + szöveg blokk
+        -
+          - group
+          - Általános
   includeTableView: false
   maxEntries: null
   minEntries: null

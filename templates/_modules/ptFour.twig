@@ -1,0 +1,82 @@
+{% if block.type == 'ptFour' %}
+  {% set isImageLeft = block.switch %}
+  {% set images = block.fourPictures.all() %}
+
+  {% if images|length == 4 %}
+  <div class="max-w-8xl mx-auto p-5 mb-1 sm:mb-[5%]">
+    {# 👉 itt történik a középre igazítás: md:items-center #}
+    <div class="flex flex-col md:flex-row md:items-center gap-8">
+
+      {# ==== KÉPOSZLOP ==== #}
+      <div class="w-full md:w-1/2 {{ isImageLeft ? 'md:order-1' : 'md:order-2' }}">
+        <div class="grid grid-cols-2 gap-4 md:gap-6">
+
+          {# BAL OSZLOP #}
+          <div class="flex flex-col gap-4 md:gap-6">
+            <div class="aspect-square overflow-hidden rounded-2xl">
+              <img
+                src="{{ images[0].getUrl() }}"
+                alt="{{ images[0].title }}"
+                class="w-full h-full object-cover"
+              >
+            </div>
+            <div class="aspect-[4/3] overflow-hidden rounded-2xl">
+              <img
+                src="{{ images[2].getUrl() }}"
+                alt="{{ images[2].title }}"
+                class="w-full h-full object-cover"
+              >
+            </div>
+          </div>
+
+          {# JOBB OSZLOP #}
+          <div class="flex flex-col gap-4 md:gap-6">
+            <div class="aspect-[4/3] overflow-hidden rounded-2xl">
+              <img
+                src="{{ images[1].getUrl() }}"
+                alt="{{ images[1].title }}"
+                class="w-full h-full object-cover"
+              >
+            </div>
+            <div class="aspect-square overflow-hidden rounded-2xl">
+              <img
+                src="{{ images[3].getUrl() }}"
+                alt="{{ images[3].title }}"
+                class="w-full h-full object-cover"
+              >
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {# ==== SZÖVEGOSZLOP ==== #}
+      <div class="w-full md:w-1/2 p-4 pt-8 sm:pt-12 sm:p-12 {{ isImageLeft ? 'md:order-2' : 'md:order-1' }}">
+        {% if block.title %}
+          <h2 class="text-3xl sm:text-6xl mb-4">{{ block.title }}</h2>
+        {% endif %}
+        {% if block.subTitle %}
+          <h3 class="text-2xl sm:text-3xl mb-4 text-secondary">{{ block.subTitle }}</h3>
+        {% endif %}
+        {% if block.textBox %}
+          <div class="prose max-w-none mb-4 [&_h3]:text-lg [&_h3]:sm:text-2xl [&_li]:list-disc [&_li]:ml-10 [&_li]:mt-1">
+            {{ block.textBox | raw }}
+          </div>
+        {% endif %}
+        {% set entryButton = block.button.one() %}
+        {% if entryButton %}
+          <div class="my-2">
+            <a href="{{ entryButton.url }}" class="bg-primary text-white px-6 py-2 rounded-full inline-flex items-center gap-2 hover:bg-primary/90 transition">
+              {{ entryButton.title }}
+              <span class="w-4 h-4 [&_svg]:w-full [&_svg]:h-full">
+                {% include 'includes/icons/heroicons/arrow-right.svg' %}
+              </span>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+  {% endif %}
+{% endif %}

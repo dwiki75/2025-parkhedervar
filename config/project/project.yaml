@@ -1,4 +1,4 @@
-dateModified: 1762522361
+dateModified: 1762586222
 email:
   fromEmail: fulop.viktor.dwiki@gmail.com
   fromName: parkhedervar
@@ -50,6 +50,7 @@ meta:
     5032b9b8-3c3f-4bd9-b66c-9b616eabab4c: Popup # Popup
     6652c4a0-b521-4514-9e6a-ba6383a6325a: 'Szöveg doboz' # Szöveg doboz
     8792f1cf-e9e4-4f28-9777-8c5304780529: 'Egy kép' # Egy kép
+    15374a4b-7c57-4349-9965-a0cfda75df3f: 'Négy kép' # Négy kép
     36685e5a-d503-4f86-9d6d-e73a0d97dc93: 'Képváltó képek' # Képváltó képek
     94625fe0-14e2-4fe2-94d5-d0d88b34013a: parkhedervar # parkhedervar
     a0ed06e8-7d19-46e7-b39f-32af2d4e18c3: Sebesség # Sebesség
@@ -63,6 +64,7 @@ meta:
     d46898f6-87ca-4eea-ae8d-1c1f76206e53: Kategória # Kategória
     e0fa9cd2-ed5d-4928-999a-9131fd0788fb: Lábléc # Lábléc
     efcb092e-4d8f-429a-aca8-d3806c9f7df2: 'Nagy kép - szöveg' # Nagy kép - szöveg
+    fbc0eba2-1bc3-4182-8660-1c571425c373: '4 kép + szöveg blokk' # 4 kép + szöveg blokk
 plugins:
   ckeditor:
     edition: standard

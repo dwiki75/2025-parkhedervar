@@ -1,0 +1,138 @@
+color: null
+description: null
+fieldLayouts:
+  00d60d14-92b2-4032-be31-f9cdddc29c1b:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: '2025-11-08T07:12:11+00:00'
+            disabled: false
+            elementCondition: null
+            id: null
+            includeInCards: false
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            providesThumbs: false
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 72f9f57f-4d4b-4ed8-ade4-098fecd2c498
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-11-08T07:15:22+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: subTitle
+            includeInCards: false
+            instructions: null
+            label: Alcím
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: aee9af55-15f8-49e8-947e-4605421b4117
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-11-08T07:15:22+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 15374a4b-7c57-4349-9965-a0cfda75df3f # Négy kép
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: d9444eaa-1c79-4de5-9c7d-7b0f14825324
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-11-08T07:15:22+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 6652c4a0-b521-4514-9e6a-ba6383a6325a # Szöveg doboz
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5f09f580-1265-4136-ba98-0389adaff05c
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-11-08T07:15:22+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 4cb3f0fe-5a28-46e4-aeca-af520ddf4746 # Kapcsoló
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: 'Bal - jobb'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 959081dd-41da-44e1-8a28-a4deba13c909
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-11-08T07:15:22+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 785c09ff-d241-42d1-b0a7-c985a24a712c # Bejegyzések
+            handle: button
+            includeInCards: false
+            instructions: null
+            label: Gomb
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 0bf52b52-beb8-4833-92d2-b1c06ffbadb5
+            userCondition: null
+            warning: null
+            width: 100
+        name: Tartalom
+        uid: 4391f133-7cfb-4bbf-a13d-d268ca2a8ff8
+        userCondition: null
+handle: ptFour
+hasTitleField: true
+icon: null
+name: '4 kép + szöveg blokk'
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
