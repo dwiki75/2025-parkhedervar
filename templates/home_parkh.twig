@@ -1,75 +1,71 @@
 {% extends "_layout_parkh" %}
 
-{# Oldalcím #}
 {% set pageTitle = entry.title %}
 
+{# ============================================
+   BLOCK MENU  →  FEJLÉC + STICKY MOBIL + SLIDER
+=============================================== #}
 {% block menu %}
 
-  {# Kontextus #}
-  {% set currentEntry = entry ?? null %}
-  {% set currentLang = currentSite.language %}
-  {% set sites = craft.app.sites.getAllSites() %}
-
-  {# Ikon macro #}
   {% import '_macros/icons.twig' as icons %}
 
-  {# Globál: header beállítása EGYSZER #}
+  {# Globál header #}
   {% set header = craft.app.globals.getSetByHandle('header') ?? null %}
   {% if not header %}
     {% set header = { textBox: '', button: null } %}
   {% endif %}
 
-  {# Mobil alsó sávhoz: opcionális ikon a header.iconName alapján (csak ikon) #}
-  {% set iconName = header.iconName is defined and header.iconName ? header.iconName|trim : null %}
+  {# Ikon (mobil alsó sávhoz) #}
+  {% set iconName = header.iconName ?? null %}
   {% set iconSet = null %}
   {% if iconName %}
-    {% set heroiconsPath = 'includes/icons/heroicons/' ~ iconName ~ '.svg' %}
-    {% set brandsPath = 'includes/icons/brands/' ~ iconName ~ '.svg' %}
-    {% if craft.app.view.doesTemplateExist(heroiconsPath) %}
+    {% if craft.app.view.doesTemplateExist('includes/icons/heroicons/' ~ iconName ~ '.svg') %}
       {% set iconSet = 'heroicons' %}
-    {% elseif craft.app.view.doesTemplateExist(brandsPath) %}
+    {% elseif craft.app.view.doesTemplateExist('includes/icons/brands/' ~ iconName ~ '.svg') %}
       {% set iconSet = 'brands' %}
     {% endif %}
   {% endif %}
   {% set iconHtml = iconSet ? icons.icon(iconName, iconSet, 'w-6 h-6 text-white') : '' %}
 
-  {# MOBIL STICKY MENÜ #}
-
-
-
-<div class="block md:hidden sticky top-0 z-50 bg-primary">
+  {# 1) FIXEN A TETEJÉN LÉVŐ MOBIL MENÜ #}
+<div class="block md:hidden fixed top-0 left-0 w-full z-50 bg-primary">
   <nav aria-label="{{ 'Fő navigáció'|t }}">
-    {% include './includes/_menu' with { id: 'mobile-header' } %}
+    {% include './includes/_menu.twig' with { id: 'mobile-header' } %}
   </nav>
 </div>
+  <div class="block md:hidden h-[72px]"></div>
+
+  {# ==========================================================
+     FEJLÉC + SLIDER BLOKK
+  =========================================================== #}
   <div class="w-full bg-white p-2 md:p-5">
-    <section class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0" aria-labelledby="home-hero-title">
+    <section class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-visible pb-16 md:pb-0"
+
+
+             aria-labelledby="home-hero-title">
       <div class="max-w-10xl mx-auto">
 
-        <!-- Felső sor -->
-        <div class="flex flex-row sm:flex sm:items-center justify-between gap-4 px-5 lg:px-10 2xl:px-20">
-          <div class="hidden md:block z-50 w-full">
-            <nav aria-label="{{ 'Fő navigáció'|t }}">
-              {% include './includes/_menu' with { id: 'site-header' } %}
-            </nav>
-          </div>
+<!-- Felső sor -->
+<div class="flex flex-row sm:flex sm:items-center justify-between gap-4 px-5 lg:px-10 2xl:px-20">
 
-          <!-- Bal oldali adat blokk (opcionális infók) -->
-          <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center" aria-label="{{ 'Elérhetőségek és rövid információk'|t }}">
-            {# később ide jöhet még tartalom #}
-            {# {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %} #}
-          </div>
+  <!-- Desktop menü -->
+  <div class="hidden md:block w-full">
+    {% include './includes/_menu.twig' with { id: 'site-header' } %}
+  </div>
 
-          <!-- Jobb oldali nyelv blokk -->
-          <div class="hidden md:flex w-1/4 sm:w-auto justify-end sm:justify-start items-start sm:items-center">
-            <nav aria-label="{{ 'Nyelvváltó'|t }}">
-              {% include './includes/_language.twig' %}
-            </nav>
-          </div>
-        </div>
+  <!-- Bal oldali adat blokk -->
+  <div class="w-3/4 sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-4">
+  </div>
 
-        {# Hero két oszlop lg-től #}
+  <!-- Nyelvváltó -->
+
+
+</div>
+
+
+        <!-- Hero két oszlop -->
         <div class="flex flex-col lg:flex-row items-stretch">
+
 
           <!-- BAL OSZLOP -->
           <div class="w-full lg:w-2/5 min-w-0 p-5 lg:px-10 2xl:px-20
@@ -77,7 +73,7 @@
                       break-words [hyphens:auto]
                       [&_p]:text-base [&_p]:lg:text-sm [&_p]:2xl:text-base
                       [&_h1]:mb-2 [&_h1]:text-thirdy [&_h1]:text-4xl [&_h1]:lg:text-5xl [&_h1]:xl:text-6xl [&_h1]:2xl:text-8xl [&_h1]:break-words
-                      [&_h2]:text-secondary [&_h2]:mb-2 [&_h2]:lg:mb-3 [&_h2]:xl:mb-4 [&_h2]:2xl:mb-5
+                      [&_h2]:text-four [&_h2]:mb-2 [&_h2]:lg:mb-3 [&_h2]:xl:mb-4 [&_h2]:2xl:mb-5
                       [&_h2]:text-2xl [&_h2]:lg:text-3xl [&_h2]:xl:text-4xl [&_h2]:2xl:text-6xl [&_h2]:break-words">
 
             <div class="self-start">
@@ -97,7 +93,7 @@
 
             <div class="self-end mt-2 hidden md:block">
               <button type="button"
-                      class="btn btn--thirdy btn--lineDraw focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 focus-visible:ring-offset-primary"
+                      class="btn btn--thirdy btn--lineDraw focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 focus-visible:ring-offset-primary text-lg font-bold uppercase"
                       onclick="window.__menuPopup && window.__menuPopup.open()"
                       aria-label="{{ 'Heti menü megnyitása'|t }}">
                 {{ 'Heti menü'|t }}
@@ -106,18 +102,19 @@
 
           </div>
 
-          <!-- JOBB OSZLOP: SLIDER -->
-<div class="w-full lg:w-3/5 min-w-0 overflow-hidden rounded-tl-[64px] min-h-0">
-  {% include './includes/_slider.twig' %}
-</div>
 
+
+          <!-- Jobb oszlop: Slider -->
+          <div class="w-full lg:w-3/5 overflow-hidden rounded-tl-[64px] min-h-0">
+            {% include './includes/_slider.twig' %}
+          </div>
 
         </div>
       </div>
     </section>
   </div>
 
-  {# --- Mobil alsó sáv (full-width). Csak akkor rajzoljuk, ha van ikon vagy gomb) --- #}
+    {# --- Mobil alsó sáv (full-width). Csak akkor rajzoljuk, ha van ikon vagy gomb) --- #}
   {% if iconHtml or (header.button is defined and header.button.one()) %}
 
       <div class="fixed bottom-0 left-0 w-full bg-primary text-white border-t border-white md:hidden z-50"
@@ -139,7 +136,18 @@
  
   {% endif %}
 
-  {# --- Hírek adatlekérés --- #}
+{% endblock %}
+
+
+
+{# ============================================
+   BLOCK MAIN → HÍREK + ONEPAGE + PICTTEXT + POPUP
+=============================================== #}
+{% block main %}
+
+  {# ========================
+     HÍREK ADATLEKÉRÉS
+  ========================= #}
   {% set limit = 6 %}
   {% set allNewsQuery = craft.entries()
     .section('news')
@@ -149,33 +157,30 @@
   {% set totalNews = allNewsQuery.count() %}
   {% set news = allNewsQuery.limit(limit).all() %}
 
-  {# --- Hírek szekció --- #}
   <section id="home-news" class="py-10" aria-labelledby="home-news-title">
     <div class="max-w-8xl mx-auto px-4 sm:px-6">
 
       <div class="mb-8 text-center">
-        <h2 id="home-news-title" class="text-3xl md:text-4xl text-primary">{{ 'Hírek'|t }}</h2>
+        <h2 id="home-news-title" class="text-3xl md:text-4xl lg:text-6xl text-primary">{{ 'Hírek'|t }}</h2>
       </div>
 
-      {# --- Mobil karusszel --- #}
-      <div class="md:hidden" role="region" aria-roledescription="carousel" aria-label="{{ 'Legfrissebb hírek'|t }}">
-        <div class="news-carousel -mx-4 px-4 overflow-x-auto flex gap-4
-                    snap-x snap-mandatory scroll-pl-4"
+      <!-- Mobil karusszel -->
+      <div class="md:hidden" role="region" aria-roledescription="carousel">
+        <div class="news-carousel -mx-4 px-4 overflow-x-auto flex gap-4 snap-x snap-mandatory scroll-pl-4"
              role="list"
-             data-dots="#news-dots"
-             aria-describedby="news-carousel-hint">
+             data-dots="#news-dots">
+
           {% for item in news %}
-            {# A kártya include marad — ha nem ad role-t, a list szerepet a konténer biztosítja #}
             {% include 'includes/_newsCard.twig' with { item: item } %}
           {% endfor %}
+
         </div>
-        <p id="news-carousel-hint" class="sr-only">{{ 'Vízszintesen görgethető lista'|t }}</p>
-        <div id="news-dots" class="flex items-center gap-2 mt-4 justify-center"
-             role="tablist" aria-label="{{ 'Lapozó'|t }}"></div>
+
+        <div id="news-dots" class="flex items-center gap-2 mt-4 justify-center" role="tablist"></div>
       </div>
 
-      {# --- Desktop grid --- #}
-      <div class="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6" role="list" aria-label="{{ 'Legfrissebb hírek'|t }}">
+      <!-- Desktop grid -->
+      <div class="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6" role="list">
         {% for item in news|slice(0,3) %}
           {% include 'includes/_newsCard.twig' with { item: item } %}
         {% endfor %}
@@ -184,167 +189,89 @@
       {% if totalNews > 3 %}
         <div class="mt-6 text-center">
           <a href="{{ url('news') }}"
-             class="inline-flex items-center gap-2 px-5 py-3 rounded-md
-                    bg-thirdy text-black font-semibold
-                    focus:outline-none focus-visible:ring-2 focus-visible:ring-black/60"
-             aria-label="{{ 'További hírek megnyitása'|t }}">
+             class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-thirdy text-black font-semibold hover:scale-110 transition">
             {{ 'További hírek'|t }}
-            <svg class="w-4 h-4" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 5l5 5-5 5"/></svg>
+            <svg class="w-4 h-4" viewBox="0 0 20 20"><path fill="currentColor" d="M7 5l5 5-5 5"/></svg>
           </a>
         </div>
       {% endif %}
     </div>
   </section>
 
-  {# --- Karusszel pöttyök – a11y finomítással --- #}
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const wrap = document.querySelector('.news-carousel');
-    if (!wrap) return;
 
-    const items = Array.from(wrap.children);
-    const dotsBox = document.querySelector(wrap.getAttribute('data-dots'));
-    if (!dotsBox) return;
+  {# ========================
+     ONEPAGE SZEKCIÓK
+  ========================= #}
+  {% set entries = craft.entries().section('onePage').type('content').all() %}
 
-    // pöttyök kirajzolása
-    dotsBox.innerHTML = '';
-    const dots = items.map((_, i) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.setAttribute('role', 'tab');
-      b.className = 'w-2.5 h-2.5 rounded-full bg-primary/30 aria-[current=true]:bg-primary transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary';
-      b.setAttribute('aria-label', `${i+1}. ${'{{ "hír"|t }}'}`);
-      b.addEventListener('click', () => {
-        const smoothOk = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        items[i].scrollIntoView({ behavior: smoothOk ? 'smooth' : 'auto', inline: 'start' });
-      });
-      dotsBox.appendChild(b);
-      return b;
-    });
+  {% if entries|length %}
+    {% for entry in entries %}
+      {% set sectionId = 'onepage-' ~ entry.id %}
+      {% set img = entry.onePict.one() ?? null %}
+      {% set hasImage = img is not null %}
 
-    // aktív pötty frissítése
-    const update = () => {
-      let idx = 0, min = Infinity, left = wrap.scrollLeft;
-      items.forEach((el, i) => {
-        const d = Math.abs(el.offsetLeft - left);
-        if (d < min) { min = d; idx = i; }
-      });
-      dots.forEach((d, i) => d.setAttribute('aria-current', String(i === idx)));
-    };
+      {% if hasImage %}
+        {% set isLandscape = img.width >= img.height %}
+        {% set transform = isLandscape ? { mode: 'crop', width: 1280 } : { mode: 'crop', width: 800 } %}
+        {% set imgUrl = img.getUrl(transform) %}
+        {% set imgWAttr = img.getWidth(transform) %}
+        {% set imgHAttr = img.getHeight(transform) %}
+      {% endif %}
 
-    update();
-    wrap.addEventListener('scroll', () => {
-      if (wrap._t) return;
-      wrap._t = requestAnimationFrame(() => { update(); wrap._t = null; });
-    });
-    window.addEventListener('resize', update);
-  });
-  </script>
+      {% set imgW  = hasImage ? (isLandscape ? 'md:w-1/2' : 'md:w-5/12') : 'md:w-0' %}
+      {% set textW = hasImage ? (isLandscape ? 'md:w-1/2' : 'md:w-7/12') : 'md:w-full' %}
+      {% set imgOrder  = entry.switch ? 'md:order-2' : 'md:order-1' %}
+      {% set textOrder = entry.switch ? 'md:order-1' : 'md:order-2' %}
 
-  {# --- Placeholder tartalom (nem szükséges a11y-hoz, maradhat) --- #}
-/* új */
+      <section id="{{ sectionId }}" class="max-w-8xl mx-auto px-6 md:px-10 py-6 md:py-10">
 
-{# OnePage szekció / content típus megjelenítése — A11y-ready #}
-{% set entries = craft.entries().section('onePage').type('content').all() %}
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-14">
 
-{% if entries|length %}
-  {% for entry in entries %}
-    {% set sectionId = 'onepage-' ~ entry.id %}
-    {% set img = entry.onePict.one() ?? null %}
-    {% set hasImage = img is not null %}
-
-    {# Kép tájolás + transform #}
-    {% if hasImage %}
-      {% set isLandscape = img.width >= img.height %}
-      {% set transform = isLandscape ? { mode: 'crop', width: 1280 } : { mode: 'crop', width: 800 } %}
-      {% set imgUrl = img.getUrl(transform) %}
-      {% set imgWAttr = img.getWidth(transform) ?? null %}
-      {% set imgHAttr = img.getHeight(transform) ?? null %}
-      {% set imgAlt = (img.title ?? null) ?: (entry.title ?? 'Kép') %}
-    {% endif %}
-
-    {# Szélesség arányok #}
-{% set imgW  = hasImage ? (isLandscape ? 'md:w-1/2' : 'md:w-5/12') : 'md:w-0' %}
-{% set textW = hasImage ? (isLandscape ? 'md:w-1/2' : 'md:w-7/12') : 'md:w-full' %}
-
-    {# Switch: kép helye #}
-    {% set imgOrder  = entry.switch ? 'md:order-2' : 'md:order-1' %}
-    {% set textOrder = entry.switch ? 'md:order-1' : 'md:order-2' %}
-
-    <section
-      id="{{ sectionId }}"
-      role="region"
-      aria-labelledby="{{ sectionId }}-heading"
-      class="max-w-8xl mx-auto px-6 md:px-10 py-12 md:py-20"
-    >
-      <div class="flex flex-col md:flex-row items-center gap-8 md:gap-14">
-
-        {# KÉP #}
-        {% if hasImage %}
-          <div class="{{ imgW }} w-full {{ imgOrder }}">
-            <figure class="rounded-3xl overflow-hidden">
-              <img
-                src="{{ imgUrl }}"
-                alt="{{ imgAlt }}"
-                {% if imgWAttr %}width="{{ imgWAttr }}"{% endif %}
-                {% if imgHAttr %}height="{{ imgHAttr }}"{% endif %}
-                class="block w-full h-auto motion-reduce:transition-none"
-                loading="lazy"
-                decoding="async"
-                fetchpriority="low"
-              >
-            </figure>
-          </div>
-        {% endif %}
-
-        {# SZÖVEG #}
-        <div class="{{ textW }} w-full {{ textOrder }}">
-          {% if entry.title %}
-            <h2 id="{{ sectionId }}-heading" class="mb-6 text-primary text-4xl md:text-5xl leading-tight">
-              {{ entry.title }}
-            </h2>
+          {% if hasImage %}
+            <div class="{{ imgW }} w-full {{ imgOrder }}">
+              <figure class="rounded-3xl overflow-hidden">
+                <img src="{{ imgUrl }}" alt="{{ img.title }}"
+                     width="{{ imgWAttr }}" height="{{ imgHAttr }}"
+                     class="block w-full h-auto" loading="lazy">
+              </figure>
+            </div>
           {% endif %}
 
-          {% if entry.textBox %}
-            <div class="prose max-w-none md:prose-lg [&_p]:mb-4">
+          <div class="{{ textW }} w-full {{ textOrder }}">
+            <!-- h2 class="mb-6 text-primary text-4xl md:text-5xl">{{ entry.title }}</h2 -->
+
+                    <div class="prose max-w-none md:prose-lg">
               {{ entry.textBox|raw }}
             </div>
-          {% endif %}
 
-          {# Bővebben – csak ha van kijelölt bejegyzés #}
-          {% set target = entry.post.one() %}
-          {% if target %}
-            <div class="mt-8">
-              <a
-                href="{{ target.url }}"
-                rel="bookmark"
-                class="inline-flex items-center justify-center rounded-full bg-primary text-white px-6 py-3 font-semibold tracking-wide hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 motion-reduce:transition-none"
-              >
-                <span aria-hidden="true">{{ 'Bővebben'|t }}</span>
-                <span class="sr-only">: {{ target.title }}</span>
-              </a>
-            </div>
-          {% endif %}
+            {% set target = entry.post.one() %}
+            {% if target %}
+              <div class="mt-8">
+                <a href="{{ target.url }}" rel="bookmark"
+                   class="inline-flex items-center justify-center rounded-full bg-primary text-white px-6 py-3 font-semibold tracking-wide hover:bg-primary/90 transition">
+                  {{ 'Bővebben'|t }}
+                  <span class="sr-only">: {{ target.title }}</span>
+                </a>
+              </div>
+            {% endif %}
+          </div>
+
         </div>
 
-      </div>
-    </section>
-  {% endfor %}
-{% endif %}
+        <div class="w-full my-auto mx-auto">
+          {% for block in entry.pictText.all() %}
+            {% include '_modules/' ~ block.type %}
+          {% endfor %}
+        </div>
 
-       
+      </section>
+
+    {% endfor %}
+  {% endif %}
+
+  {# ===============================
+     MENU POPUP INCLUDE (VÉGÉN)
+  ================================ #}
+  {% include './includes/_menuPopup.twig' %}
 
 {% endblock %}
-
-{% block main %}
-  {# A layout már tartalmaz <main>-t; itt ne tegyünk újabbat, csak tartalmat adnánk, de most üresen hagyom #}
-  <div class="w-full my-auto mx-auto p-3">
-      {# % set resp = craft.app.runAction('dwiki-form2/default/frontend-form', { formKey: 'default' }) %}
-    {{ (resp.content ?? resp.data ?? '')|raw } #}
-
-     {% include './includes/_menuPopup.twig' %}
-        
-  
-  </div>
-{% endblock %}
-

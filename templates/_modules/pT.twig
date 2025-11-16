@@ -25,73 +25,95 @@
   {% set imageRoundedClass = 'rounded-xl' %}
 
 <div class="max-w-8xl mx-auto"> 
-  <div class="flex flex-col md:flex-row md:items-center p-5 mb-1 sm:mb-[5%]">
+  <div class="flex flex-col md:flex-row md:items-center mb-1">
     
-    {# Kép blokk #}
+    {# ---- KÉP BLOKK ---- #}
     <div class="relative overflow-visible w-full {{ mainImageWidthClass }} {{ imageOrder }}">
       {% if mainImage %}
         <img 
           src="{{ mainImage.getUrl(mainTransform) }}"
           alt="{{ mainImage.title }}"
-          class="w-full h-auto object-cover {{ imageRoundedClass }}"
-        >
+          class="w-full h-auto object-cover {{ imageRoundedClass }}">
       {% endif %}
 
       {% if smallImage %}
         {% set smallTransform = isCpOn ? thumb640Hfit : thumb640crop %}
-        
-        {# Kis kép mobilon: simán alatta #}
+
         <div class="block md:hidden mt-4 {{ isImageLeft ? 'text-left' : 'text-right' }}">
           <img 
             src="{{ smallImage.getUrl(smallTransform) }}"
             alt="{{ smallImage.title }}"
-            class="w-full h-auto rounded-xl"
-          >
+            class="w-full h-auto rounded-xl">
         </div>
 
-        {# Kis kép desktopon: rálógatva #}
         <img 
           src="{{ smallImage.getUrl(smallTransform) }}"
           alt="{{ smallImage.title }}"
-          class="
-            hidden md:block
-            absolute
-            w-[40%]
-            h-auto
-            top-[80%]
-            {{ isImageLeft ? 'left-10' : 'right-10' }}
-            rounded-xl
-          "
-        >
+          class="hidden md:block absolute w-[40%] h-auto top-[80%] {{ isImageLeft ? 'left-10' : 'right-10' }} rounded-xl">
       {% endif %}
     </div>
 
-    {# Szöveges blokk #}
-    <div class="w-full {{ textWidthClass }} p-4 pt-8 sm:pt-12 sm:p-12 {{ textOrder }}">
+    {# ---- SZÖVEGES BLOKK ---- #}
+    <div class="w-full {{ textWidthClass }} pt-8 sm:pt-12 sm:p-12 {{ textOrder }}">
+
       {% if block.title %}
         <h2 class="text-3xl sm:text-6xl mb-4">{{ block.title }}</h2>
       {% endif %}
+
       {% if block.subTitle %}
         <h3 class="text-2xl sm:text-3xl mb-4 text-secondary">{{ block.subTitle }}</h3>
       {% endif %}
+
+      {# =============================== #}
+      {#      GOMB MÁTRIX – ÚJ HELY      #}
+      {#    SUBTITLE ÉS TEXTBOX KÖZÖTT   #}
+      {# =============================== #}
+
+      {% set buttons = block.buttons.all() %}
+
+      {% if buttons|length %}
+        <div class="flex flex-wrap gap-3 mt-2 mb-6">
+
+          {% for btn in buttons %}
+            {% set url = btn.lButton ?? '#' %}
+            {% set txt = btn.nButton ?? '' %}
+
+            <a href="{{ url }}"
+              class="px-5 py-2 border border-primary text-primary text-base rounded-full
+                      bg-white transition-colors duration-200
+                      hover:bg-primary hover:text-white">
+              {{ txt }}
+            </a>
+          {% endfor %}
+
+        </div>
+      {% endif %}
+
+      {# ---- TEXTBOX MOST EZUTÁN JÖN ---- #}
       {% if block.textBox %}
         <div class="prose max-w-none mb-4 [&_h3]:text-lg [&_h3]:sm:text-2xl [&_li]:list-disc [&_li]:list-outside [&_li]:ml-10 [&_li]:mt-1">
           {{ block.textBox | raw }}
         </div>
       {% endif %}
-      {% set entryButton = block.button.one() %}
-      {% if entryButton %}
-        <div class="my-2">
-          <a href="{{ entryButton.url }}" class="bg-primary text-white px-6 py-2 rounded-full inline-flex items-center gap-2 hover:bg-primary/90 transition">
-            {{ entryButton.title }}
-            <span class="w-4 h-4 [&_svg]:w-full [&_svg]:h-full">
-              {% include 'includes/icons/heroicons/arrow-right.svg' %}
-            </span>
-          </a>
-        </div>
-      {% endif %}
+
+      {# Opcionális egyedi egygombos régi megoldás – ha kell #}
+    {% set entryButton = block.button.one() %}
+    {% if entryButton %}
+      <div class="my-2">
+        <a href="{{ entryButton.url }}"
+          class="bg-primary text-white px-6 py-3 rounded-full inline-flex items-center gap-2 
+                  font-semibold transition-transform duration-300
+                  hover:scale-110">
+          {{ entryButton.title }}
+          <span class="w-4 h-4 [&_svg]:w-full [&_svg]:h-full">
+            {% include 'includes/icons/heroicons/arrow-right.svg' %}
+          </span>
+        </a>
+      </div>
+    {% endif %}
+
     </div>
 
   </div>
-</div>     
+</div>
 {% endif %}

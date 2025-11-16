@@ -36,7 +36,7 @@ fieldLayouts:
             uid: e687f3d8-422a-4498-bca4-ebcc11b4c253
             userCondition: null
             warning: null
-            width: 100
+            width: 50
           -
             dateAdded: '2025-11-07T11:51:09+00:00'
             editCondition: null
@@ -51,6 +51,23 @@ fieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: 3d4cb4d5-9661-4321-a121-8f9a4d5af391
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2025-11-15T11:24:44+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 79ebc98e-0c3f-4c41-a614-badf35fe67e0 # Belső gombok
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2a2df57f-e9d8-4a0d-b1b4-201a29574b5b
             userCondition: null
             warning: null
             width: 100
@@ -70,24 +87,7 @@ fieldLayouts:
             uid: d87af9a5-7f3e-41e5-9055-328cda23dea0
             userCondition: null
             warning: null
-            width: 100
-          -
-            dateAdded: '2025-11-07T11:51:09+00:00'
-            editCondition: null
-            elementCondition: null
-            fieldUid: 6652c4a0-b521-4514-9e6a-ba6383a6325a # Szöveg doboz
-            handle: null
-            includeInCards: false
-            instructions: null
-            label: null
-            providesThumbs: false
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 8db2f118-b3ba-4957-8e89-f61f15768219
-            userCondition: null
-            warning: null
-            width: 100
+            width: 50
           -
             dateAdded: '2025-11-07T11:51:09+00:00'
             editCondition: null
@@ -122,6 +122,23 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 25
+          -
+            dateAdded: '2025-11-07T11:51:09+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 6652c4a0-b521-4514-9e6a-ba6383a6325a # Szöveg doboz
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8db2f118-b3ba-4957-8e89-f61f15768219
+            userCondition: null
+            warning: null
+            width: 100
           -
             dateAdded: '2025-11-07T11:51:09+00:00'
             editCondition: null

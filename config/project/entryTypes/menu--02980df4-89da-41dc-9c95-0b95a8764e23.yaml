@@ -129,10 +129,10 @@ fieldLayouts:
               elementType: craft\elements\Entry
               fieldContext: global
             fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
-            handle: dirctLink
+            handle: directLink
             includeInCards: false
             instructions: null
-            label: null
+            label: 'Link szövegesen'
             providesThumbs: false
             required: false
             tip: null

@@ -43,16 +43,27 @@ function ds(el, key, fallback = '') {
 function mountHeaderById(id) {
   const el = document.getElementById(id)
   if (!el) return
+
+  // ⛔ DESKTOP HEADER → NE MOUNTOLJON MOBILON !!!
+  if (id === 'site-header' && window.innerWidth < 768) {
+    return
+  }
+
   const props = {
     logoUrl: ds(el, 'logoUrl'),
     logoAlt: ds(el, 'logoAlt'),
     languageHtml: ds(el, 'language'),
     menuItems: safeParseJSON(ds(el, 'menu')),
+    mode: ds(el, 'mode', 'default'),
   }
+
   createApp(HeaderMenu, props).mount(el)
 }
+
 mountHeaderById('site-header')
 mountHeaderById('mobile-header')
+
+
 
 // --- POPUP ---
 {

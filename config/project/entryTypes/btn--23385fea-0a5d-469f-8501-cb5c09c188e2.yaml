@@ -1,0 +1,57 @@
+color: null
+description: null
+fieldLayouts:
+  416039c1-6fe8-43ff-894c-eeacf91446c6:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2025-11-15T11:22:56+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: nButton
+            includeInCards: false
+            instructions: null
+            label: 'Gomb neve'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: cde2f00e-6c0b-4302-8389-615ed236e9b1
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2025-11-15T11:22:56+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: lButton
+            includeInCards: false
+            instructions: null
+            label: 'Gomb linkje'
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5e941156-972e-4078-abc6-48acd3a01351
+            userCondition: null
+            warning: null
+            width: 50
+        name: Tartalom
+        uid: 24cb33cf-d803-4d67-8e8f-10559ff932b7
+        userCondition: null
+handle: btn
+hasTitleField: false
+icon: null
+name: 'Belső gomb'
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

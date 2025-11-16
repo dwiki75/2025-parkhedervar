@@ -1,8 +1,6 @@
 {% extends "_layout_parkh" %}
 
-{% block menu %}
-  {% include './includes/_menuIn' %}
-{% endblock %}
+
 
 {% block main %}
 {% set perPage = 6 %}
@@ -18,7 +16,7 @@ as pageInfo, news %}
     <div class="max-w-8xl mx-auto px-4 sm:px-6">
 
       <div class="mb-8 text-center">
-        <h1 id="news-list-title" class="text-3xl md:text-4xl text-primary">{{ 'Hírek'|t }}</h1>
+        <h1 id="news-list-title" class="text-3xl md:text-4xl lg:text-6xl text-primary">{{ 'Hírek'|t }}</h1>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6" role="list" aria-label="{{ 'Hírek'|t }}">

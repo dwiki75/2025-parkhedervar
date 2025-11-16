@@ -1,87 +1,56 @@
-{# includes/_menu.twig #}
-{% set menuItems   = craft.entries.section('menu').all() %}
-{% set currentPath = craft.app.request.getPathInfo() %}
-{% set baseUrl     = craft.app.request.getHostInfo() %}
-
+{# --- LOGO --- #}
 {% set headerGlobal = craft.app.globals.getSetByHandle('header') ?? null %}
-{% set headerObj    = (header is defined and header) ? header : headerGlobal %}
-{% set logo         = (headerObj and headerObj.image|length) ? headerObj.image.one() : null %}
+{% set logo = headerGlobal and headerGlobal.image|length ? headerGlobal.image.one() : null %}
+
+{# --- MENÜ ADATOK --- #}
+{% set menuItems = craft.entries.section('menu').all() %}
+{% set baseUrl = craft.app.request.getHostInfo() %}
 
 {% set formattedMenu = [] %}
 {% for item in menuItems %}
-  {% set type = (item.optional ?? '')|lower %}
-  {% set url = '#' %}
-  {% if type == 'post' and item.post|length %}
-    {% set url = item.post.one().url %}
-  {% elseif type == 'category' and item.catField|length %}
-    {% set url = item.catField.one().url %}
-  {% elseif type == 'directlink' and item.directLink is not empty %}
-    {% set url = item.directLink %}
-  {% endif %}
-  {% set isExternal = (type == 'directlink') %}
-  {% set menuPath   = url|replace({ (baseUrl ~ '/'): '' }) %}
-  {% set isActive   = (not isExternal) and (menuPath == currentPath) %}
-  {% set formattedMenu = formattedMenu|merge([{
-    title: item.title,
-    url: url,
-    active: isActive,
-    external: isExternal
-  }]) %}
+    {% set type = (item.optional ?? '')|lower %}
+    {% set url = '#' %}
+
+    {% if type == 'post' and item.post|length %}
+        {% set url = item.post.one().url %}
+    {% elseif type == 'category' and item.catField|length %}
+        {% set url = item.catField.one().url %}
+    {% elseif type == 'directlink' and item.directLink %}
+        {% set url = item.directLink %}
+    {% endif %}
+
+    {% set isExternal = url matches '~^https?://~' and not (url starts with baseUrl) %}
+
+    {% set formattedMenu = formattedMenu|merge([
+        {
+            title: item.title,
+            url: url,
+            external: isExternal
+        }
+    ]) %}
 {% endfor %}
 
+{# --- LANGUAGE HTML --- #}
 {% set languageHtml %}
-  {% include './includes/_language.twig' %}
+    {% include './includes/_language.twig' %}
 {% endset %}
 
-<header
-  id="{{ id ?? 'site-header' }}"
-  data-logo-url="{{ logo ? logo.url : '' }}"
-  data-logo-alt="{{ logo ? (logo.alt ?? logo.title ?? siteName ?? '') : '' }}"
-  data-language="{{ languageHtml|e('html_attr') }}"
-  data-menu="{{ formattedMenu|json_encode|e('html_attr') }}"
-  class="w-full transition-all duration-300 ease-in-out"
-  role="banner"
->
-  <nav aria-label="{{ 'Fő navigáció'|t }}" class="max-w-8xl mx-auto px-4 relative">
-    {# a relative biztosítja, hogy a nyelvváltó ne csússzon ki fix overlayben sem #}
-    <div class="flex items-center justify-between gap-4 py-3 relative">
-      {# Bal: logó #}
-      <a href="{{ siteUrl }}"
-         class="inline-flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black rounded-md"
-         aria-label="{{ siteName }}">
-        {% if logo %}
-          <img src="{{ logo.url }}" alt="{{ siteName }}" class="h-10 w-auto" loading="lazy" decoding="async">
-        {% else %}
-          <span class="text-lg font-semibold">{{ siteName }}</span>
-        {% endif %}
-      </a>
+{# =============== DESKTOP =============== #}
+<div id="{{ id == 'site-header' ? 'site-header' : '' }}"
+     {% if id == 'site-header' %}
+        data-logo-url="{{ logo ? logo.url : '' }}"
+        data-logo-alt="{{ logo ? (logo.alt ?? logo.title ?? siteName) : '' }}"
+        data-language="{{ languageHtml|e('html_attr') }}"
+        data-menu='{{ formattedMenu|json_encode }}'
+     {% endif %}
+></div>
 
-      {# Közép: menüpontok (desktopon látszik) #}
-      <ul class="hidden md:flex items-center gap-1" role="list" id="primary-menu">
-        {% for it in formattedMenu %}
-          <li>
-            <a href="{{ it.url }}"
-               class="px-3 py-2 rounded-md inline-flex items-center gap-2
-                      hover:bg-white/10
-                      focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
-               {% if it.active %} aria-current="page"{% endif %}
-               {% if it.external %} target="_blank" rel="noopener noreferrer"{% endif %}>
-              <span>{{ it.title }}</span>
-              {% if it.external %}
-                <svg class="w-4 h-4" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                  <path fill="currentColor" d="M7 5h8v8h-2V8.414l-8.293 8.293-1.414-1.414L11.586 7H7V5z"/>
-                </svg>
-                <span class="sr-only">{{ ' (külső hivatkozás)'|t }}</span>
-              {% endif %}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-
-      {# Jobb: nyelvváltó – középen marad, nem csúszik ki mobilon #}
-        <div class="flex items-center gap-2 pr-8 md:absolute md:right-3 md:top-1/2 md:-translate-y-1/2">
-          {% include './includes/_language.twig' %}
-        </div>
+{# =============== MOBIL =============== #}
+{% if id == 'mobile-header' %}
+    <div id="mobile-header"
+         data-logo-url="{{ logo ? logo.url : '' }}"
+         data-logo-alt="{{ logo ? (logo.alt ?? logo.title ?? siteName) : '' }}"
+         data-language="{{ languageHtml|e('html_attr') }}"
+         data-menu='{{ formattedMenu|json_encode }}'>
     </div>
-  </nav>
-</header>
+{% endif %}

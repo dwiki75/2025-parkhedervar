@@ -1,0 +1,29 @@
+columnSuffix: null
+handle: buttons
+instructions: null
+name: 'Belső gombok'
+searchable: false
+settings:
+  createButtonLabel: null
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 23385fea-0a5d-469f-8501-cb5c09c188e2 # Belső gomb
+        -
+          - group
+          - Általános
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix

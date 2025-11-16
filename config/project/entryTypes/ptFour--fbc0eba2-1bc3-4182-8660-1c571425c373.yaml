@@ -36,7 +36,7 @@ fieldLayouts:
             uid: 72f9f57f-4d4b-4ed8-ade4-098fecd2c498
             userCondition: null
             warning: null
-            width: 100
+            width: 50
           -
             dateAdded: '2025-11-08T07:15:22+00:00'
             editCondition: null
@@ -53,7 +53,7 @@ fieldLayouts:
             uid: aee9af55-15f8-49e8-947e-4605421b4117
             userCondition: null
             warning: null
-            width: 100
+            width: 50
           -
             dateAdded: '2025-11-08T07:15:22+00:00'
             editCondition: null
@@ -70,24 +70,7 @@ fieldLayouts:
             uid: d9444eaa-1c79-4de5-9c7d-7b0f14825324
             userCondition: null
             warning: null
-            width: 100
-          -
-            dateAdded: '2025-11-08T07:15:22+00:00'
-            editCondition: null
-            elementCondition: null
-            fieldUid: 6652c4a0-b521-4514-9e6a-ba6383a6325a # Szöveg doboz
-            handle: null
-            includeInCards: false
-            instructions: null
-            label: null
-            providesThumbs: false
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 5f09f580-1265-4136-ba98-0389adaff05c
-            userCondition: null
-            warning: null
-            width: 100
+            width: 75
           -
             dateAdded: '2025-11-08T07:15:22+00:00'
             editCondition: null
@@ -102,6 +85,23 @@ fieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: 959081dd-41da-44e1-8a28-a4deba13c909
+            userCondition: null
+            warning: null
+            width: 25
+          -
+            dateAdded: '2025-11-08T07:15:22+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 6652c4a0-b521-4514-9e6a-ba6383a6325a # Szöveg doboz
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5f09f580-1265-4136-ba98-0389adaff05c
             userCondition: null
             warning: null
             width: 100

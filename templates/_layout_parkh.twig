@@ -2,13 +2,14 @@
 {% include './includes/_head.twig' %}
 
 <body class="min-h-dvh antialiased">
-  {# Skip link a képernyőolvasók és billentyűzet felhasználók kedvéért #}
+
+  {# Skip link #}
   <a href="#main"
      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-3 focus:py-2 focus:rounded-md focus:bg-white focus:text-black focus:shadow-md">
     {{ 'Ugrás a fő tartalomra'|t }}
   </a>
 
-  {# ---- Globális képtranform setek (változatlanul hagyva) ---- #}
+  {# ---- Globális képtranform setek ---- #}
   {% set thumb1024crop = { mode: 'crop', width: 1024, height: 640, quality: 100, position: 'center-center' } %}
   {% set thumb640Hcrop = { mode: 'crop', width: 640, height: 1024, quality: 100, position: 'center-center' } %}
   {% set thumb1024fit = { mode: 'fit', width: 1024, height: 640, quality: 100, position: 'center-center' } %}
@@ -32,37 +33,23 @@
   {# ---------- HEADER / NAV ---------- #}
   <header role="banner">
     {% block menu %}
-      {% set currentEntry = entry ?? null %}
-      {% set currentLang = currentSite.language %}
-      {% set sites = craft.app.sites.getAllSites() %}
 
-      {# Mobil sticky nav #}
-      <div class="block md:hidden sticky top-0 z-50 bg-white">
-        <nav aria-label="{{ 'Fő navigáció'|t }}">
-          {% include './includes/_menu' with { id: 'mobile-header' } %}
-        </nav>
-      </div>
+      {# ======= MOBIL STICKY MENU (mindig _menu.twig) ======= #}
 
-      {# Felső sáv (ikonok + nyelvváltó) #}
-      <div class="w-full bg-secondary hidden md:block rounded-4xl">
-        <div class="max-w-8xl m-auto grid grid-cols-2 sm:flex sm:items-center justify-between p-3 gap-4 bg-secondary text-white">
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
-            {% include './includes/_iconsData.twig' with { id: 'mobile-header' } %}
-          </div>
-          <div class="flex justify-end sm:justify-start">
-            <nav aria-label="{{ 'Nyelvváltó'|t }}">
-              {% include './includes/_language' %}
-            </nav>
-          </div>
-        </div>
-      </div>
 
-      {# Desktop sticky nav #}
-      <div class="hidden md:block sticky top-0 z-50 bg-lightbrown p-5">
-        <nav aria-label="{{ 'Fő navigáció'|t }}">
-          {% include './includes/_menu' with { id: 'site-header' } %}
-        </nav>
-      </div>
+<div class="block md:hidden sticky top-0 z-50 bg-primary">
+  <nav aria-label="{{ 'Fő navigáció'|t }}">
+    {% include './includes/_menu.twig' with { id: 'mobile-header' } %}
+  </nav>
+</div>
+
+
+      {# ======= DESKTOP MENÜ (belső oldalakhoz: _menuIn.twig) ======= #}
+<div class="hidden md:block w-full" >
+  <div class="hidden md:block h-[64px] w-full"></div>
+    {% include './includes/_menuIn.twig' with { id: 'site-header' } %}
+</div>
+
     {% endblock %}
   </header>
 
@@ -73,70 +60,66 @@
   </main>
 
   {# ---------- FOOTER ---------- #}
-{% block footer %}
-{% set footer = craft.app.globals.getSetByHandle('footer') %}
+  {% block footer %}
+  {% set footer = craft.app.globals.getSetByHandle('footer') %}
 
-<div class="w-full bg-white p-2 md:p-5">
-  <footer class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0">
-    <div class="max-w-10xl mx-auto px-5 lg:px-10 2xl:px-20 pt-10 pb-5">
-      <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+  <div class="w-full bg-white p-2 md:p-5">
+    <footer class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0">
+      <div class="max-w-10xl mx-auto px-5 lg:px-10 2xl:px-20 pt-10 pb-5">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-        {# LOGÓ #}
-        <div class="lg:col-span-2">
-          {% if footer.onePict.one() %}
-            <img
-              src="{{ footer.onePict.one().url }}"
-              alt="{{ footer.onePict.one().title }}"
-              class="h-14 w-auto">
-          {% endif %}
+          {# LOGÓ #}
+          <div class="lg:col-span-2">
+            {% if footer.onePict.one() %}
+              <img
+                src="{{ footer.onePict.one().url }}"
+                alt="{{ footer.onePict.one().title }}"
+                class="h-14 w-auto">
+            {% endif %}
+          </div>
+
+          {# SZÖVEGBOX 1 #}
+          <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 
+                      [&_h3]:mb-4 [&_h3]:text-white [&_h4]:text-white [&_a]:underline
+                      [&_h4]:mb-4 [&_h4]:font-lg">
+            {{ footer.textBox
+              |iconify
+              |replace({
+                  '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
+                })
+              |raw }}
+          </div>
+
+          {# SZÖVEGBOX 2 #}
+          <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 [&_h4]:text-white
+                      [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline
+                      [&_h4]:mb-4 [&_h4]:font-lg">
+            {{ footer.textBox2
+              |iconify
+              |replace({
+                  '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
+                })
+              |raw }}
+          </div>
+
+          {# SZÖVEGBOX 3 #}
+          <div class="group/fadebox col-span-1 lg:col-span-4 mt-4 text-sm [&_h4]:text-white
+                      [&_p]:mt-1 [&_h3]:text-base [&_h3]:lg:text-lg [&_h3]:mb-4
+                      [&_h4]:mb-4 [&_h4]:font-lg [&_h3]:text-white [&_a]:underline">
+            {{ footer.textBox3
+              |iconify
+              |replace({
+                  '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
+                })
+              |raw }}
+          </div>
+
         </div>
-
-        {# SZÖVEGBOX 1 #}
-        <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 
-                    [&_h3]:mb-4 [&_h3]:text-white [&_h4]:text-white [&_a]:underline
-                    [&_h4]:mb-4 [&_h4]:font-lg">
-          {{ footer.textBox
-            |iconify
-            |replace({
-                '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
-              })
-            |raw }}
-        </div>
-
-        {# SZÖVEGBOX 2 #}
-        <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 [&_h4]:text-white
-                    [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline
-                    [&_h4]:mb-4 [&_h4]:font-lg">
-          {{ footer.textBox2
-            |iconify
-            |replace({
-                '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
-              })
-            |raw }}
-        </div>
-
-        {# SZÖVEGBOX 3 #}
-        <div class="group/fadebox col-span-1 lg:col-span-4 mt-4 text-sm [&_h4]:text-white
-                    [&_p]:mt-1 [&_h3]:text-base [&_h3]:lg:text-lg [&_h3]:mb-4
-                    [&_h4]:mb-4 [&_h4]:font-lg [&_h3]:text-white [&_a]:underline">
-          {{ footer.textBox3
-            |iconify
-            |replace({
-                '<a ':'<a class="opacity-70 transition-opacity duration-300 group-hover/fadebox:opacity-40 hover:opacity-100 " '
-              })
-            |raw }}
-        </div>
-
       </div>
-    </div>
-  </footer>
-</div>
+    </footer>
+  </div>
 
-{% endblock %}
-
-
-
-
+  {% endblock %}
 
   {% include './includes/_popup' %}
 </body>

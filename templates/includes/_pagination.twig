@@ -1,9 +1,11 @@
 {# templates/includes/_pagination.twig #}
 <nav class="mt-10 flex justify-center items-center gap-3" role="navigation" aria-label="{{ 'Oldalak'|t }}">
+
   {# Előző #}
   {% if paginate.prevUrl %}
     <a href="{{ paginate.prevUrl }}"
-       class="px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm text-gray-700">
+       class="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-sm text-gray-700
+              transition transform duration-150 hover:scale-110">
       ‹ {{ 'Előző'|t }}
     </a>
   {% endif %}
@@ -11,8 +13,14 @@
   {# Oldalszámok #}
   {% for page in 1..paginate.totalPages %}
     {% set url = paginate.getPageUrl(page) %}
+
     <a href="{{ url }}"
-       class="px-3 py-2 rounded-md text-sm font-medium {{ page == paginate.currentPage ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700' }}">
+       class="w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium
+              transition transform duration-150 hover:scale-110
+              {{ page == paginate.currentPage
+                ? 'bg-primary text-white'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }}">
       {{ page }}
     </a>
   {% endfor %}
@@ -20,8 +28,10 @@
   {# Következő #}
   {% if paginate.nextUrl %}
     <a href="{{ paginate.nextUrl }}"
-       class="px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm text-gray-700">
+       class="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-sm text-gray-700
+              transition transform duration-150 hover:scale-110">
       {{ 'Következő'|t }} ›
     </a>
   {% endif %}
+
 </nav>
