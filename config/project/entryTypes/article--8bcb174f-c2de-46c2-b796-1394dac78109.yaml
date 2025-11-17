@@ -71,6 +71,40 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: '2025-11-17T10:08:41+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: fed5335b-3d92-4ac6-a718-c21c5eab0573 # Képek 
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 16c85296-1876-4216-b4d5-102fafaf8320
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-11-17T13:49:52+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d11f6ee6-67d9-4ae4-8924-e8dffc44555a # Szöveg
+            handle: fKey
+            includeInCards: false
+            instructions: 'Ha szükséges űrlap adott cikkhez, itt kell megadni az azonosítóját, ami kiolvasható az űrlap pluginból.'
+            label: Űrlap
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 567801e9-f3bd-4a03-b0e8-7a5446399c09
+            userCondition: null
+            warning: null
+            width: 100
         name: Tartalom
         uid: 603cbe38-3f71-4723-9d88-bff71ea7e6ca
         userCondition: null

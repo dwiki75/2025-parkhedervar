@@ -57,25 +57,51 @@ onBeforeUnmount(() => {
 <template>
   <div class="masonry-container px-2 sm:px-4 md:px-8 max-w-8xl mx-auto">
     <div class="columns-2 sm:columns-2 md:columns-4 2xl:columns-5 gap-4">
+
       <div
         v-for="(pic, i) in pictures"
         :key="pic.id"
-        class="break-inside-avoid rounded-lg overflow-hidden cursor-pointer mb-4"
+        class="relative break-inside-avoid rounded-lg overflow-hidden cursor-pointer mb-4 group"
         @click="openLightbox(i)"
       >
-      <div class="break-inside-avoid rounded-lg overflow-hidden cursor-pointer mb-4">
+        <!-- thumbnail -->
         <picture>
           <source :srcset="pic.thumbWebp" type="image/webp" />
           <img
             :src="pic.thumbJpg"
             :alt="pic.alt"
-            class="w-full h-auto object-cover block transition-transform duration-500 ease-out hover:scale-110"
+            class="w-full h-auto object-cover block transition-transform duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] group-hover:scale-110"
             loading="lazy"
             draggable="false"
           />
         </picture>
+
+        <!-- overlay (finom fade, sötétedik hoverkor) -->
+
+
+
+        <!-- nagyító ikon (állandóan látható + finom hover-anim) -->
+        <div
+          class="absolute bottom-3 right-3  bg-black/50 text-white p-2 rounded-lg 
+                 transition-all duration-500 transform group-hover:scale-110 pointer-events-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-4.35-4.35m2.1-5.4a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"
+            />
+          </svg>
+        </div>
       </div>
-      </div>
+
     </div>
 
     <!-- Lightbox -->

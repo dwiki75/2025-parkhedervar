@@ -1,4 +1,4 @@
-dateModified: 1763223130
+dateModified: 1763387392
 email:
   fromEmail: fulop.viktor.dwiki@gmail.com
   fromName: parkhedervar
@@ -67,6 +67,7 @@ meta:
     e0fa9cd2-ed5d-4928-999a-9131fd0788fb: Lábléc # Lábléc
     efcb092e-4d8f-429a-aca8-d3806c9f7df2: 'Nagy kép - szöveg' # Nagy kép - szöveg
     fbc0eba2-1bc3-4182-8660-1c571425c373: '4 kép + szöveg blokk' # 4 kép + szöveg blokk
+    fed5335b-3d92-4ac6-a718-c21c5eab0573: 'Képek ' # Képek 
 plugins:
   ckeditor:
     edition: standard

@@ -37,11 +37,12 @@
       {# ======= MOBIL STICKY MENU (mindig _menu.twig) ======= #}
 
 
-<div class="block md:hidden sticky top-0 z-50 bg-primary">
+<div class="block md:hidden fixed top-0 left-0 w-full z-50 bg-primary">
   <nav aria-label="{{ 'Fő navigáció'|t }}">
     {% include './includes/_menu.twig' with { id: 'mobile-header' } %}
   </nav>
 </div>
+  <div class="block md:hidden h-[72px]"></div>
 
 
       {# ======= DESKTOP MENÜ (belső oldalakhoz: _menuIn.twig) ======= #}
@@ -62,6 +63,8 @@
   {# ---------- FOOTER ---------- #}
   {% block footer %}
   {% set footer = craft.app.globals.getSetByHandle('footer') %}
+
+
 
   <div class="w-full bg-white p-2 md:p-5">
     <footer class="mx-auto bg-primary text-white rounded-xl md:rounded-2xl lg:rounded-4xl overflow-hidden pb-16 md:pb-0">

@@ -17,6 +17,27 @@
       {% include '_modules/' ~ block.type  %}
     </div>  
     {% endfor %}
+
+
+    {% if entry.fKey ?? null %}
+    <div id="form" class="py-5 sm:py-10">
+        {% set formKey = entry.fKey %}
+
+        {% set resp = craft.app.runAction('dwiki-form2/default/frontend-form', {
+            formKey: formKey
+        }) %}
+
+        {{ (resp.content ?? resp.data ?? '')|raw }}
+    </div>    
+    {% endif %}
+
+  {% if entry.pictures|length %}
+          {% include './includes/_gallery' %}
+  {% endif %}
+
+
+
+
 </div>
 
 {% endif %}
@@ -32,21 +53,7 @@
 
 {% endif %}
 
-{% set whatLocal = craft.app.language %}
-{% if whatLocal == 'hu' %}
 
-<div id="booking" class="w-full bg-lightbrown">
-        <div class="max-w-8xl mx-auto">
-               <h2 class="text-2xl md:text-5xl  mx-6 mt-10 inline-block">{{ "Table reservation"|t }}</h2>
-
-          <!-- Foglalási űrlap -->
-
-
-
-          {# % include './includes/_form'% #}
-
-        </div>
-{% endif %}
 
 </div>
 

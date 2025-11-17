@@ -1,6 +1,6 @@
 {# plugins/dwiki-form2/templates/frontendForm.twig #}
 <form method="post" action="" accept-charset="UTF-8"
-      class="dwiki-form bg-secondary p-6"
+      class="dwiki-form bg-primary p-6 max-w-8xl mx-auto  mb-1 sm:mb-[5%] rounded-xl md:rounded-2xl lg:rounded-4xl"
       data-dwiki-form="1"
       data-form-key="{{ formKey }}"
       novalidate>
@@ -194,7 +194,7 @@
   </div>
 
   <div class="mt-4 flex flex-col md:flex-row md:items-start md:gap-4 w-full">
-    <button type="submit" class="px-6 py-3 bg-primary text-black font-semibold rounded-full hover:bg-opacity-80 transition">
+    <button type="submit" class="px-6 py-3 bg-thirdy text-black font-semibold rounded-full hover:bg-opacity-80 transition">
       {{ lang == 'es' ? 'Enviar' : 'Send' }}
     </button>
   </div>
