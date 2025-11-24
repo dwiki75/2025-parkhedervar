@@ -25,15 +25,22 @@
   </div>
 
   <div class="flex justify-between items-center mb-6 w-full">
-{% set lang = currentSite.language ?? 'en' %}
+{% set lang = currentSite.language ?? 'hu' %}
 
+
+{# --- keresünk egy olyan mezőt, aminek a label-je FormTitle --- #}
+{% set mainTitle = null %}
+{% for f in fields %}
+    {% if f.label == '_title' %}
+        {% set mainTitle = f.options %}
+    {% endif %}
+{% endfor %}
+
+{# --- ha van külön megadott cím, azt írjuk ki, különben "Űrlap" --- #}
 <h2 class="text-2xl font-semibold text-white">
-  {% if lang == 'es' %}
-    Solicita precios y paquetes
-  {% else %}
-    Request pricing & packages
-  {% endif %}
+    {{ mainTitle ?: 'Űrlap' }}
 </h2>
+
 
 <span class="text-sm text-white">
   {% if lang == 'es' %}
@@ -47,10 +54,21 @@
 
   <div class="flex flex-wrap -mx-1.5">
     {% for field in fields %}
+
       {# név: a label kebab-case változata (a SendController is ezt várja) #}
       {% set name = field.label|kebab %}
       {# rejtett: a látható címke map a levélhez #}
       <input type="hidden" name="_labels[{{ name }}]" value="{{ field.label }}">
+{% if field.label == '_title' %}
+    {# ezt a mezőt nem jelenítjük meg az űrlapon #}
+    {% set skip = true %}
+{% else %}
+    {% set skip = false %}
+{% endif %}
+
+{% if skip %}
+    {# ugrás: SEMMIT nem renderelünk erre a mezőre #}
+{% else %}
 
       <div class="w-full md:px-1.5 mb-3
         {% if field.width == 'w-1/2' %} md:w-1/2
@@ -98,7 +116,7 @@
   <div class="relative">
     <select
       name="{{ name }}"
-      class="w-full box-border p-2 pr-10 bg-black/20 text-white placeholder-white/70 border-none rounded-md appearance-none leading-[1.5rem] {{ field.cssClass ?? '' }}"
+      class="w-full box-border p-2 pr-10 bg-white/20 text-white placeholder-white/70 border-none rounded-md appearance-none leading-[1.5rem] {{ field.cssClass ?? '' }}"
       {% if field.required %}required{% endif %}>
       {% if placeholderMode %}
         <option value="" disabled selected>{{ placeholderText }}</option>
@@ -143,7 +161,7 @@
   <textarea
     name="{{ name }}"
     rows="4"
-    class="w-full box-border p-2 bg-black/20 text-white placeholder-white/70 border-none rounded-md {{ field.cssClass ?? '' }}"
+    class="w-full box-border p-2 bg-white/20 text-white placeholder-white/70 border-none rounded-md {{ field.cssClass ?? '' }}"
     {% if field.required %}required{% endif %}
     {% if placeholderMode %}placeholder="{{ placeholderText }}"{% endif %}></textarea>
 
@@ -159,7 +177,7 @@
       type="date"
       name="{{ name }}"
       value="{{ today }}"
-      class="w-full p-2 pr-10 sm:pr-2 bg-black/20 text-white placeholder-white/70 border-none rounded-md {{ field.cssClass ?? '' }}"
+      class="w-full p-2 pr-10 sm:pr-2 bg-white/20 text-white placeholder-white/70 border-none rounded-md {{ field.cssClass ?? '' }}"
       {% if field.required %}required{% endif %}>
 
     {# Mobilos, jobb oldali ikon – nem foglal helyet, nem kattintható #}
@@ -183,14 +201,15 @@
   <input
     type="{{ field.type }}"
     name="{{ name }}"
-    class="w-full box-border p-2 bg-black/20 text-white placeholder-white/70 border-none rounded-md {{ field.cssClass ?? '' }}"
+    class="w-full box-border p-2 bg-white/20 text-white placeholder-white/70 border-none rounded-md {{ field.cssClass ?? '' }}"
     {% if field.required %}required{% endif %}
     {% if placeholderMode %}placeholder="{{ placeholderText }}"{% endif %}>
 {% endif %}
 
 
       </div>
-    {% endfor %}
+      {% endif %}
+{% endfor %}
   </div>
 
   <div class="mt-4 flex flex-col md:flex-row md:items-start md:gap-4 w-full">

@@ -20,14 +20,17 @@
 
 
     {% if entry.fKey ?? null %}
-    <div id="form" class="py-5 sm:py-10">
-        {% set formKey = entry.fKey %}
+      {% set formKey = entry.fKey %}
+    <div id="form_{{entry.fKey}}" class="py-5 sm:py-10">
+      
 
-        {% set resp = craft.app.runAction('dwiki-form2/default/frontend-form', {
-            formKey: formKey
-        }) %}
+{% set resp = craft.app.runAction('dwiki-form2/default/frontend-form', {
+    formKey: entry.fKey,
+    entryId: entry.id
+}) %}
 
-        {{ (resp.content ?? resp.data ?? '')|raw }}
+          {{ resp.content|raw }}
+
     </div>    
     {% endif %}
 

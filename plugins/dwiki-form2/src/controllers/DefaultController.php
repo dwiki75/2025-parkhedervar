@@ -90,11 +90,19 @@ class DefaultController extends Controller
     /**
      * Frontend form renderelés - ezt hívhatják meg közvetlenül a template-ből
      */
-    public function actionFrontendForm(): \yii\web\Response
+    public function actionFrontendForm(string $formKey = null): \yii\web\Response
     {
-        $formKey = $this->resolveFormKey();
+        // 1) Ha a runAction() route paraméterben átadta, akkor itt megkapod
+        if ($formKey) {
+            // direkt így használjuk tovább,
+            // nem hívjuk a resolveFormKey()-t hogy ne írja felül "default"-ra
+        } else {
+            // 2) Ha route param nem jött, menjünk a meglévő logikád szerint
+            $formKey = $this->resolveFormKey();
+        }
+    
         $siteHandle = $this->resolveSiteHandle();
-        
+    
         // Ha az adott site-on nincs mező ehhez a formKey-hez, próbáljunk default-ból másolni
         $existingCount = FieldRecord::find()
             ->where(['siteHandle' => $siteHandle, 'formKey' => $formKey])
@@ -125,27 +133,30 @@ class DefaultController extends Controller
         $view = Craft::$app->getView();
         $oldTemplateMode = $view->getTemplateMode();
         $view->setTemplateMode(View::TEMPLATE_MODE_SITE);
-        
+    
         try {
-            // Template renderelés - ugyanúgy mint a debug verzióban
+            // Template renderelés
             $templateContent = $view->renderTemplate('dwikiform2/frontendForm', [
+                'entry' => Craft::$app->getView()->getTwig()->getGlobals()['entry'] ?? null,
                 'formKey' => $formKey,
                 'fields' => $this->getFieldList($formKey),
-                'placeholderMode' => Craft::$app->getProjectConfig()->get('dwikiForm2.placeholderMode') ?? false,
+                'placeholderMode' => Craft::$app->getProjectConfig()
+                    ->get('dwikiForm2.placeholderMode') ?? false,
             ]);
-            
-            // Manuális response létrehozás (ez volt a kulcs!)
+    
+            // Manuális response
             $response = new \yii\web\Response();
             $response->content = $templateContent;
             $response->getHeaders()->set('Content-Type', 'text/html; charset=UTF-8');
-            
+    
             return $response;
-            
+    
         } finally {
             // Template mode visszaállítása
             $view->setTemplateMode($oldTemplateMode);
         }
     }
+    
     /**
      * Frontend form renderelés  VÉGE
      */
