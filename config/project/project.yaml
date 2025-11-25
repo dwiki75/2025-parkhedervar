@@ -1,4 +1,4 @@
-dateModified: 1763913685
+dateModified: 1764080571
 email:
   fromEmail: fulop.viktor.dwiki@gmail.com
   fromName: parkhedervar
@@ -42,7 +42,7 @@ meta:
     36f675c9-3455-4876-b913-6b88042286a0: 'Heti menü' # Heti menü
     79ebc98e-0c3f-4c41-a614-badf35fe67e0: 'Belső gombok' # Belső gombok
     88c6398a-f683-42af-9840-82a752943ecc: Főmenü # Főmenü
-    493d156c-cec2-48a1-8873-4db0e47f5d35: 'Kép és szöveg' # Kép és szöveg
+    493d156c-cec2-48a1-8873-4db0e47f5d35: 'Cikke felépítése' # Cikke felépítése
     785c09ff-d241-42d1-b0a7-c985a24a712c: Bejegyzések # Bejegyzések
     846aa6c1-3a4b-4656-a534-646aa812d4f4: Simple # Simple
     915fda05-fe2f-4d16-8676-0d5f34b33d08: Adat # Adat
@@ -58,6 +58,7 @@ meta:
     a0ed06e8-7d19-46e7-b39f-32af2d4e18c3: Sebesség # Sebesség
     b3a9b4f6-0a54-40c7-80fa-8a53361137e2: Választó # Választó
     bb5ef826-a820-4982-a272-9ad7d3c5be5a: parkhedervar # parkhedervar
+    bbcbdc68-72af-4b8f-9ea6-8c54ebf35067: '3 kép hozzáadása' # 3 kép hozzáadása
     becc6248-77f7-4548-9c0c-9326b0764e28: HÍr # HÍr
     cd5eaea5-24c1-47f6-96bf-ce456bbed2f2: Cikkek # Cikkek
     d7bf11f6-03cd-4651-b906-363634efd7dd: Hír # Hír
@@ -65,6 +66,7 @@ meta:
     d823c0fc-0e81-4d86-95cf-0b55ac23463e: 'Kép és szöveg' # Kép és szöveg
     d46898f6-87ca-4eea-ae8d-1c1f76206e53: Kategória # Kategória
     e0fa9cd2-ed5d-4928-999a-9131fd0788fb: Lábléc # Lábléc
+    ee1f86a8-671c-448f-bf5b-2830bd064f1d: '3 kép' # 3 kép
     efcb092e-4d8f-429a-aca8-d3806c9f7df2: 'Nagy kép - szöveg' # Nagy kép - szöveg
     fbc0eba2-1bc3-4182-8660-1c571425c373: '4 kép + szöveg blokk' # 4 kép + szöveg blokk
     fed5335b-3d92-4ac6-a718-c21c5eab0573: 'Képek ' # Képek 

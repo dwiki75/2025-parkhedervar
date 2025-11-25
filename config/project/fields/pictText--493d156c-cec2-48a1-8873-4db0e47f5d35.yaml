@@ -1,7 +1,7 @@
 columnSuffix: null
 handle: pictText
 instructions: null
-name: 'Kép és szöveg'
+name: 'Cikke felépítése'
 searchable: false
 settings:
   createButtonLabel: null
@@ -21,6 +21,14 @@ settings:
         -
           - uid
           - fbc0eba2-1bc3-4182-8660-1c571425c373 # 4 kép + szöveg blokk
+        -
+          - group
+          - Általános
+    -
+      __assoc__:
+        -
+          - uid
+          - bbcbdc68-72af-4b8f-9ea6-8c54ebf35067 # 3 kép hozzáadása
         -
           - group
           - Általános

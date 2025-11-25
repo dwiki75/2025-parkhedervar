@@ -16,6 +16,10 @@
   <div class="p-4 flex flex-col gap-2">
     <h3 class="text-xl sm:text-2xl text-thirdy">{{ item.title }}</h3>
 
+      <div class="mb-2 text-center">
+        <h4 id="date" class="text-base font-raleway font-bold text-left text-lightbrown">{{ item.postDate|date('Y-m-d') }} </h4>
+      </div>
+
     {% if item.simpleText %}
       <p class="text-sm leading-relaxed line-clamp-4">
         {{ item.simpleText }}
