@@ -1,6 +1,5 @@
 {# ================================================================
    LOGO + MENÜ ADATOK BETÖLTÉSE
-   (ugyanaz, mint a főmenünél)
 ================================================================ #}
 
 {% set headerGlobal = craft.app.globals.getSetByHandle('header') ?? null %}
@@ -10,25 +9,66 @@
 {% set baseUrl = craft.app.request.getHostInfo() %}
 
 {% set formattedMenu = [] %}
+
 {% for item in menuItems %}
+
     {% set type = (item.optional ?? '')|lower %}
-    {% set url = '#' %}
+    {% set url  = '#' %}
+    {% set slug = null %}
+
+    {# --------- LINK + SLUG FELTÖLTÉS --------- #}
 
     {% if type == 'post' and item.post|length %}
-        {% set url = item.post.one().url %}
+        {# menüpont egy bejegyzésre mutat #}
+        {% set target = item.post.one() %}
+        {% set url    = target.url %}
+        {% set slug   = target.slug %}
+
     {% elseif type == 'category' and item.catField|length %}
-        {% set url = item.catField.one().url %}
+        {# menüpont kategóriára mutat #}
+        {% set target = item.catField.one() %}
+        {% set url    = target.url %}
+        {% set slug   = target.slug %}
+
     {% elseif type == 'directlink' and item.directLink %}
+        {# közvetlen link #}
         {% set url = item.directLink %}
+        {# slug a cím alapján, ékezetmentesítve #}
+        {% set slug = item.title
+            |lower
+            |replace({
+                'á':'a','é':'e','í':'i','ó':'o','ö':'o','ő':'o','ú':'u','ü':'u','ű':'u'
+            })
+            |replace({
+                ' ':'',
+                '-':''
+            })
+        %}
+
+    {% else %}
+        {# fallback: slug a cím alapján #}
+        {% set slug = item.title
+            |lower
+            |replace({
+                'á':'a','é':'e','í':'i','ó':'o','ö':'o','ő':'o','ú':'u','ü':'u','ű':'u'
+            })
+            |replace({
+                ' ':'',
+                '-':''
+            })
+        %}
     {% endif %}
 
+    {# külső link-e? #}
     {% set isExternal = url matches '~^https?://~' and not (url starts with baseUrl) %}
 
+    {# MENÜ ELEM JSON #}
     {% set formattedMenu = formattedMenu|merge([
         {
             title: item.title,
             url: url,
-            external: isExternal
+            external: isExternal,
+            slug: slug
         }
     ]) %}
 {% endfor %}
@@ -38,13 +78,8 @@
     {% include './includes/_language.twig' %}
 {% endset %}
 
-
 {# ================================================================
    INNER HEADER MOUNT POINT
-   * Csak mini header lesz
-   * Nincs nagy fejlécrész
-   * Nincs scrollra váltás
-   * Mobilon ugyanaz az overlay menü működik
 ================================================================ #}
 
 <div id="site-header"

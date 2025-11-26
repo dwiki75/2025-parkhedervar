@@ -44,7 +44,7 @@ function toggleMenu() {
   menuOpen.value = !menuOpen.value
   document.body.classList.toggle('overflow-hidden', menuOpen.value)
 
-  if (!menuOpen.value) {
+  if (!menuOpen.value && props.mode === 'default') {
     activeAnchorId.value = null
   }
 }
@@ -61,7 +61,7 @@ function checkIsMobile() {
 }
 
 /* ========================
-   Anchor
+   Anchor parsing
 ======================== */
 function getAnchorId(url) {
   if (!url) return null
@@ -70,10 +70,63 @@ function getAnchorId(url) {
   return url.slice(hashIndex + 1)
 }
 
+/* ========================
+   SLUG NORMALIZÁLÁS
+======================== */
+function normalizeSlug(str) {
+  if (!str) return ''
+  return decodeURIComponent(str)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // ékezetek törlése
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')      // minden nem alfanumerikus törlése
+}
+
+/* ========================
+   IS INNER ACTIVE (SLUG ALAPÚ)
+======================== */
+function isInnerActive(item) {
+  if (props.mode !== 'inner') return false
+  if (!item.slug) return false
+
+  const currentSlug = normalizeSlug(window.location.pathname.split('/').pop())
+  const menuSlug = normalizeSlug(item.slug)
+
+  return currentSlug === menuSlug
+}
+
+/* ========================
+   URL normalizálás + path match
+======================== */
+function normalizePath(path) {
+  if (!path) return ''
+
+  return decodeURIComponent(path)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\/+$/, '')
+}
+
 function isPathActive(url) {
   try {
     const full = new URL(url, window.location.origin)
-    return full.pathname === window.location.pathname
+
+    const current = normalizePath(window.location.pathname)
+    const target = normalizePath(full.pathname)
+
+    if (current === target) {
+      return true
+    }
+
+    // Cikk slug összevetés (encoded vs decoded)
+    if (current.startsWith('/cikkek/') && target.startsWith('/cikkek/')) {
+      const curSlug = current.replace('/cikkek/', '')
+      const tarSlug = target.replace('/cikkek/', '')
+      return curSlug === tarSlug
+    }
+
+    return false
   } catch {
     return false
   }
@@ -82,10 +135,28 @@ function isPathActive(url) {
 /* ========================
    Link CSS osztályok
 ======================== */
-function linkClasses(url) {
+function linkClasses(itemOrUrl) {
   const base = 'rounded-full px-5 py-2 transition-colors duration-200'
+
+  // Ha stringet kapott (régi hívás), alakítsuk át objektummá
+  let item = typeof itemOrUrl === 'string'
+    ? { url: itemOrUrl, slug: null }
+    : itemOrUrl
+
+  // --------- INNER MODE (slug alapú ACTIVE) ---------
+  if (props.mode === 'inner') {
+    const active = isInnerActive(item)
+    return [
+      base,
+      active ? 'bg-thirdy text-black' : 'text-white hover:bg-thirdy hover:text-black'
+    ]
+  }
+
+  // --------- DEFAULT MODE (főoldal anchor + path) ---------
+  const url = item.url
   const anchorId = getAnchorId(url)
 
+  // anchor-based active (NYITÓOLDAL)
   if (anchorId) {
     const active = activeAnchorId.value === anchorId
     return [
@@ -94,12 +165,14 @@ function linkClasses(url) {
     ]
   }
 
+  // normál path-based active (NYITÓOLDALON)
   const active = isPathActive(url)
   return [
     base,
     active ? 'bg-thirdy text-black' : 'text-white hover:bg-thirdy hover:text-black'
   ]
 }
+
 
 /* ========================
    Smooth scroll
@@ -110,7 +183,6 @@ function scrollToAnchor(anchorId) {
 
   const offset = 70
   const top = target.getBoundingClientRect().top + window.scrollY - offset
-
   window.scrollTo({ top, behavior: 'smooth' })
 }
 
@@ -119,9 +191,32 @@ function scrollToAnchor(anchorId) {
 ======================== */
 function onMenuClick(item, event) {
   const url = item.url
-  const anchorId = getAnchorId(url)
 
-  if (item.external) return
+  /* ——————————————
+     1) ONEPAGE KEZELÉS
+  —————————————— */
+  if (url.startsWith('/#onepage-')) {
+
+    // Nyitóoldal → scroll
+    if (window.location.pathname === '/') {
+      event.preventDefault()
+      const anchorId = url.replace('/#', '')
+      scrollToAnchor(anchorId)
+      return
+    }
+
+    // Belső oldal → átirányítás a főoldal megfelelő szekciójához
+    event.preventDefault()
+    window.location.href = url
+    return
+  }
+
+  /* ——————————————
+     2) Normal URL-ek:
+        anchor vagy path match
+  —————————————— */
+
+  const anchorId = getAnchorId(url)
   if (!anchorId) return
 
   let full
@@ -135,7 +230,9 @@ function onMenuClick(item, event) {
     event.preventDefault()
     scrollToAnchor(anchorId)
 
-    activeAnchorId.value = anchorId
+    if (props.mode === 'default') {
+      activeAnchorId.value = anchorId
+    }
 
     if (isMobile.value && menuOpen.value) toggleMenu()
   }
@@ -231,9 +328,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- ===========================
-       NAGY HEADER (csak default mód)
-  ============================ -->
+  <!-- FŐ HEADER (csak default) -->
   <header
     v-if="props.mode === 'default'"
     ref="mainHeaderRef"
@@ -244,7 +339,7 @@ onUnmounted(() => {
 
       <div class="flex items-center justify-between w-full h-full px-4 sm:px-0">
 
-        <!-- BAL: LOGÓ -->
+        <!-- LOGÓ -->
         <div class="flex items-center"
             :style="{
               height: (isMobile ? SMALL_HEADER_HEIGHT : LARGE_HEADER_HEIGHT) + 'px',
@@ -261,14 +356,14 @@ onUnmounted(() => {
           </a>
         </div>
 
-        <!-- KÖZÉP: DESKTOP MENÜ -->
+        <!-- DESKTOP MENÜ -->
         <div class="hidden sm:flex flex-grow justify-center">
           <ul class="flex gap-[1px] items-center text-secondary text-base font-bold">
             <template v-for="item in menuItems" :key="item.url">
               <li>
                 <a
                   :href="item.url"
-                  :class="linkClasses(item.url)"
+                  :class="linkClasses(item)"
                   @click="onMenuClick(item, $event)"
                 >
                   {{ item.title }}
@@ -278,28 +373,26 @@ onUnmounted(() => {
           </ul>
         </div>
 
-        <!-- JOBB: NYELVVÁLTÓ -->
+        <!-- NYELVVÁLTÓ -->
         <div class="hidden sm:flex items-center">
           <div v-html="languageHtml"></div>
         </div>
 
       </div>
 
-      <!-- MOBIL: HAMBURGER + NYELVVÁLTÓ -->
+      <!-- MOBIL HEADER -->
       <div class="sm:hidden absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3 z-20">
 
-        <!-- NYELVVÁLTÓ -->
         <div class="mobile-lang" v-html="languageHtml"></div>
 
-        <!-- HAMBURGER GOMB -->
         <button
           @click="toggleMenu"
           aria-label="Menü"
           class="relative w-[30px] h-[22px] flex flex-col justify-between"
         >
-          <span class="block bg-white h-[3px] w-[30px] rounded"></span>
-          <span class="block bg-white h-[3px] w-[30px] rounded"></span>
-          <span class="block bg-white h-[3px] w-[30px] rounded"></span>
+          <span class="block h-[3px] w-[30px] rounded bg-white"></span>
+          <span class="block h-[3px] w-[30px] rounded bg-white"></span>
+          <span class="block h-[3px] w-[30px] rounded bg-white"></span>
         </button>
 
       </div>
@@ -307,9 +400,7 @@ onUnmounted(() => {
     </div>
   </header>
 
-  <!-- ===========================
-       MOBIL OVERLAY MENÜ
-  ============================ -->
+  <!-- MOBIL MENÜ -->
   <div
     id="mobile-menu"
     :class="[
@@ -318,39 +409,30 @@ onUnmounted(() => {
     ]"
   >
 
-    <!-- FELSŐ SOR (logó + zászlók + X) -->
     <div class="flex items-center justify-between px-5 pt-2 pb-3">
-
-      <!-- LOGÓ -->
       <img :src="logoUrl" :alt="logoAlt" class="h-10 w-auto" />
 
-      <!-- ZÁSZLÓK + X -->
       <div class="flex items-center gap-2">
-
-        <!-- NYELVVÁLTÓ -->
         <div class="mobile-lang flex items-center gap-1" v-html="languageHtml"></div>
 
-        <!-- X GOMB -->
         <button
           @click="toggleMenu"
           aria-label="Bezárás"
           class="relative w-[30px] h-[22px] flex flex-col justify-between"
         >
-          <span class="block bg-white h-[3px] w-[30px] rotate-45 translate-y-[9px]"></span>
-          <span class="block bg-white h-[3px] w-[30px] opacity-0"></span>
-          <span class="block bg-white h-[3px] w-[30px] -rotate-45 -translate-y-[9px]"></span>
+          <span class="block h-[3px] w-[30px] translate-y-[9px] rotate-45 bg-white"></span>
+          <span class="block h-[3px] w-[30px] opacity-0 bg-white"></span>
+          <span class="block h-[3px] w-[30px] -translate-y-[9px] -rotate-45 bg-white"></span>
         </button>
-
       </div>
     </div>
 
-    <!-- MENÜ LISTA -->
-    <ul class="flex flex-col gap-6 items-center text-white text-xl font-bold mt-10">
+    <ul class="mt-10 flex flex-col items-center gap-6 text-xl font-bold text-white">
       <template v-for="item in menuItems" :key="item.url + '-mobile'">
         <li>
           <a
             :href="item.url"
-            :class="linkClasses(item.url)"
+            :class="linkClasses(item)"
             @click="onMenuClick(item, $event)"
           >
             {{ item.title }}
@@ -358,30 +440,28 @@ onUnmounted(() => {
         </li>
       </template>
     </ul>
+
   </div>
 
-  <!-- ===========================
-       MINI HEADER (DESKTOP ONLY)
-  ============================ -->
+  <!-- MINI HEADER (DESKTOP ONLY) -->
   <header
-  v-if="!isMobile && (props.mode === 'default' || props.mode === 'inner')"
-
+    v-if="!isMobile && (props.mode === 'default' || props.mode === 'inner')"
     class="fixed top-2 left-10 right-10 z-50 pointer-events-none transition-all duration-300 ease-out"
     :class="miniVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-[10px]'"
   >
-    <div class="pointer-events-auto max-w-8xl mx-auto px-6 py-2 rounded-xl bg-primary text-white backdrop-blur shadow-[0_0_40px_rgba(255,255,255,0.25)]">
+    <div class="pointer-events-auto mx-auto max-w-8xl rounded-xl bg-primary px-6 py-2 text-white shadow-[0_0_40px_rgba(255,255,255,0.25)] backdrop-blur">
       <div class="flex items-center justify-between">
 
-        <a href="/" class="flex items-center h-10">
+        <a href="/" class="flex h-10 items-center">
           <img :src="logoUrl" :alt="logoAlt" class="h-8 w-auto object-contain" />
         </a>
 
-        <ul class="hidden sm:flex gap-1 items-center text-secondary text-sm font-bold">
+        <ul class="hidden items-center gap-1 text-sm font-bold text-secondary sm:flex">
           <template v-for="item in menuItems" :key="item.url + '-mini'">
             <li>
               <a
                 :href="item.url"
-                :class="linkClasses(item.url)"
+                :class="linkClasses(item)"
                 @click="onMenuClick(item, $event)"
               >
                 {{ item.title }}
@@ -390,13 +470,12 @@ onUnmounted(() => {
           </template>
         </ul>
 
-        <div class="hidden sm:block ml-4 pointer-events-auto" v-html="languageHtml"></div>
+        <div class="pointer-events-auto ml-4 hidden sm:block" v-html="languageHtml"></div>
 
       </div>
     </div>
   </header>
 </template>
-
 
 <style scoped>
 :deep(.mobile-lang ul) {
@@ -405,4 +484,3 @@ onUnmounted(() => {
   gap: 0.5rem !important;
 }
 </style>
-
