@@ -1,7 +1,7 @@
 {# Layout template #}
 {% include './includes/_head.twig' %}
 
-<body class="min-h-dvh antialiased">
+<body id="#top"class="min-h-dvh antialiased">
 
   {# Skip link #}
   <a href="#main"
@@ -84,7 +84,7 @@
           {# SZÖVEGBOX 1 #}
           <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 
                       [&_h3]:mb-4 [&_h3]:text-white [&_h4]:text-white [&_a]:underline
-                      [&_h4]:mb-4 [&_h4]:font-lg">
+                      [&_h4]:mb-4 [&_h4]:text-lg [&_h4]:sm:text-xl">
             {{ footer.textBox
               |iconify
               |replace({
@@ -96,7 +96,7 @@
           {# SZÖVEGBOX 2 #}
           <div class="group/fadebox [&_h3]:text-xl [&_h3]:lg:text-2xl [&_p]:mt-1 [&_h4]:text-white
                       [&_h3]:mb-4 [&_h3]:text-white [&_a]:underline
-                      [&_h4]:mb-4 [&_h4]:font-lg">
+                      [&_h4]:mb-4 [&_h4]:text-lg [&_h4]:sm:text-xl">
             {{ footer.textBox2
               |iconify
               |replace({
@@ -108,7 +108,8 @@
           {# SZÖVEGBOX 3 #}
           <div class="group/fadebox col-span-1 lg:col-span-4 mt-4 text-sm [&_h4]:text-white
                       [&_p]:mt-1 [&_h3]:text-base [&_h3]:lg:text-lg [&_h3]:mb-4
-                      [&_h4]:mb-4 [&_h4]:font-lg [&_h3]:text-white [&_a]:underline">
+                      [&_h4]:mb-4 [&_h4]:font-lg [&_h3]:text-white [&_a]:underline ">
+                    
             {{ footer.textBox3
               |iconify
               |replace({
